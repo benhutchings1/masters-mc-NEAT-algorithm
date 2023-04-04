@@ -1,0 +1,308 @@
+Air,0,minecraft:air
+Stone,1,minecraft:stone
+Granite,1^1,minecraft:granite
+Polished Granite,1^2,minecraft:polished_granite
+Diorite,1^3,minecraft:diorite
+Polished Diorite,1^4,minecraft:polished_diorite
+Andesite,1^5,minecraft:andesite
+Polished Andesite,1^6,polished_andesite
+Grass,2,minecraft:grass
+Dirt,3,minecraft:dirt
+Coarse Dirt,3^1,minecraft:coarse_dirt
+Podzol,3^2,minecraft:podzol
+Cobblestone,4,minecraft:cobblestone
+Oak Wood Plank,5,minecraft:planks
+Spruce Wood Plank,5^1,minecraft:spruce_planks
+Birch Wood Plank,5^2,minecraft:birch_planks
+Jungle Wood Plank,5^3,minecraft:jungle_planks
+Acacia Wood Plank,5^4,minecraft:acacia_planks
+Dark Oak Wood Plank,5^5,minecraft:dark_oak_planks
+Bedrock,7,minecraft:bedrock
+Gold Ore,14,minecraft:gold_ore
+Iron Ore,15,minecraft:iron_ore
+Coal Ore,16,minecraft:coal_ore
+Oak Wood,17,minecraft:log
+Spruce Wood,17^1,minecraft:spruce_log
+Birch Wood,17^2,minecraft:birch_log
+Jungle Wood,17^3,minecraft:jungle_log
+Oak Leaves,18,minecraft:leaves
+Spruce Leaves,18^1,minecraft:spruce_leaves
+Birch Leaves,18^2,minecraft:birch_leaves
+Jungle Leaves,18^3,minecraft:jungle_leaves
+Sponge,19,minecraft:sponge
+Wet Sponge,19^1,minecraft:wet_sponge
+Glass,20,minecraft:glass
+Lapis Lazuli Ore,21,minecraft:lapis_ore
+Lapis Lazuli Block,22,minecraft:lapis_block
+Dispenser,23,minecraft:dispenser
+Sandstone,24,minecraft:sandstone
+Chiseled Sandstone,24^1,minecraft:chiseled_sandstone
+Smooth Sandstone,24^2,minecraft:cut_sandstone
+Note Block,25,minecraft:noteblock
+Sticky Piston,29,minecraft:sticky_piston
+Cobweb,30,minecraft:web
+Piston,33,minecraft:piston
+White Wool,35,minecraft:wool
+Orange Wool,35^1,minecraft:orange_wool
+Magenta Wool,35^2,minecraft:magenta_wool
+Light Blue Wool,35^3,minecraft:light_blue_wool
+Yellow Wool,35^4,minecraft:yellow_wool
+Lime Wool,35^5,minecraft:lime_wool
+Pink Wool,35^6,minecraft:pink_wool
+Gray Wool,35^7,minecraft:gray_wool
+Light Gray Wool,35^8,minecraft:light_gray_wool
+Cyan Wool,35^9,minecraft:cyan_wool
+Purple Wool,35^10,minecraft:purple_wool
+Blue Wool,35^11,minecraft:blue_wool
+Brown Wool,35^12,minecraft:brown_wool
+Green Wool,35^13,minecraft:green_wool
+Red Wool,35^14,minecraft:red_wool
+Black Wool,35^15,minecraft:black_wool
+Gold Block,41,minecraft:gold_block
+Iron Block,42,minecraft:iron_block
+Double Stone Slab,43,minecraft:double_stone_slab
+Double Sandstone Slab,43^1,minecraft:double_stone_slab
+Double Wooden Slab,43^2,minecraft:double_stone_slab
+Double Cobblestone Slab,43^3,minecraft:double_stone_slab
+Double Brick Slab,43^4,minecraft:double_stone_slab
+Double Stone Brick Slab,43^5,minecraft:double_stone_slab
+Double Nether Brick Slab,43^6,minecraft:double_stone_slab
+Double Quartz Slab,43^7,minecraft:double_stone_slab
+Stone Slab,44,minecraft:stone_slab
+Sandstone Slab,44^1,minecraft:sandstone_slab
+Cobblestone Slab,44^3,minecraft:cobblestone_slab
+Brick Slab,44^4,minecraft:brick_slab
+Stone Brick Slab,44^5,minecraft:stone_brick_slab
+Nether Brick Slab,44^6,minecraft:nether_brick_slab
+Quartz Slab,44^7,minecraft:quartz_slab
+Bricks,45,minecraft:brick_block
+TNT,46,minecraft:tnt
+Bookshelf,47,minecraft:bookshelf
+Moss Stone,48,minecraft:mossy_cobblestone
+Obsidian,49,minecraft:obsidian
+Monster Spawner,52,minecraft:mob_spawner
+Oak Wood Stairs,53,minecraft:oak_stairs
+Chest,54,minecraft:chest
+Diamond Ore,56,minecraft:diamond_ore
+Diamond Block,57,minecraft:diamond_block
+Crafting Table,58,minecraft:crafting_table
+Furnace,61,minecraft:furnace
+Burning Furnace,62,minecraft:lit_furnace
+Cobblestone Stairs,67,minecraft:stone_stairs
+Redstone Ore,73,minecraft:redstone_ore
+Ice,79,minecraft:ice
+Snow Block,80,minecraft:snow
+Jukebox,84,minecraft:jukebox
+Oak Fence,85,minecraft:fence
+Pumpkin,86,minecraft:pumpkin
+Netherrack,87,minecraft:netherrack
+Soul Sand,88,minecraft:soul_sand
+Glowstone,89,minecraft:glowstone
+Jack o'Lantern,91,minecraft:lit_pumpkin
+White Stained Glass,95,minecraft:stained_glass
+Orange Stained Glass,95^1,minecraft:orange_stained_glass
+Magenta Stained Glass,95^2,minecraft:magenta_stained_glass
+Light Blue Stained Glass,95^3,minecraft:light_blue_stained_glass
+Yellow Stained Glass,95^4,minecraft:yellow_stained_glass
+Lime Stained Glass,95^5,minecraft:lime_stained_glass
+Pink Stained Glass,95^6,minecraft:pink_stained_glass
+Gray Stained Glass,95^7,minecraft:gray_stained_glass
+Light Gray Stained Glass,95^8,minecraft:light_gray_stained_glass
+Cyan Stained Glass,95^9,minecraft:cyan_stained_glass
+Purple Stained Glass,95^10,minecraft:purple_stained_glass
+Blue Stained Glass,95^11,minecraft:blue_stained_glass
+Brown Stained Glass,95^12,minecraft:brown_stained_glass
+Green Stained Glass,95^13,minecraft:green_stained_glass
+Red Stained Glass,95^14,minecraft:red_stained_glass
+Black Stained Glass,95^15,minecraft:black_stained_glass
+Wooden Trapdoor,96,minecraft:trapdoor
+Stone Bricks,98,minecraft:stonebrick
+Mossy Stone Bricks,98^1,minecraft:mossy_stone_bricks
+Cracked Stone Bricks,98^2,minecraft:cracked_stone_bricks
+Chiseled Stone Bricks,98^3,minecraft:chiseled_stone_bricks
+Brown Mushroom Block,99,minecraft:brown_mushroom_block
+Red Mushroom Block,100,minecraft:red_mushroom_block
+Iron Bars,101,minecraft:iron_bars
+Glass Pane,102,minecraft:glass_pane
+Melon Block,103,minecraft:melon_block
+Oak Fence Gate,107,minecraft:fence_gate
+Brick Stairs,108,minecraft:brick_stairs
+Stone Brick Stairs,109,minecraft:stone_brick_stairs
+Mycelium,110,minecraft:mycelium
+Nether Brick,112,minecraft:nether_brick
+Nether Brick Fence,113,minecraft:nether_brick_fence
+Nether Brick Stairs,114,minecraft:nether_brick_stairs
+Enchantment Table,116,minecraft:enchanting_table
+End Portal Frame,120,minecraft:end_portal_frame
+End Stone,121,minecraft:end_stone
+Redstone Lamp (inactive),123,minecraft:redstone_lamp
+Redstone Lamp (active),124,minecraft:lit_redstone_lamp
+Double Oak Wood Slab,125,minecraft:double_wooden_slab
+Double Spruce Wood Slab,125^1,minecraft:double_wooden_slab
+Double Birch Wood Slab,125^2,minecraft:double_wooden_slab
+Double Jungle Wood Slab,125^3,minecraft:double_wooden_slab
+Double Acacia Wood Slab,125^4,minecraft:double_wooden_slab
+Double Dark Oak Wood Slab,125^5,minecraft:double_wooden_slab
+Oak Wood Slab,126,minecraft:wooden_slab
+Spruce Wood Slab,126^1,minecraft:spruce_slab
+Birch Wood Slab,126^2,minecraft:birch_slab
+Jungle Wood Slab,126^3,minecraft:jungle_slab
+Acacia Wood Slab,126^4,minecraft:acacia_slab
+Dark Oak Wood Slab,126^5,minecraft:dark_oak_slab
+Sandstone Stairs,128,minecraft:sandstone_stairs
+Emerald Ore,129,minecraft:emerald_ore
+Ender Chest,130,minecraft:ender_chest
+Emerald Block,133,minecraft:emerald_block
+Spruce Wood Stairs,134,minecraft:spruce_stairs
+Birch Wood Stairs,135,minecraft:birch_stairs
+Jungle Wood Stairs,136,minecraft:jungle_stairs
+Beacon,138,minecraft:beacon
+Cobblestone Wall,139,minecraft:cobblestone_wall
+Mossy Cobblestone Wall,139^1,minecraft:mossy_cobblestone_wall
+Trapped Chest,146,minecraft:trapped_chest
+Daylight Sensor,151,minecraft:daylight_detector
+Redstone Block,152,minecraft:redstone_block
+Nether Quartz Ore,153,minecraft:quartz_ore
+Hopper,154,minecraft:hopper
+Quartz Block,155,minecraft:quartz_block
+Chiseled Quartz Block,155^1,minecraft:chiseled_quartz_block
+Pillar Quartz Block,155^2,minecraft:quartz_pillar
+Quartz Stairs,156,minecraft:quartz_stairs
+Dropper,158,minecraft:dropper
+White Hardened Clay,159,minecraft:stained_hardened_clay
+Orange Hardened Clay,159^1,minecraft:stained_hardened_clay
+Magenta Hardened Clay,159^2,minecraft:stained_hardened_clay
+Light Blue Hardened Clay,159^3,minecraft:stained_hardened_clay
+Yellow Hardened Clay,159^4,minecraft:stained_hardened_clay
+Lime Hardened Clay,159^5,minecraft:stained_hardened_clay
+Pink Hardened Clay,159^6,minecraft:stained_hardened_clay
+Gray Hardened Clay,159^7,minecraft:stained_hardened_clay
+Light Gray Hardened Clay,159^8,minecraft:stained_hardened_clay
+Cyan Hardened Clay,159^9,minecraft:stained_hardened_clay
+Purple Hardened Clay,159^10,minecraft:stained_hardened_clay
+Blue Hardened Clay,159^11,minecraft:stained_hardened_clay
+Brown Hardened Clay,159^12,minecraft:stained_hardened_clay
+Green Hardened Clay,159^13,minecraft:stained_hardened_clay
+Red Hardened Clay,159^14,minecraft:stained_hardened_clay
+Black Hardened Clay,159^15,minecraft:stained_hardened_clay
+White Stained Glass Pane,160,minecraft:stained_glass_pane
+Orange Stained Glass Pane,160^1,minecraft:orange_stained_glass_pane
+Magenta Stained Glass Pane,160^2,minecraft:magenta_stained_glass_pane
+Light Blue Stained Glass Pane,160^3,minecraft:light_blue_stained_glass_pane
+Yellow Stained Glass Pane,160^4,minecraft:yellow_stained_glass_pane
+Lime Stained Glass Pane,160^5,minecraft:lime_stained_glass_pane
+Pink Stained Glass Pane,160^6,minecraft:pink_stained_glass_pane
+Gray Stained Glass Pane,160^7,minecraft:gray_stained_glass_pane
+Light Gray Stained Glass Pane,160^8,minecraft:light_gray_stained_glass_pane
+Cyan Stained Glass Pane,160^9,minecraft:cyan_stained_glass_pane
+Purple Stained Glass Pane,160^10,minecraft:purple_stained_glass_pane
+Blue Stained Glass Pane,160^11,minecraft:blue_stained_glass_pane
+Brown Stained Glass Pane,160^12,minecraft:brown_stained_glass_pane
+Green Stained Glass Pane,160^13,minecraft:green_stained_glass_pane
+Red Stained Glass Pane,160^14,minecraft:red_stained_glass_pane
+Black Stained Glass Pane,160^15,minecraft:black_stained_glass_pane
+Acacia Leaves,161,minecraft:leaves2
+Dark Oak Leaves,161^1,minecraft:dark_oak_leaves
+Acacia Wood,162,minecraft:log2
+Dark Oak Wood,162^1,minecraft:dark_oak_log
+Acacia Wood Stairs,163,minecraft:acacia_stairs
+Dark Oak Wood Stairs,164,minecraft:dark_oak_stairs
+Slime Block,165,minecraft:slime
+Iron Trapdoor,167,minecraft:iron_trapdoor
+Prismarine,168,minecraft:prismarine
+Prismarine Bricks,168^1,minecraft:prismarine_bricks
+Dark Prismarine,168^2,minecraft:dark_prismarine
+Sea Lantern,169,minecraft:sea_lantern
+Hay Bale,170,minecraft:hay_block
+Hardened Clay,172,minecraft:hardened_clay
+Block of Coal,173,minecraft:coal_block
+Packed Ice,174,minecraft:packed_ice
+Inverted Daylight Sensor,178,minecraft:daylight_detector_inverted
+Red Sandstone,179,minecraft:red_sandstone
+Chiseled Red Sandstone,179^1,minecraft:chiseled_red_sandstone
+Smooth Red Sandstone,179^2,minecraft:cut_red_sandstone
+Red Sandstone Stairs,180,minecraft:red_sandstone_stairs
+Double Red Sandstone Slab,181,minecraft:double_stone_slab2
+Red Sandstone Slab,182,minecraft:red_sandstone_slab
+Spruce Fence Gate,183,minecraft:spruce_fence_gate
+Birch Fence Gate,184,minecraft:birch_fence_gate
+Jungle Fence Gate,185,minecraft:jungle_fence_gate
+Dark Oak Fence Gate,186,minecraft:dark_oak_fence_gate
+Acacia Fence Gate,187,minecraft:acacia_fence_gate
+Spruce Fence,188,minecraft:spruce_fence
+Birch Fence,189,minecraft:birch_fence
+Jungle Fence,190,minecraft:jungle_fence
+Dark Oak Fence,191,minecraft:dark_oak_fence
+Acacia Fence,192,minecraft:acacia_fence
+End Rod,198,minecraft:end_rod
+Purpur Block,201,minecraft:purpur_block
+Purpur Pillar,202,minecraft:purpur_pillar
+Purpur Stairs,203,minecraft:purpur_stairs
+Purpur Double Slab,204,minecraft:purpur_double_slab
+Purpur Slab,205,minecraft:purpur_slab
+End Stone Bricks,206,minecraft:end_bricks
+Grass Path,208,minecraft:grass_path
+Magma Block,213,minecraft:magma
+Nether Wart Block,214,minecraft:nether_wart_block
+Red Nether Brick,215,minecraft:red_nether_brick
+Bone Block,216,minecraft:bone_block
+White Shulker Box,219,minecraft:white_shulker_box
+Orange Shulker Box,220,minecraft:orange_shulker_box
+Magenta Shulker Box,221,minecraft:magenta_shulker_box
+Light Blue Shulker Box,222,minecraft:light_blue_shulker_box
+Yellow Shulker Box,223,minecraft:yellow_shulker_box
+Lime Shulker Box,224,minecraft:lime_shulker_box
+Pink Shulker Box,225,minecraft:pink_shulker_box
+Gray Shulker Box,226,minecraft:gray_shulker_box
+Light Gray Shulker Box,227,minecraft:silver_shulker_box
+Cyan Shulker Box,228,minecraft:cyan_shulker_box
+Purple Shulker Box,229,minecraft:purple_shulker_box
+Blue Shulker Box,230,minecraft:blue_shulker_box
+Brown Shulker Box,231,minecraft:brown_shulker_box
+Green Shulker Box,232,minecraft:green_shulker_box
+Red Shulker Box,233,minecraft:red_shulker_box
+Black Shulker Box,234,minecraft:black_shulker_box
+White Glazed Terracotta,235,minecraft:white_terracotta
+Orange Glazed Terracotta,236,minecraft:orange_terracotta
+Magenta Glazed Terracotta,237,minecraft:magenta_terracotta
+Light Blue Glazed Terracotta,238,minecraft:light_blue_terracotta
+Yellow Glazed Terracotta,239,minecraft:yellow_terracotta
+Lime Glazed Terracotta,240,minecraft:lime_terracotta
+Pink Glazed Terracotta,241,minecraft:pink_terracotta
+Gray Glazed Terracotta,242,minecraft:gray_terracotta
+Light Gray Glazed Terracotta,243,minecraft:light_gray_terracotta
+Cyan Glazed Terracotta,244,minecraft:cyan_terracotta
+Purple Glazed Terracotta,245,minecraft:purple_terracotta
+Blue Glazed Terracotta,246,minecraft:blue_terracotta
+Brown Glazed Terracotta,247,minecraft:brown_terracotta
+Green Glazed Terracotta,248,minecraft:green_terracotta
+Red Glazed Terracotta,249,minecraft:red_terracotta
+Black Glazed Terracotta,250,minecraft:black_terracotta
+White Concrete,251,minecraft:concrete
+Orange Concrete,251^1,minecraft:orange_concrete
+Magenta Concrete,251^2,minecraft:magenta_concrete
+Light Blue Concrete,251^3,minecraft:light_blue_concrete
+Yellow Concrete,251^4,minecraft:yellow_concrete
+Lime Concrete,251^5,minecraft:lime_concrete
+Pink Concrete,251^6,minecraft:pink_concrete
+Gray Concrete,251^7,minecraft:gray_concrete
+Light Gray Concrete,251^8,minecraft:light_gray_concrete
+Cyan Concrete,251^9,minecraft:cyan_concrete
+Purple Concrete,251^10,minecraft:purple_concrete
+Blue Concrete,251^11,minecraft:blue_concrete
+Brown Concrete,251^12,minecraft:brown_concrete
+Green Concrete,251^13,minecraft:green_concrete
+Red Concrete,251^14,minecraft:red_concrete
+Black Concrete,251^15,minecraft:black_concrete
+Structure Block,255,minecraft:structure_block
+Oak Door,324,minecraft:wooden_door
+Iron Door,330,minecraft:iron_door
+Brick,336,minecraft:brick
+Melon,360,minecraft:melon
+Nether Brick,405,minecraft:netherbrick
+Nether Quartz,406,minecraft:quartz
+Spruce Door,427,minecraft:spruce_door
+Birch Door,428,minecraft:birch_door
+Jungle Door,429,minecraft:jungle_door
+Acacia Door,430,minecraft:acacia_door
+Dark Oak Door,431,minecraft:dark_oak_door
