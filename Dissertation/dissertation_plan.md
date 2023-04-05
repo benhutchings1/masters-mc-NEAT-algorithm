@@ -26,13 +26,15 @@
         - Experimenting with system behaviours
 
 ### Aim and Objectives
-Aim: ?
+Aim: 
 Objectives  
 1. Experiment with other creations
 
 
 
-## Background (~6-8 pages)
+## Related Work (~6-8 pages)
+- PGC 
+    - Previous techniques
 - Evocraft
     - https://evocraft.life/
     - gRPC calls framework 
@@ -41,9 +43,11 @@ Objectives
     - Minecraft AI Settlement Generation Challenge
     - Voxel space
 - NEAT
+    - Fitness functions
     - Novelty Search
 -  Evocraft22_PCGNN
     - https://github.com/Michael-Beukman/Evocraft22_PCGNN/tree/main/src/analysis/proper_experiments/v400
+    - i am focusing on a much smaller scale generation, they focused on large scale diversity?
 -https://link.springer.com/chapter/10.1007/978-3-030-72699-7_21
     - Open ended frameworks
 ## Method (~10-12 pages)
@@ -55,5 +59,4 @@ Objectives
 ## Future Work
 
 ## References (~1-2 pages)
-
-500 words/page
+https://subscription.packtpub.com/book/game-development/9781785886713/1/ch01lvl1sec14/the-drawbacks-of-procedural-generation
