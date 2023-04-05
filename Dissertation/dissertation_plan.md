@@ -56,6 +56,7 @@ Objectives
 - Minecraft performance 
 - Fitness over time
     - Max, mean, min, fitness
+    - Performance scaling with size of building generated
 ## Future Work
 
 ## References (~1-2 pages)

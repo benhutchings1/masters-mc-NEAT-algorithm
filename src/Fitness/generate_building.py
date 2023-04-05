@@ -1,19 +1,33 @@
 import numpy as np
+import neat
 
 
-def generate(model, height:int, length:int, width:int):
+def generate(net:neat.nn.FeedForwardNetwork, height:int, length:int, width:int):
     """
     Uses a given model to create a house to the specified height, length, width
     Get the model to predict a block by giving the surrounding blocks
     """
+    template_input = np.zeros((17 + 6))
+    template_input[0] = height
+    template_input[1] = length
+    template_input[2] = width
+
     out = np.zeros((height, length, width)).astype(int)
+    out.fill(-1)
     for h in range(height):
         for l in range(length):
             for w in range(width):
                 surr_points = get_surrounding_points(out, w, h, l)
-                # inputs = ?
+                template_input[3] = h
+                template_input[4] = l
+                template_input[5] = w
+                template_input[6:] = surr_points
+
                 # Use model to predict current point
-                # model.activate(inputs)
+                out[h][l][w] = np.argmax(net.activate(template_input))
+
+    return out
+
 
 def get_surrounding_points(ar:np.array, x:int, y:int, z:int) -> np.array:
     out = np.zeros((2 * 3 * 3) - 1).astype(int)
