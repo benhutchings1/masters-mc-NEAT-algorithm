@@ -1,15 +1,46 @@
 from . import generate_building
 import neat
+from concurrent.futures import ProcessPoolExecutor, as_completed
+import numpy as np
 
-def test_fitness(genomes, config:neat.Config,):
-    # Iterate through genomes and corresponding networks
-    for genome, net in zip(genomes, generate_nets(genomes, config)):
-        print(generate_building.generate(net, 15, 15, 15))
-        raise NotImplementedError
+def test_fitness(genomes:list, config:neat.Config):
+    # Configuration options
+    HEIGHT = 5
+    LENGTH = 5
+    WIDTH = 5
 
-def generate_nets(genomes, config) -> list:
+    # Get genome information
+    gids = [g[0] for g in genomes]
+    nets = [net for net in generate_nets(genomes, config)]
+    net_results = [None] * (len(nets) + 1)
+
+    # Generate one building using each genome
+    # Split processing over all CPU's
+    with ProcessPoolExecutor() as exe:
+        futures = [
+            exe.submit(generate_building.generate, gid, net, HEIGHT, LENGTH, WIDTH)
+                        for gid, net in zip(gids, nets)
+                ]
+        # Process results once completed
+        for result in as_completed(futures):
+            result = result.result()
+            net_results[result[0]] = result[1]
+    # Evaluate Fitness for model's output
+    fitnesses = [
+        combined_fitness_test(gid, genome, output) 
+        for gid, genome, output in zip(gids, nets, net_results)
+    ]
+    print(fitnesses)
+
+    raise NotImplementedError
+
+def generate_nets(genomes:list, config:neat.Config) -> list:
     nets = []
     for genome_id, genome in genomes:
+        # Create net from given genome
         nets.append(neat.nn.FeedForwardNetwork.create(genome, config))
     return nets
         
+
+def combined_fitness_test(gid:int, genome:neat.DefaultGenome, output:np.array) -> int:
+    return 0
