@@ -4,6 +4,11 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 import numpy as np
 
 def test_fitness(genomes:list, config:neat.Config):
+    """
+    Main function called to evaluate a set of genomes
+    Requires a neat.Config object
+    Returns a list of fitness values for each genome
+    """
     # Configuration options
     HEIGHT = 5
     LENGTH = 5
@@ -35,6 +40,9 @@ def test_fitness(genomes:list, config:neat.Config):
     raise NotImplementedError
 
 def generate_nets(genomes:list, config:neat.Config) -> list:
+    """
+    Uses each genome to make a list of corresponding neat.FeedForwardNetwork's
+    """
     nets = []
     for genome_id, genome in genomes:
         # Create net from given genome
