@@ -2,7 +2,7 @@ import numpy as np
 import neat
 
 
-def generate(net:neat.nn.FeedForwardNetwork, height:int, length:int, width:int):
+def generate(genome_id:int, net:neat.nn.FeedForwardNetwork, height:int, length:int, width:int):
     """
     Uses a given model to create a house to the specified height, length, width
     Get the model to predict a block by giving the surrounding blocks
@@ -26,7 +26,7 @@ def generate(net:neat.nn.FeedForwardNetwork, height:int, length:int, width:int):
                 # Use model to predict current point
                 out[h][l][w] = np.argmax(net.activate(template_input))
 
-    return out
+    return genome_id, out
 
 
 def get_surrounding_points(ar:np.array, x:int, y:int, z:int) -> np.array:
