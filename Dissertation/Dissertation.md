@@ -29,10 +29,21 @@ https://www.sportskeeda.com/minecraft/how-big-minecraft-world
 ### EvoCraft Challenge
 The EvoCraft challenge brief is to create an open-ended algorithm which is capable of creating novel and increasingly complex structures. These algorithms have to be unending and should aim to diverge over time rather than slow down and become repetitive. One of the drawbacks of PGC was the lack of quality control, and the problem with infintely generating content becoming repetitive over time. This challenge aims to use evolving algorithms to keep generating content which is interesting.
 
+### Procedural Content Generation
+
 ### NEAT + Novely Search
 NeuroEvolution of Augmenting Topologies (NEAT) is a genetic algorithm (GA) which uses biological evolution to increase the complexity of neural networks. Traditional neural networks have a fixed structure of input, hidden, and output layers, usually fully connected by weights and biases. To improve the performance of the model the network is given examples of inputs and corresponding outputs, and techniques such as back propogation are used to update the network. NEAT works in a much different way. Instead of having a fixed structure inside the genome (the name for a network in NEAT context), the genome structure evolves over time. The genome is initialized with basic connections inside the genome, resulting in essentially random output. A population of individuals, each with a copy of the genome, is generated. This population then "evolves" through a process called "mutation". Each individual in the population will have a/many random changes made to their internal structure. Each individual is then evaluated using a fitness function, which evaluates an output and assignes a score. The top individuals are then taken and the others are destroyed. The population is then recreated, to create a next "generation", using these top individuals and the mutation process is repeated. The goal of the process is, through random mutation, to move towards a network which can produce perfect output. 
 
 There is however a problem with this evolution process, a population's fitness score can becomes stuck in a local maxima. Moving out of this spot would require generations with lower fitness scores, but after some generations the population fitness would increase to reach a global maxima. This is a problem because any individual which drops in fitness would be eliminated, stopping the population from diversing. A solution to this is incorperating novelty search. In novelty serach not only does the fitness function evaluate the output of a model it also measures how diverse the genetic structure of an individual is compared to the population, and uses this to boost its fitness score. This promotes individuals which branch out and evolve different structures, hopefully improving the chances of making a network which reaches a perfect fitness score.
+
+### Reinforcement Learning PCG
+Reinforcement learning (RL) is a type of machine learning composed of three key elements: an agent, the environment, a reward. RL uses a trial-and-error method with an agent interacting with an environment. An agent makes an action within and environment and will either be rewarded, if the the action was a good action, and punished, if the action was bad. The eventual goal for a RL agent is to learn a policy, which is a mapping from input states to output actions. The agent starts with random actions and getting experience, in the form of state-action-reward, which is used to update the policy of the agent. Eventually the agent aims to maximise the cumulative reward signal by maintaining a balance between exploring, to learn new experiences, and exploitation, leveraging existing techniques.
+
+RL gains many of the same benefits as genetic algorithms. They require no large training set, because the agent learns from interactions with the environment, and therefore has the same creativity that a GA does. 
+
+RL delayed gratification?
+
+https://pythonistaplanet.com/pros-and-cons-of-reinforcement-learning/
 
 ## Method
 

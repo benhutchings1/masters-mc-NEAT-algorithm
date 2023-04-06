@@ -57,6 +57,7 @@ Objectives
 - Fitness over time
     - Max, mean, min, fitness
     - Performance scaling with size of building generated
+- Novelty can be high but has to be human novelty which is hgih
 ## Future Work
 
 ## References (~1-2 pages)
