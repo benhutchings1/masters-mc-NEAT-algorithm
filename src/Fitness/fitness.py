@@ -16,7 +16,7 @@ def test_fitness(genomes:list, config:neat.Config):
 
     # Get genome information
     gids = [g[0] for g in genomes]
-    nets = [net for net in generate_nets(genomes, config)]
+    nets = [net for net in __generate_nets(genomes, config)]
     net_results = [None] * (len(nets) + 1)
 
     # Generate one building using each genome
@@ -35,13 +35,13 @@ def test_fitness(genomes:list, config:neat.Config):
         combined_fitness_test(gid, genome, output) 
         for gid, genome, output in zip(gids, nets, net_results)
     ]
-    print(fitnesses)
 
     raise NotImplementedError
 
-def generate_nets(genomes:list, config:neat.Config) -> list:
+def __generate_nets(genomes:list, config:neat.Config) -> list:
     """
     Uses each genome to make a list of corresponding neat.FeedForwardNetwork's
+    returns list of networks
     """
     nets = []
     for genome_id, genome in genomes:
@@ -51,4 +51,7 @@ def generate_nets(genomes:list, config:neat.Config) -> list:
         
 
 def combined_fitness_test(gid:int, genome:neat.DefaultGenome, output:np.array) -> int:
+    """
+    Combines all fitness tests
+    """
     return 0
