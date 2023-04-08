@@ -14,6 +14,12 @@ def test_fitness(genomes:list, config:neat.Config):
     LENGTH = 5
     WIDTH = 5
 
+    input_config = [
+        HEIGHT,
+        LENGTH,
+        WIDTH
+    ]
+
     # Get genome information
     gids = [g[0] for g in genomes]
     nets = [net for net in __generate_nets(genomes, config)]
@@ -23,20 +29,23 @@ def test_fitness(genomes:list, config:neat.Config):
     # Split processing over all CPU's
     with ProcessPoolExecutor() as exe:
         futures = [
-            exe.submit(generate_building.generate, gid, net, HEIGHT, LENGTH, WIDTH)
+            exe.submit(generate_building.generate, gid, net, input_config)
                         for gid, net in zip(gids, nets)
                 ]
         # Process results once completed
         for result in as_completed(futures):
             result = result.result()
             net_results[result[0]] = result[1]
+
+    raise NotImplementedError
     # Evaluate Fitness for model's output
     fitnesses = [
         combined_fitness_test(gid, genome, output) 
         for gid, genome, output in zip(gids, nets, net_results)
     ]
 
-    raise NotImplementedError
+
+    
 
 def __generate_nets(genomes:list, config:neat.Config) -> list:
     """
@@ -50,7 +59,7 @@ def __generate_nets(genomes:list, config:neat.Config) -> list:
     return nets
         
 
-def combined_fitness_test(gid:int, genome:neat.DefaultGenome, output:np.array) -> int:
+def combined_fitness_tests(genomes:neat.DefaultGenome, inputs:np.array, outputs:np.array) -> int:
     """
     Combines all fitness tests
     """
