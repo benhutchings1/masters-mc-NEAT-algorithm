@@ -49,8 +49,9 @@ Objectives
 -  Evocraft22_PCGNN
     - https://github.com/Michael-Beukman/Evocraft22_PCGNN/tree/main/src/analysis/proper_experiments/v400
     - i am focusing on a much smaller scale generation, they focused on large scale diversity?
--
-    - Open ended frameworks
+- GAN
+    - Can be much bigger models
+    - EA's are harder to run on GPU
 ## Method (~10-12 pages)
 - Type of novelty search
     - KNN
