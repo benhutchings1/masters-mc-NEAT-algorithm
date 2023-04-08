@@ -73,3 +73,10 @@ Objectives
 
 ## References (~1-2 pages)
 https://subscription.packtpub.com/book/game-development/9781785886713/1/ch01lvl1sec14/the-drawbacks-of-procedural-generation
+
+
+
+
+TODO
+Update with new aim
+Update NEAT description to show description of cross over mutate....

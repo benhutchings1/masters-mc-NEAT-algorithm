@@ -1,4 +1,4 @@
-from . import generate_building
+from . import generate_building, fitness_functions, novelty
 import neat
 from concurrent.futures import ProcessPoolExecutor, as_completed
 import numpy as np
@@ -35,15 +35,12 @@ def test_fitness(genomes:list, config:neat.Config):
         # Process results once completed
         for result in as_completed(futures):
             result = result.result()
-            net_results[result[0]] = result[1]
+            net_results[result[0] - 1] = result[1]
 
-    raise NotImplementedError
+    
     # Evaluate Fitness for model's output
-    fitnesses = [
-        combined_fitness_test(gid, genome, output) 
-        for gid, genome, output in zip(gids, nets, net_results)
-    ]
-
+    fitnesses = combined_fitness_tests(genomes, input_config, net_results)
+    raise NotImplementedError
 
     
 
@@ -59,8 +56,10 @@ def __generate_nets(genomes:list, config:neat.Config) -> list:
     return nets
         
 
-def combined_fitness_tests(genomes:neat.DefaultGenome, inputs:np.array, outputs:np.array) -> int:
+def combined_fitness_tests(genomes:neat.DefaultGenome, input:np.array, outputs:np.array) -> int:
     """
     Combines all fitness tests
     """
-    return 0
+    # novelty.novelty_fitness(genomes)
+    fitness_functions.structure_fitness(genomes, input, outputs)
+    raise NotImplementedError

@@ -4,7 +4,7 @@ import numpy as np
 
 class BlockReader():
     def __init__(self, block_path=None):
-        self.client = mc.create()
+        # self.client = mc.create()
         # Read in block list
         self.blocklist = None
         self.blockmap = None

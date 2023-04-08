@@ -12,6 +12,9 @@ def generate(genome_id:int, net:neat.nn.FeedForwardNetwork, input_config:List[fl
     template_input = np.zeros((20 + len(input_config)))
     l_config = len(input_config)
     template_input[:l_config] = input_config
+    height = input_config[0]
+    length = input_config[1]
+    width = input_config[2]
 
     out = np.zeros((height, length, width)).astype(int)
     out.fill(-1)
@@ -20,11 +23,11 @@ def generate(genome_id:int, net:neat.nn.FeedForwardNetwork, input_config:List[fl
             for w in range(width):
                 surr_points = __get_surrounding_points(out, w, h, l)
                 # Give current coords of block placed
-                template_input[l_config + 3] = h
-                template_input[l_config + 4] = l
-                template_input[l_config + 5] = w
+                template_input[l_config] = h
+                template_input[l_config + 1] = l
+                template_input[l_config + 2] = w
                 # Give surrounding blocks
-                template_input[l_config + 6:] = surr_points
+                template_input[l_config + 3:] = surr_points
 
                 # Use model to predict current point
                 out[h][l][w] = np.argmax(net.activate(template_input))
