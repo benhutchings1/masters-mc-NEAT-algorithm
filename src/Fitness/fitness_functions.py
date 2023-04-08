@@ -6,3 +6,9 @@
 # Check has a door on low floor
 # Check for slanted roof? or flat roof?
 # Check for diversity
+
+def get_diversity(genomes):
+    print(genomes)
+
+def genome_distane(a, b):
+    pass
