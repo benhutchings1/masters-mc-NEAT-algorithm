@@ -2,6 +2,7 @@ from . import generate_building, fitness_functions, novelty
 import neat
 from concurrent.futures import ProcessPoolExecutor, as_completed
 import numpy as np
+import random
 
 def test_fitness(genomes:list, config:neat.Config):
     """
@@ -13,11 +14,16 @@ def test_fitness(genomes:list, config:neat.Config):
     HEIGHT = 5
     LENGTH = 5
     WIDTH = 5
+    
+    seeds = random.sample(range(0, 307), 3)
 
     input_config = [
         HEIGHT,
         LENGTH,
-        WIDTH
+        WIDTH,
+        seeds[0],
+        seeds[1],
+        seeds[2]
     ]
 
     # Get genome information
