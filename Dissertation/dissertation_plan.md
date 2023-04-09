@@ -45,6 +45,8 @@ Objectives
 - NEAT
     - Fitness functions
     - Novelty Search
+        - Critical factors in novelty search https://dl.acm.org/doi/abs/10.1145/2001576.2001708?casa_token=m49nq4A5exsAAAAA:iQROZsm1KBg_uBPa-lQPmB36D32dhf7yPWxT4jIrIPMSG1SiQ2tYQHDWL2MpIUhdFLxAbM6r-0vDSBw
+
     - https://dl.acm.org/doi/pdf/10.1145/2001576.2001606
 -  Evocraft22_PCGNN
     - https://github.com/Michael-Beukman/Evocraft22_PCGNN/tree/main/src/analysis/proper_experiments/v400
