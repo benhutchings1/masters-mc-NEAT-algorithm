@@ -4,16 +4,18 @@ from typing import List
 
 # Check for windows
 # Check for slanted roof? or flat roof?
+# Size of model?
 
 def structure_fitness(genomes:List[neat.DefaultGenome], input:np.array, outputs:List[np.array]) \
     -> List[float]:
     fit_funcs = [fit_seed_blocks, fit_airspace, fit_bounding_wall, fit_door]
+    fitnesses = []
     for (gid, genome), output in zip(genomes, outputs):
         g_fit = []
         for f in fit_funcs:
             g_fit.append(f(genome, input, output))
-        print(g_fit)
-        break   
+        fitnesses.append(np.average(g_fit))
+    return fitnesses
 
 
 def fit_bounding_wall(genome:neat.DefaultGenome, input:np.array, output:np.array) -> float:

@@ -4,6 +4,8 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 import numpy as np
 import random
 
+generation = 0
+
 def test_fitness(genomes:list, config:neat.Config):
     """
     Main function called to evaluate a set of genomes
@@ -45,8 +47,8 @@ def test_fitness(genomes:list, config:neat.Config):
 
     
     # Evaluate Fitness for model's output
-    fitnesses = combined_fitness_tests(genomes, input_config, net_results)
-    raise NotImplementedError
+    for (__, genome), fit in zip(genomes, combined_fitness_tests(genomes, input_config, net_results)):
+        genome.fitness = fit
 
     
 
@@ -67,5 +69,4 @@ def combined_fitness_tests(genomes:neat.DefaultGenome, input:np.array, outputs:n
     Combines all fitness tests
     """
     # novelty.novelty_fitness(genomes)
-    fitness_functions.structure_fitness(genomes, input, outputs)
-    raise NotImplementedError
+    return fitness_functions.structure_fitness(genomes, input, outputs)
