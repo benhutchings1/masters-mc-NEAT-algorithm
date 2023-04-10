@@ -1,5 +1,7 @@
 import neat
 import numpy as np
+import os
+from .Fitness import fitness
 
 def run(config_file:str, fitness_function:object, checkpoint_path="checkpoints/",
         n_generations=100):
@@ -9,6 +11,12 @@ def run(config_file:str, fitness_function:object, checkpoint_path="checkpoints/"
     Models are incrementally checkpointed and saved in checkpoint_path
     returns the best performing model
     """
+    # Make checkpoint path if non-existant
+    try:
+        os.mkdir(checkpoint_path)
+    except FileExistsError:
+        pass
+    
     # Load configuration.
     config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
                          neat.DefaultSpeciesSet, neat.DefaultStagnation,
@@ -20,7 +28,7 @@ def run(config_file:str, fitness_function:object, checkpoint_path="checkpoints/"
     # Add a stdout reporter to show progress in the terminal.
     p.add_reporter(neat.StdOutReporter(True))
     p.add_reporter(neat.StatisticsReporter())
-    p.add_reporter(neat.Checkpointer(5, filename_prefix=checkpoint_path + "/NEAT-checkpoint-"))
+    p.add_reporter(neat.Checkpointer(5, filename_prefix=checkpoint_path + "NEAT-checkpoint-"))
 
     # Run for up to n generations.
     winner = p.run(fitness_function, n_generations)
@@ -59,3 +67,22 @@ def edit_config(path:str, input_size=None, pop_size=None,
     with open(path, "w") as fs:
         fs.writelines(lines)
     
+def load_checkpoint(checkpoint_path:str) -> neat.Population:
+    cp = neat.Checkpointer()
+    return cp.restore_checkpoint(checkpoint_path)
+
+def load_genomes_checkpoint(checkpoint_path:str):
+    return load_checkpoint(checkpoint_path).population.items()
+
+def checkpoint_best_genome(checkpoint_path:str, config_path:neat.Config, as_model=True):
+    # Load configuration.
+    config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
+                         neat.DefaultSpeciesSet, neat.DefaultStagnation,
+                         config_path)
+    
+    genomes = load_genomes_checkpoint(checkpoint_path)
+    if as_model:
+        return neat.nn.FeedForwardNetwork.create(
+            fitness.test_fitness(genomes, config, return_best=True), config)
+    else:
+        return fitness.test_fitness(genomes, config, return_best=True)
