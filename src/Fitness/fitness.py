@@ -6,7 +6,7 @@ import random
 
 generation = 0
 
-def test_fitness(genomes:list, config:neat.Config):
+def test_fitness(genomes:list, config:neat.Config, return_best=False):
     """
     Main function called to evaluate a set of genomes
     Requires a neat.Config object
@@ -16,7 +16,6 @@ def test_fitness(genomes:list, config:neat.Config):
     HEIGHT = 5
     LENGTH = 5
     WIDTH = 5
-    
     seeds = random.sample(range(0, 307), 3)
 
     input_config = [
@@ -36,21 +35,34 @@ def test_fitness(genomes:list, config:neat.Config):
     # Generate one building using each genome
     # Split processing over all CPU's
     with ProcessPoolExecutor() as exe:
+        # Send function call to be parallalised
+        # Give index to map back to
         futures = [
-            exe.submit(generate_building.generate, gid, net, input_config)
-                        for gid, net in zip(gids, nets)
+            exe.submit(generate_building.generate, i, net, input_config)
+                        for i, net in enumerate(nets)
                 ]
         # Process results once completed
         for result in as_completed(futures):
+            # Get result from future when completed
             result = result.result()
-            net_results[result[0] - 1] = result[1]
-
+            # Map results back to array
+            net_results[result[0]] = result[1]
     
     # Evaluate Fitness for model's output
+    best_fit = 0
+    best_genome = 0
+    
     for (__, genome), fit in zip(genomes, combined_fitness_tests(genomes, input_config, net_results)):
+        # Get best model
+        if return_best:
+            if fit > best_fit:
+                best_fit = fit
+                best_genome = genome
+                
         genome.fitness = fit
 
-    
+    if best_fit:
+        return best_genome
 
 def __generate_nets(genomes:list, config:neat.Config) -> list:
     """
