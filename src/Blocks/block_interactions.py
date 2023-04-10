@@ -4,7 +4,7 @@ import numpy as np
 
 class BlockReader():
     def __init__(self, block_path=None):
-        # self.client = mc.create()
+        self.client = mc.create()
         # Read in block list
         self.blocklist = None
         self.blockmap = None
@@ -65,17 +65,19 @@ class BlockReader():
         return blocks                    
 
 
-    def place_block(self, x, y, z, blockid, subblock=0):
+    def place_block_id(self, x, y, z, blockid, subblock=0):
         return self.client.setBlock(x, y, z, blockid, subblock) 
     
 
-    def place_block(self, x, y, z, strblock):
+    def place_block_str(self, x, y, z, strblock):
+        assert type(strblock) == str
         if "^" in strblock:
             id, subblock = strblock.split("^")
             id, subblock = int(id), int(subblock)
-            self.place_block(x, y, z, id, subblock)
+            self.place_block_id(x, y, z, id, subblock)
+            return
         else:
-            self.place_block(x, y, z, blockid=int(strblock))
+            self.place_block_id(x, y, z, blockid=int(strblock))    
 
 
     def place_blocks(self, start_coords, end_coords, blockid, subblock):
@@ -93,11 +95,18 @@ class BlockReader():
             subblock
         )
 
-    def place_blocks_np(self, blocks, x, y, z, strblocks=False):
+    def place_blocks_np(self, blocks, x0=0, y0=-60, z0=0, map=True):
+        assert len(blocks.shape) == 3
+        if map:
+            assert not self.blocklist is None 
+            
         for yi, y in enumerate(blocks):
             for xi, x in enumerate(y):
                 for zi, z in enumerate(x):
-                    self.place_block(x+xi, y+yi, z+zi, strblocks=z)
+                    if map:
+                        z = self.blocklist[z]
+                    self.place_block_str(x0, y0, z0, strblock=z)
+                    
 
         
 
