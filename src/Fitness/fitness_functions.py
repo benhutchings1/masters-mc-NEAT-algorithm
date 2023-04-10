@@ -6,6 +6,8 @@ from typing import List
 # Check for slanted roof? or flat roof?
 # Size of model?
 
+# Fitness 0 = low, 1 = high
+
 def structure_fitness(genomes:List[neat.DefaultGenome], input:np.array, outputs:List[np.array]) \
     -> List[float]:
     fit_funcs = [fit_seed_blocks, fit_airspace, fit_bounding_wall, fit_door]
