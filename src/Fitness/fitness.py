@@ -13,11 +13,13 @@ def test_fitness(genomes:list, config:neat.Config, return_best=False):
     Returns a list of fitness values for each genome
     """
     # Configuration options
-    HEIGHT = 5
-    LENGTH = 5
-    WIDTH = 5
+    HEIGHT = 6
+    LENGTH = 6
+    WIDTH = 6
+    # Generate 3 random blocks
     seeds = random.sample(range(0, 307), 3)
 
+    # Format inputs
     input_config = [
         HEIGHT,
         LENGTH,
