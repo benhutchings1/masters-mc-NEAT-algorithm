@@ -1,5 +1,6 @@
 # Procedural content generation through the use of genetic algorithms (working title)
 # Exploration vs exploitation - Investigating how different levels of novelty affect a population's overall fitness in NEAT algorithms
+# How much is too much novelty?
 ## Abstract
 
 ##  Introduction
@@ -31,8 +32,15 @@ https://link.springer.com/content/pdf/10.1007/3-540-46002-0_19.pdf
 ######NEEDS REWRITING FOR UPDATED PROJECT AIM
 
 ### Aims and Objectives
-Aim: Investigate how levels of novelty in a population affects the population's overall fitness, within the context of the EvoCraft challenge.
-
+Aim: Investigate how varying levels of novelty in a population affects the population's overall fitness, within the context of the EvoCraft challenge.
+Objectives:
+    1. Investigate other competition entries for the EvoCraft challenge
+    2. Research novelty techniques
+    3. Train a basic model which can generate structures of arbitrary quality
+    4. Implement basic novelty search
+    5. Experiment with different levels of novelty
+### Hypothesis
+@@
 
 ## Background
 ### Minecraft
@@ -43,6 +51,19 @@ For interactions between Python and Minecraft world I will be using a Minecraft 
 
 ### EvoCraft Challenge
 The EvoCraft challenge brief is to create an open-ended algorithm which is capable of creating novel and increasingly complex structures. These algorithms have to be unending and should aim to diverge over time rather than slow down and become repetitive. One of the drawbacks of PGC was the lack of quality control, and the problem with infintely generating content becoming repetitive over time. This challenge aims to use evolving algorithms to keep generating content which keeps diverging and becoming more interesting.
+
+### EvoCraft competition winners
+#### Evocraft PCGNN *Michael Beukman, Matthew Kruger, Guy Axelrod, Manuel Fokam, Muhammad Nasir*
+[ref] were came runners up in the EvoCraft competition with their endless city generator. Their approach broke a city down into the component 'levels', starting from the lowest level, the house and garden. To generate a house and garden they broke this down into 4 components: the house structure, roof, decorations, and garden. They then used a PCGNN (Procedural Content Generation using Neat and Novelty search) to generate each of these components. The house, roof, and decorations are all generated as 3d tilemaps to be placed in-world. The house consists of walls, empty space, and enterance, the roof consists of a design covering the area beneath it, and the decorations consists of decoration blocks filling floor space inside the house. The garden works slightly differently as it is a 2d tilemap covering an area with flowers, grass, and trees. They then used these component houses and gardens to create a town. A town is its own generated 2D tilemap of houses, gardens and roads @@image in appendix@@, where are road connects all the houses in the town. They then placed many towns together to create a city, which could grow endlessly. 
+@@ Put about successes and drawbacks?
+@@pic in appendix@@  
+https://github.com/Michael-Beukman/Evocraft22_PCGNN
+
+#### simple_minecraft_evolver *real_itu*
+https://github.com/real-itu/simple_minecraft_evolver
+#### Automated design of novel redstone circuits *Nicholas Guttenberg* 
+https://github.com/GoodAI/EvocraftEntry
+
 
 ### Procedural Content Generation Techniques
 ### NEAT + Novely Search
@@ -68,6 +89,7 @@ https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8877944/
 https://jonathan-hui.medium.com/gan-why-it-is-so-hard-to-train-generative-advisory-networks-819a86b3750b
 
 ## Method
+
 
 ## Evaluation
 
