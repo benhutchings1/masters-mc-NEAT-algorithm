@@ -3,8 +3,11 @@ import csv
 import numpy as np
 
 class BlockReader():
-    def __init__(self, block_path=None):
-        self.client = mc.create()
+    def __init__(self, block_path=None, connect=True):
+        if connect:
+            self.client = mc.create()
+        else:
+            self.client = None
         # Read in block list
         self.blocklist = None
         self.blockmap = None
@@ -35,7 +38,7 @@ class BlockReader():
             )
     
     
-    def read_blocks_np(self, start_coords, end_coords):
+    def read_blocks_np(self, start_coords, end_coords, listid=True):
         # Read a cube of blocks
         assert type(start_coords) == list or type(end_coords) == list
         assert len(start_coords) == 3 and len(end_coords) == 3
@@ -45,8 +48,10 @@ class BlockReader():
 
         # Get coordinate vector
         diff = [abs(end_coords[i]-start_coords[i])+1 for i in range(len(start_coords))]
-        blocks = np.zeros(shape=(diff[1], diff[0], diff[2])).astype(int)
-
+        if listid:
+            blocks = np.zeros(shape=(diff[1], diff[0], diff[2])).astype(int)
+        else:
+            blocks = np.zeros(shape=(diff[1], diff[0], diff[2])).astype(str)
         # Iterate over y element
         for yi, y in enumerate(range(start_coords[1], start_coords[1] + diff[1])):
             # Iterate over x element
@@ -59,9 +64,12 @@ class BlockReader():
                     if not block[1] == 0:
                         strblock += f"^{block[1]}"
 
-                    arspace[zi] = self.blockmap[
-                        strblock
-                    ]
+                    if listid:
+                        arspace[zi] = self.blockmap[
+                            strblock
+                        ]
+                    else:
+                        arspace[zi] = strblock
         return blocks                    
 
 
@@ -105,7 +113,7 @@ class BlockReader():
                 for zi, z in enumerate(x):
                     if map:
                         z = self.blocklist[z]
-                    self.place_block_str(x0, y0, z0, strblock=z)
+                    self.place_block_str(x0+xi, y0+yi, z0+zi, strblock=z)
                     
 
         
@@ -118,5 +126,44 @@ class BlockReader():
             for ri, row in enumerate(reader):
                 out.append(row[1])
                 lookup[row[1]] = ri
+        # Remap some lookup values
+        remap = [64, 71, 193, 194, 195, 196, 197, 17, 162, 167, 96]        
+        for id in remap:
+            mpp = lookup[f"{id}"]
+            for i in range(20):
+                lookup[f"{id}^{i}"] = mpp
+        
         return out, lookup
+
+    def __sort_coordinates(self, a, b):
+        return [min(ai, bi) for ai, bi in zip(a, b)], \
+            [max(ai, bi) for ai, bi in zip(a, b)]
+            
                 
+                
+    def save_np(self, arr:np.array, path:str):
+        with open(path, "w+") as fs:
+            wr = csv.writer(fs)
+            wr.writerow(arr.shape)
+            for y in arr:
+                for z in y:
+                    wr.writerow(z)
+    
+    def read_np(self, path:str) -> np.array:
+        with open(path, "r") as fs:
+            rd = csv.reader(fs)
+            shape = ()
+            arr = None
+            rowy = 0
+            rowx=0
+            for i, row in enumerate(rd):
+                if not i:
+                    shape = tuple([int(s) for s in row])
+                    arr = np.zeros(shape=shape).astype(int).astype(str)
+                else:
+                    arr[rowy][rowx] = row
+                    rowx += 1
+                    if rowx > (shape[1] - 1):
+                        rowx = 0
+                        rowy += 1
+        return arr
