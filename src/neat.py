@@ -85,4 +85,4 @@ def checkpoint_best_genome(checkpoint_path:str, config_path:neat.Config, as_mode
         return neat.nn.FeedForwardNetwork.create(
             fitness.test_fitness(genomes, config, return_best=True), config)
     else:
-        return fitness.test_fitness(genomes, config, return_best=True)
+        return fitness.test_fitness(genomes, config, return_best=True)[1]
