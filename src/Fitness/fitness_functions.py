@@ -5,20 +5,27 @@ from typing import List
 # Check for windows
 # Check for slanted roof? or flat roof?
 # Size of model?
-
+# House symmetry
 # Fitness 0 = low, 1 = high
 
-def structure_fitness(genomes:List[neat.DefaultGenome], input:np.array, outputs:List[np.array]) \
+def structure_fitness(genomes:List[neat.DefaultGenome], input:list, outputs:List[np.array]) \
     -> List[float]:
     fit_funcs = [fit_seed_blocks, fit_airspace, fit_bounding_wall, fit_door]
     fitnesses = []
-    for (gid, genome), output in zip(genomes, outputs):
+    for (__, genome), output in zip(genomes, outputs):
         g_fit = []
         for f in fit_funcs:
             g_fit.append(f(genome, input, output))
         fitnesses.append(np.average(g_fit))
     return fitnesses
 
+def single_structure_fitness(input:list, output:np.array):
+    fit_funcs = [fit_seed_blocks, fit_airspace, fit_bounding_wall, fit_door]
+    f_names = ["Seed block fitness", "Airspace fitness", "Bounding wall fitness", "Door fitness"]
+    fitness = {}
+    for name, f in zip(f_names, fit_funcs):
+        fitness[name] = f(None, input, output)
+    return fitness
 
 def fit_bounding_wall(genome:neat.DefaultGenome, input:np.array, output:np.array) -> float:
     # Checks for a complete wall with no airgaps
@@ -36,8 +43,7 @@ def fit_bounding_wall(genome:neat.DefaultGenome, input:np.array, output:np.array
 def fit_door(genome:neat.DefaultGenome, input:np.array, output:np.array) -> float:
     # Check door exists and is on floor
     # Door ID's
-    ids=  [297, 298, 304, 305, 306, 307]
-    fit = 0
+    ids = [93, 98, 277, 278, 279, 280, 281]
     # Iterate over each layer
     for yi, y in enumerate(output):
         # Get non-corner walls
@@ -45,11 +51,10 @@ def fit_door(genome:neat.DefaultGenome, input:np.array, output:np.array) -> floa
         for wall in walls:
             # Check if each door ID exists
             for door in ids:
-                if door in wall:
+                if str(door) in wall:
                     if yi == 0 or yi == 1:
-                        fit = 1
-                        return fit
-    return fit                
+                        return 1
+    return 0                
          
                     
 def fit_airspace(genome:neat.DefaultGenome, input:np.array, output:np.array) -> float:
@@ -61,10 +66,11 @@ def fit_airspace(genome:neat.DefaultGenome, input:np.array, output:np.array) -> 
         for x in z[1:-1]:
             # Count non air blocks
             non_zero += np.count_nonzero(x[1:-1])
+
     # Get volume of interior space
     vol = (len(output) - 1) * (len(output[0]) - 2) * (len(output[0][0]) - 2)
     # Get percentage of air blocks
-    return 1 - (non_zero / vol)
+    return non_zero / vol
 
 
 def fit_seed_blocks(genome:neat.DefaultGenome, input:np.array, output:np.array) -> float:
@@ -80,21 +86,22 @@ def fit_seed_blocks(genome:neat.DefaultGenome, input:np.array, output:np.array) 
     
     # Sort counts
     counts = sorted(counts, key=lambda x: x[1], reverse=True)
-
-    # Get top 6
+    
+    # Get top 8
     top = 8
     if len(counts) > top:
-        counts = (counts[0][:top], counts[1][:top])
-
+        counts = counts[:top+1]
+    
     # Get IDs 
     counts = [id for id, __ in counts]
+    
     # Get number of seed blocks found in structure
     found = 0
     for seed in seeds:
-        if seed in counts:
+        if str(seed) in counts:
             found += 1
 
-    # Return percentage of found for fitness
+    # Return percentage of seeds found for fitness
     return found/len(seeds)
     
     
