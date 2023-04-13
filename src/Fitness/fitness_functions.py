@@ -16,7 +16,7 @@ def structure_fitness(genomes:List[neat.DefaultGenome], input:list, outputs:List
         g_fit = []
         for f in fit_funcs:
             g_fit.append(f(genome, input, output))
-        fitnesses.append(np.average(g_fit))
+        fitnesses.append(sum(g_fit))
     return fitnesses
 
 def single_structure_fitness(input:list, output:np.array):

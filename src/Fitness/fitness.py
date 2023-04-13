@@ -82,5 +82,6 @@ def combined_fitness_tests(genomes:neat.DefaultGenome, input:np.array, outputs:n
     """
     Combines all fitness tests
     """
-    # novelty.novelty_fitness(genomes)
-    return fitness_functions.structure_fitness(genomes, input, outputs)
+    novelty.novelty_fitness(genomes, len(genomes)/2)
+    raise NotImplementedError
+    # return fitness_functions.structure_fitness(genomes, input, outputs)
