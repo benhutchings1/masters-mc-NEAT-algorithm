@@ -127,7 +127,7 @@ class BlockReader():
                 out.append(row[1])
                 lookup[row[1]] = ri
         # Remap some lookup values
-        remap = [64, 71, 193, 194, 195, 196, 197, 17, 162, 167, 96]        
+        remap = [64, 71, 193, 194, 195, 196, 197, 17, 162]        
         for id in remap:
             mpp = lookup[f"{id}"]
             for i in range(20):
