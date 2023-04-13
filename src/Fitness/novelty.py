@@ -1,8 +1,13 @@
 import neat
 from typing import List
 
-def novelty_fitness(genomes: List[neat.DefaultGenome]):
-    pass
+def novelty_fitness(genomes: List[neat.DefaultGenome], k:int):
+    weight_coef = 0.5
+    disjoint_coef = 1
+    for i in range(len(genomes) - 1):
+        for b in genomes[i+1:]:
+            print(distance(genomes[i][1], b[1], weight_coef, disjoint_coef))
+            
 
 def distance(a, b, weight_coef, disjoint_coef):
         """
