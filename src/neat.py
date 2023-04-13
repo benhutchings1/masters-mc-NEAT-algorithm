@@ -42,7 +42,7 @@ def run(config_file:str, fitness_function:object, checkpoint_path="checkpoints/"
     return winner_net
 
 def edit_config(path:str, input_size=None, pop_size=None,
-                       fitness_threshold=None) -> None:
+                       fitness_threshold=None, output_size=None) -> None:
     """
     Updates NEAT configuration file with input size given by value
     """
@@ -62,6 +62,10 @@ def edit_config(path:str, input_size=None, pop_size=None,
         if not fitness_threshold is None:
             if lines[l][:17] == "fitness_threshold":
                 lines[l] = f"fitness_threshold              = {fitness_threshold}\n"
+        
+        if not output_size is None:
+            if lines[l][:11] == "num_outputs":
+                lines[l] = f"num_outputs             = {output_size}\n"
 
     # write back lines
     with open(path, "w") as fs:
