@@ -63,6 +63,7 @@ Objectives
     - Novelty search
         - dist fuction
         - Archived and NN networks 
+            - Might cycle through evolutinoary behaviours
         - Experiment
             - Test with no novelty
             - Test with low novelty
