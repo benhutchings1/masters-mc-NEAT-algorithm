@@ -2,19 +2,22 @@ from mcpi.minecraft import Minecraft as mc
 import csv
 import numpy as np
 
-class BlockReader():
+class BlockInterface():
     def __init__(self, block_path=None, connect=True):
         if connect:
             self.client = mc.create()
         else:
             self.client = None
+            
         # Read in block list
         self.blocklist = None
         self.blockmap = None
         if not block_path is None:
             self.blocklist, self.blockmap = self.__read_in_blocks(block_path)
         
-
+    def connect(self):
+        self.client = mc.create()
+    
     def read_block(self, x, y, z, verbose=False):
         if verbose:
             block = self.client.getBlockWithData(x, y, z)
@@ -103,7 +106,7 @@ class BlockReader():
             subblock
         )
 
-    def place_blocks_np(self, blocks, x0=0, y0=-60, z0=0, map=True):
+    def place_blocks_np(self, blocks, x0=0, y0=-60, z0=0, isblocklist=True):
         assert len(blocks.shape) == 3
         if map:
             assert not self.blocklist is None 
@@ -111,8 +114,14 @@ class BlockReader():
         for yi, y in enumerate(blocks):
             for xi, x in enumerate(y):
                 for zi, z in enumerate(x):
-                    if map:
+                    if isblocklist:
+                        if type(z) is not int:
+                            # try cast to int
+                            z = int(z)
                         z = self.blocklist[z]
+                    else:
+                        z = str(z)
+                    
                     self.place_block_str(x0+xi, y0+yi, z0+zi, strblock=z)
                     
 
@@ -127,7 +136,8 @@ class BlockReader():
                 out.append(row[1])
                 lookup[row[1]] = ri
         # Remap some lookup values
-        remap = [64, 71, 193, 194, 195, 196, 197, 17, 162]        
+        remap = [64, 71, 193, 194, 195, 196, 197, 17, 162, 53, 67, 108,\
+            109, 114, 128, 134, 135, 136, 156, 163, 164, 180, 203]        
         for id in remap:
             mpp = lookup[f"{id}"]
             for i in range(20):
