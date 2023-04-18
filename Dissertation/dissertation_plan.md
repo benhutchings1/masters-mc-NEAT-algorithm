@@ -61,6 +61,7 @@ Objectives
 - NEAT python
     - Algorithmic fitnesss functions
     - Novelty search
+        - Put through activation function
         - dist fuction
         - Archived and NN networks 
             - Might cycle through evolutinoary behaviours
@@ -82,7 +83,8 @@ Objectives
 - Novelty can be high but has to be human novelty which is high
 - 
 ## Future Work
-
+- Having some memory based NN?
+- Feature network (adding chimneys, balconies....)
 ## References (~1-2 pages)
 https://subscription.packtpub.com/book/game-development/9781785886713/1/ch01lvl1sec14/the-drawbacks-of-procedural-generation
 
