@@ -54,14 +54,6 @@ Red Wool,35^14,minecraft:red_wool
 Black Wool,35^15,minecraft:black_wool
 Gold Block,41,minecraft:gold_block
 Iron Block,42,minecraft:iron_block
-Double Stone Slab,43,minecraft:double_stone_slab
-Double Sandstone Slab,43^1,minecraft:double_stone_slab
-Double Wooden Slab,43^2,minecraft:double_stone_slab
-Double Cobblestone Slab,43^3,minecraft:double_stone_slab
-Double Brick Slab,43^4,minecraft:double_stone_slab
-Double Stone Brick Slab,43^5,minecraft:double_stone_slab
-Double Nether Brick Slab,43^6,minecraft:double_stone_slab
-Double Quartz Slab,43^7,minecraft:double_stone_slab
 Stone Slab,44,minecraft:stone_slab
 Sandstone Slab,44^1,minecraft:sandstone_slab
 Cobblestone Slab,44^3,minecraft:cobblestone_slab
@@ -71,20 +63,14 @@ Nether Brick Slab,44^6,minecraft:nether_brick_slab
 Quartz Slab,44^7,minecraft:quartz_slab
 Bricks,45,minecraft:brick_block
 Obsidian,49,minecraft:obsidian
-Oak Wood Stairs East,53,minecraft:oak_stairs
-Oak Wood Stairs West,53^1,minecraft:oak_stairs
-Oak Wood Stairs South,53^2,minecraft:oak_stairs
-Oak Wood Stairs North,53^3,minecraft:oak_stairs
+Oak Wood Stairs,53,minecraft:oak_stairs
 Chest,54,minecraft:chest
 Diamond Ore,56,minecraft:diamond_ore
 Diamond Block,57,minecraft:diamond_block
 Crafting Table,58,minecraft:crafting_table
 Furnace,61,minecraft:furnace
 Oak Door,64,minecraft:wooden_door
-Cobblestone Stairs East,67,minecraft:stone_stairs
-Cobblestone Stairs West,67^1,minecraft:stone_stairs
-Cobblestone Stairs South,67^2,minecraft:stone_stairs
-Cobblestone Stairs North,67^3,minecraft:stone_stairs
+Cobblestone Stairs,67,minecraft:stone_stairs
 Iron Door,71,minecraft:iron_door
 Redstone Ore,73,minecraft:redstone_ore
 Pumpkin,86,minecraft:pumpkin
@@ -116,61 +102,31 @@ Brown Mushroom Block,99,minecraft:brown_mushroom_block
 Red Mushroom Block,100,minecraft:red_mushroom_block
 Melon Block,103,minecraft:melon_block
 Oak Fence Gate,107,minecraft:fence_gate
-Brick Stairs East,108,minecraft:brick_stairs
-Brick Stairs West,108^1,minecraft:brick_stairs
-Brick Stairs South,108^2,minecraft:brick_stairs
-Brick Stairs North,108^3,minecraft:brick_stairs
-Stone Brick Stairs East,109,minecraft:stone_brick_stairs
-Stone Brick Stairs West,109^1,minecraft:stone_brick_stairs
-Stone Brick Stairs South,109^2,minecraft:stone_brick_stairs
-Stone Brick Stairs North,109^3,minecraft:stone_brick_stairs
+Brick Stairs,108,minecraft:brick_stairs
+Stone Brick Stairs,109,minecraft:stone_brick_stairs
 Nether Brick,112,minecraft:nether_brick
 Nether Brick Fence,113,minecraft:nether_brick_fence
-Nether Brick Stairs East,114,minecraft:nether_brick_stairs
-Nether Brick Stairs West,114^1,minecraft:nether_brick_stairs
-Nether Brick Stairs South,114^2,minecraft:nether_brick_stairs
-Nether Brick Stairs North,114^3,minecraft:nether_brick_stairs
+Nether Brick Stairs,114,minecraft:nether_brick_stairs
 End Stone,121,minecraft:end_stone
-Double Oak Wood Slab,125,minecraft:double_wooden_slab
-Double Spruce Wood Slab,125^1,minecraft:double_wooden_slab
-Double Birch Wood Slab,125^2,minecraft:double_wooden_slab
-Double Jungle Wood Slab,125^3,minecraft:double_wooden_slab
-Double Acacia Wood Slab,125^4,minecraft:double_wooden_slab
-Double Dark Oak Wood Slab,125^5,minecraft:double_wooden_slab
 Oak Wood Slab,126,minecraft:wooden_slab
 Spruce Wood Slab,126^1,minecraft:spruce_slab
 Birch Wood Slab,126^2,minecraft:birch_slab
 Jungle Wood Slab,126^3,minecraft:jungle_slab
 Acacia Wood Slab,126^4,minecraft:acacia_slab
 Dark Oak Wood Slab,126^5,minecraft:dark_oak_slab
-Sandstone Stairs East,128,minecraft:sandstone_stairs
-Sandstone Stairs West,128^1,minecraft:sandstone_stairs
-Sandstone Stairs South,128^2,minecraft:sandstone_stairs
-Sandstone Stairs North,128^3,minecraft:sandstone_stairs
+Sandstone Stairs,128,minecraft:sandstone_stairs
 Emerald Ore,129,minecraft:emerald_ore
 Emerald Block,133,minecraft:emerald_block
-Spruce Wood Stairs East,134,minecraft:spruce_stairs
-Spruce Wood Stairs West,134^1,minecraft:spruce_stairs
-Spruce Wood Stairs South,134^2,minecraft:spruce_stairs
-Spruce Wood Stairs North,134^3,minecraft:spruce_stairs
-Birch Wood Stairs East,135,minecraft:birch_stairs
-Birch Wood Stairs West,135^1,minecraft:birch_stairs
-Birch Wood Stairs South,135^2,minecraft:birch_stairs
-Birch Wood Stairs North,135^3,minecraft:birch_stairs
-Jungle Wood Stairs East,136,minecraft:jungle_stairs
-Jungle Wood Stairs West,136^1,minecraft:jungle_stairs
-Jungle Wood Stairs South,136^2,minecraft:jungle_stairs
-Jungle Wood Stairs North,136^3,minecraft:jungle_stairs
+Spruce Wood Stairs,134,minecraft:spruce_stairs
+Birch Wood Stairs,135,minecraft:birch_stairs
+Jungle Wood Stairs,136,minecraft:jungle_stairs
 Mossy Cobblestone Wall,139^1,minecraft:mossy_cobblestone_wall
 Redstone Block,152,minecraft:redstone_block
 Nether Quartz Ore,153,minecraft:quartz_ore
 Quartz Block,155,minecraft:quartz_block
 Chiseled Quartz Block,155^1,minecraft:chiseled_quartz_block
 Pillar Quartz Block,155^2,minecraft:quartz_pillar
-Quartz Stairs East,156,minecraft:quartz_stairs
-Quartz Stairs West,156^1,minecraft:quartz_stairs
-Quartz Stairs South,156^2,minecraft:quartz_stairs
-Quartz Stairs North,156^3,minecraft:quartz_stairs
+Quartz Stairs,156,minecraft:quartz_stairs
 White Hardened Clay,159,minecraft:stained_hardened_clay
 Orange Hardened Clay,159^1,minecraft:stained_hardened_clay
 Magenta Hardened Clay,159^2,minecraft:stained_hardened_clay
@@ -191,14 +147,8 @@ Acacia Leaves,161,minecraft:leaves2
 Dark Oak Leaves,161^1,minecraft:dark_oak_leaves
 Acacia Wood,162,minecraft:log2
 Dark Oak Wood,162^1,minecraft:dark_oak_log
-Acacia Wood Stairs East,163,minecraft:acacia_stairs
-Acacia Wood Stairs West,163^1,minecraft:acacia_stairs
-Acacia Wood Stairs South,163^2,minecraft:acacia_stairs
-Acacia Wood Stairs North,163^3,minecraft:acacia_stairs
-Dark Oak Wood Stairs East,164,minecraft:dark_oak_stairs
-Dark Oak Wood Stairs West,164^1,minecraft:dark_oak_stairs
-Dark Oak Wood Stairs South,164^2,minecraft:dark_oak_stairs
-Dark Oak Wood Stairs North,164^3,minecraft:dark_oak_stairs
+Acacia Wood Stairs,163,minecraft:acacia_stairs
+Dark Oak Wood Stairs,164,minecraft:dark_oak_stairs
 Slime Block,165,minecraft:slime
 Prismarine,168,minecraft:prismarine
 Prismarine Bricks,168^1,minecraft:prismarine_bricks
@@ -208,11 +158,7 @@ Block of Coal,173,minecraft:coal_block
 Red Sandstone,179,minecraft:red_sandstone
 Chiseled Red Sandstone,179^1,minecraft:chiseled_red_sandstone
 Smooth Red Sandstone,179^2,minecraft:cut_red_sandstone
-Red Sandstone Stairs East,180,minecraft:red_sandstone_stairs
-Red Sandstone Stairs West,180^1,minecraft:red_sandstone_stairs
-Red Sandstone Stairs South,180^2,minecraft:red_sandstone_stairs
-Red Sandstone Stairs North,180^3,minecraft:red_sandstone_stairs
-Double Red Sandstone Slab,181,minecraft:double_stone_slab2
+Red Sandstone Stairs,180,minecraft:red_sandstone_stairs
 Red Sandstone Slab,182,minecraft:red_sandstone_slab
 Spruce Fence Gate,183,minecraft:spruce_fence_gate
 Birch Fence Gate,184,minecraft:birch_fence_gate
@@ -231,11 +177,7 @@ Acacia Door,196,minecraft:acacia_door
 Dark Oak Door,197,minecraft:dark_oak_door
 Purpur Block,201,minecraft:purpur_block
 Purpur Pillar,202,minecraft:purpur_pillar
-Purpur Stairs East,203,minecraft:purpur_stairs
-Purpur Stairs West,203^1,minecraft:purpur_stairs
-Purpur Stairs South,203^2,minecraft:purpur_stairs
-Purpur Stairs North,203^3,minecraft:purpur_stairs
-Purpur Double Slab,204,minecraft:purpur_double_slab
+Purpur Stairs,203,minecraft:purpur_stairs
 Purpur Slab,205,minecraft:purpur_slab
 End Stone Bricks,206,minecraft:end_bricks
 Magma Block,213,minecraft:magma
