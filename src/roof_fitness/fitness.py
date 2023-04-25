@@ -1,5 +1,5 @@
-from . import fitness_functions
-from src import novelty as nvlty, generate_building
+from . import fitness_functions, generate_roof
+from src import novelty as nvlty, logger
 from src.Blocks import block_interactions
 import neat
 import numpy as np
@@ -7,9 +7,13 @@ import random
 import math
 
 class Fitness:
-    def __init__(self, block_path) -> None:
-        self.novelty = nvlty.Novelty()
+    def __init__(self, block_path, novelty_log_path, struct_log_path, overwrite=True) -> None:
+        # Setup novelty calculator with logging
+        self.novelty = nvlty.Novelty(novelty_log_path, overwrite=overwrite)
+        # Setup block interactor
         self.bi = block_interactions.BlockInterface(block_path=block_path, connect=False)
+        # Setup structural data logger
+        self.struct_logger = logger.StructLogger(struct_log_path, "struct_log.csv", overwrite_log=overwrite)
         
     def __call__(self, genomes:list, config:neat.Config, return_best=False):
         """
@@ -19,9 +23,9 @@ class Fitness:
         Returns a list of fitness values for each genome
         """
         # Configuration options
-        HEIGHT = 2
-        LENGTH = 5
-        WIDTH = 5
+        HEIGHT = random.randint(2, 5)
+        LENGTH = random.randint(5, 10)
+        WIDTH = random.randint(5, 10)
         
         # Generate 3 random blocks
         seeds = random.sample(range(0, len(self.bi.blocklist) - 1), 3)
@@ -30,15 +34,11 @@ class Fitness:
         input_config = [
             HEIGHT,
             LENGTH,
-            WIDTH,
-            seeds[0],
-            seeds[1],
-            seeds[2]
+            WIDTH
         ]
 
         nets = [net for net in self.__generate_nets(genomes, config)]
-        net_results = generate_building.parallel_generate(nets, input_config)
-    
+        net_results = generate_roof.parallel_generate(nets, input_config)
         # Evaluate Fitness for model's output
         best_fit = 0
         best_genome = 0
@@ -49,7 +49,7 @@ class Fitness:
                 if fit > best_fit:
                     best_fit = fit
                     best_genome = genome
-        
+    
             genome.fitness = fit
 
         if best_fit:
@@ -71,11 +71,18 @@ class Fitness:
         """
         Combines all fitness tests
         """
+        # Start logging generation
+        self.struct_logger.start_gen()
+        
+        # Compute ratio of fitness to novelty
         r_nov, r_fit = 1, 2 # r_nov:r_fit
+        p_nov = r_nov/(r_nov+r_fit)
+        p_fit = r_fit/(r_nov+r_fit)
+        
+        # Compute fitness and novelty
         out = []
         novelty = self.novelty.novelty_fitness(genomes, math.ceil(len(genomes)/2))
-        fitness = fitness_functions.structure_fitness(genomes, input, outputs) 
+        fitness = fitness_functions.structure_fitness(input, outputs, logger=self.struct_logger) 
         for ni, fi in zip(novelty, fitness):
-            out.append(ni * (r_nov/(r_nov+r_fit)) + fi * (r_fit/(r_nov+r_fit)))
-        
-        return [0 for g in genomes]
+            out.append(ni * p_nov + fi * p_fit)
+        return [0.5 for g in genomes]
