@@ -125,8 +125,6 @@ class BlockInterface():
                     self.place_block_str(x0+xi, y0+yi, z0+zi, strblock=z)
                     
 
-        
-
     def __read_in_blocks(self, path):
         out = []
         lookup = {}
@@ -177,3 +175,13 @@ class BlockInterface():
                         rowx = 0
                         rowy += 1
         return arr
+    
+    def convert_heightmap(self, heightmap, blockidx=1):
+        out = np.zeros((np.max(heightmap)+1, heightmap.shape[0], heightmap.shape[1])).astype(int)
+        print(heightmap)
+        for yi,y in enumerate(heightmap):
+            for xi, x in enumerate(y):
+                out[x][yi][xi] = blockidx
+        return out
+        
+        
