@@ -1,12 +1,30 @@
-from src import neat
-from src.Fitness import fitness, generate_building
-from src.Blocks import block_interactions
-from tests.structure_test import test_structure
+from src.neatfitnessinterface import RoofInterface, HouseInterface
+import numpy as np
+import os
+from src.Blocks.block_interactions import BlockInterface
+
+block_path = "src/Blocks/blocks.csv"
+bi = BlockInterface(block_path, connect=False)
+
+roof_net = RoofInterface(
+    config_file="config/Roof-NEAT-config",
+    block_path=block_path,
+    log_root="logs/roof/",
+    overwrite_logs=True,
+    n_generations=5000,
+    n_input=13,
+    n_output=8,
+    n_pop=5,
+).run()
 
 
-config_path = "config/NEAT-config"
-blocks_path = "src/Blocks/blocks.csv"
-bi = block_interactions.BlockReader(block_path=blocks_path, connect=False)
-neat.edit_config(config_path, input_size = 26, pop_size=10, 
-                 output_size=len(bi.blocklist))
-print(neat.run(config_path, fitness.test_fitness, n_generations=1))
+# house_net = HouseInterface(
+#     config_file="config/House-NEAT-config",
+#     block_path=block_path,
+#     log_root="logs/house/",
+#     overwrite_logs=True,
+#     n_generations=1000,
+#     n_input=26,
+#     n_output=len(bi.blocklist)-1,
+#     n_pop=5,
+# ).run()
