@@ -2,28 +2,49 @@ import neat
 from typing import List
 import numpy as np 
 import math
+from src.logger import NoveltyLogger
 
 class Novelty:
-    def __init__(self) -> None:
+    def __init__(self, novelty_log_path, activation_function=False, threshold=0.9, overwrite=True) -> None:
         self.archive = None
-        self.threshold = 0
+        self.threshold = threshold
+        if overwrite:
+            self.logger = NoveltyLogger(novelty_log_path, "novelty.csv", header=["KNN Novelty", "Archive Novelty"])
+        else:
+            self.logger = NoveltyLogger(novelty_log_path, "novelty.csv")
+            
+        self.activation_function = activation_function
 
     def novelty_fitness(self, genomes: List[neat.DefaultGenome], k:int):
-        self.archive = [g for __, g in genomes]
+        # Novelty config
         weight_coef = 0.5
         disjoint_coef = 1 
-        # Get novelty within 
-        # opulation
-        novelty = self.knn(genomes, math.ceil(2*len(genomes)/3), weight_coef, disjoint_coef)
         
+        # Get novelty within population to n_pop/3 nearest neightbours
+        novelty = self.knn(genomes, math.ceil(2*len(genomes)/3), weight_coef, disjoint_coef)
+        log = [[i,-1] for i in novelty]
+                
         # Check if archive is empty or not
-        if not self.archive == None:
+        if self.archive is not None:
             # Add archived novelty to population novelty
             arch = self.archived_dist(genomes, weight_coef, disjoint_coef)
             for i in range(len(novelty)):
-                novelty[i] += arch[i]
+                novelty[i] = (arch[i] + novelty[i])/2
+                log[i][1] = arch[i]
+
+        # Log novelty values
+        self.logger.log_iteration(log)
         
-        # Archive top 10% of individuals 
+        # Archive individuals above novelty threshold 
+        g_arch = []
+        for (__, g), nov in zip(genomes, novelty):
+            if nov > self.threshold:
+                g_arch.append(g)
+        if len(g_arch) > 0:
+            self.archive = g_arch
+        else:
+            self.archive = None
+            
         return novelty        
         
     def archived_dist(self, genomes:List[neat.DefaultGenome], weight_coef:float, disjoint_coef:float)\
@@ -35,8 +56,7 @@ class Novelty:
         for genome in genomes:
             dist.append(self.single_knn(genome, self.archive, k, weight_coef, disjoint_coef))
         return dist
-
-
+    
     def knn(self, genomes:List[neat.DefaultGenome], k:int, weight_coef:float, disjoint_coef:float) \
         -> List[float]:
         assert type(k) == int
@@ -59,13 +79,13 @@ class Novelty:
             out.append(np.average(neighs[:k]))
         return out            
             
-    def single_knn(self, a:neat.DefaultGenome, b:List[neat.DefaultGenome], k:int, weight_coef:float, disjoint_coef:float) \
-        -> float:
+    def single_knn(self, a:neat.DefaultGenome, b:List[neat.DefaultGenome], k:int, weight_coef:float,\
+                   disjoint_coef:float) -> float:
         dist = []
         for bi in b:
             dist.append(self.distance(a, bi, weight_coef, disjoint_coef))
         dist = sorted(dist)[:k]
-        return np.average(dist)
+        return self.__activation_function(np.average(dist))
         
 
     def distance(self, a, b, weight_coef, disjoint_coef):
@@ -132,3 +152,9 @@ class Novelty:
         if a.aggregation != b.aggregation:
             d += 1.0
         return d * weight_coef
+
+    def __activation_function(self,x):
+        if self.activation_function:
+            pass
+        else:
+            return x
