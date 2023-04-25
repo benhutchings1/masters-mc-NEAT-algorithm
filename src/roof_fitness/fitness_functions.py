@@ -3,24 +3,40 @@ import neat
 from typing import List
 import warnings
 import math
+from src.logger import StructLogger
 
-# Covers building
-# Sloped sides
-
-def structure_fitness(genomes:List[neat.DefaultGenome], input:list, outputs:List[np.array]) \
+def structure_fitness(input:list, outputs:List[np.array], logger:StructLogger) \
     -> List[float]:
-    fit_funcs = [fit_cover, fit_complexity, fit_symmetry]
+    # Setup logging file to first time with headers
+    if logger.first_time:
+        setup_logger(logger)
+        logger.first_time = False    
+    
+    fit_funcs = [fit_complexity, fit_symmetry]
     fitnesses = []
     for output in outputs:
         g_fit = []
+        # Check no values are above height or below 0
+        if not fit_compliance(input, output):
+            g_fit.append(0)
+        else:
+            g_fit.append(1.0)
+        # Get other fitness values
         for f in fit_funcs:
             g_fit.append(f(input, output))
         fitnesses.append(np.average(g_fit))
+        # Log individual values
+        logger.log_value(g_fit)  
     return fitnesses
 
+def setup_logger(logger:StructLogger):
+    f_names = ["fit_compliance", "fit_complexity", "fit_symmetry"]
+    logger.add_header(f_names)
+    logger.start_gen()
+
 def single_structure_fitness(input:list, output:np.array):
-    fit_funcs = [fit_cover, fit_complexity, fit_symmetry]
-    f_names = ["Cover Fitness", "Complexity Fitness", "Symmetry Fitness"]
+    fit_funcs = [fit_complexity, fit_symmetry]
+    f_names = []
     fitness = {}
     for name, f in zip(f_names, fit_funcs):
         fitness[name] = f(None, input, output)
@@ -38,15 +54,13 @@ def get_roof_heighmap(output:np.array):
                     break
     return height_map
 
-
 def fit_complexity(input, output):
-    heightmap = get_roof_heighmap(output)
     count = 0
     comp_val = 0
-    for yi, y in enumerate(heightmap):
+    for yi, y in enumerate(output):
         for xi, x in enumerate(y):
-            surr = get_surrounding(heightmap, yi, xi)
-            grad = [s - heightmap[yi][xi] for s in surr]
+            surr = get_surrounding(output, yi, xi)
+            grad = [s - output[yi][xi] for s in surr]
             for val in grad:
                 if val == -1 or val == 1:
                     comp_val += 1
@@ -62,16 +76,8 @@ def get_surrounding(heightmap, yi, xi):
             if not y < 0 and not y > len(heightmap) - 1:
                 if not x < 0 and not x > len(heightmap[0]) - 1:
                     out.append(heightmap[y][x])
-    return out
-      
-
-
-def fit_cover(input:np.array, output:np.array):
-    # Get columns covered by a block
-    return np.count_nonzero(get_roof_heighmap(output)) / (output.shape[1] * output.shape[2]) 
-    
-
-
+    return np.array(out)
+   
 def fit_symmetry(input:np.array, output:np.array) -> float:
     return max(fit_vert_symmetry(output), fit_horiz_symmetry(output))
 
@@ -80,25 +86,22 @@ def fit_vert_symmetry(output:np.array) -> float:
     a = None
     b = None
     same = 0
-    for y in output:
-        a, b = arr_split(y, axis=1)
-        # Flip b side
-        b = np.flip(b, axis=1)
-        same += np.count_nonzero(a==b)
+    a, b = arr_split(output, axis=1)
+    # Flip b side
+    b = np.flip(b, axis=1)
+    same += np.count_nonzero(a==b)
 
-    return same/(a.shape[0] * a.shape[1] * len(output))
+    return same/(a.shape[0] * a.shape[1])
 
 
 def fit_horiz_symmetry(output:np.array) -> float:
     # Get sides for symmetry checking
     same = 0
-    for y in output:
-        a, b = arr_split(y, axis=0)
-        # Flip b side
-        b = np.flip(b, axis=0)
-        same += np.count_nonzero(a==b)
-
-    return same/(a.shape[0] * a.shape[1] * len(output))
+    a, b = arr_split(output, axis=0)
+    # Flip b side to directly compare
+    b = np.flip(b, axis=0)
+    same += np.count_nonzero(a==b)  
+    return same/(a.shape[0] * a.shape[1])
 
 def arr_split(plane:np.array, axis:int) -> List[np.array]:
     assert axis == 1 or axis == 0
@@ -128,3 +131,7 @@ def arr_split(plane:np.array, axis:int) -> List[np.array]:
             right = plane[:, div_line:]
     
     return left, right
+
+def fit_compliance(input:np.array, output:np.array):   
+    return not (np.min(output) < 0 or np.max(output) > input[0])
+    
