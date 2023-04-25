@@ -1,16 +1,17 @@
 import neat
 import os
 from src.Blocks.block_interactions import BlockInterface
+from src.logger import StatsLogger
 
 class Neat(BlockInterface):
-    def __init__(self, config_file:str, block_path:str, checkpoint_path:str, fitness_func:object,
-            n_generations=1000, n_input=None, n_pop=None, n_output=None):       
+    def __init__(self, config_file:str, block_path:str, checkpoint_path:str, stats_log_path:str, fitness_func:object,
+            n_generations=1000, n_input=None, n_pop=None, n_output=None, overwrite=True):       
         # Run parent init
         super().__init__(block_path=block_path, connect=False)
          
         # Make checkpoint path if non-existant
         try:
-            os.mkdir(checkpoint_path)
+            os.makedirs(checkpoint_path)
         except FileExistsError:
             pass
         self.checkpoint:str = checkpoint_path
@@ -30,8 +31,11 @@ class Neat(BlockInterface):
         
         # Save fitness function
         self.fitness = fitness_func
+        
+        # Make stats logger
+        self.stats_logger = StatsLogger(stats_log_path, "stats.csv", overwrite_log=overwrite)
     
-    def run(self):
+    def run(self, population:neat.Population=None):
         """
         Performs NEAT model creation and evolution for n_generations 
         Configuration for NEAT given by config file 
@@ -40,19 +44,25 @@ class Neat(BlockInterface):
         """
 
         # Create the population, which is the top-level object for a NEAT run.
-        p = neat.Population(self.config)
-
+        if population is None:
+            p = neat.Population(self.config)
+        else:
+            # Use population from checkpoint
+            p = population
+        
         # Add a stdout reporter to show progress in the terminal.
-        p.add_reporter(neat.StdOutReporter(True))
-        p.add_reporter(neat.StatisticsReporter())
+        # p.add_reporter(neat.StdOutReporter(True))
+        p.add_reporter(self.stats_logger)
         p.add_reporter(neat.Checkpointer(5, filename_prefix=self.checkpoint + "NEAT-checkpoint-"))
-      
+
         # Run for up to n generations.
         winner = p.run(self.fitness, self.n_gen)
 
         # Display the winning genome.
         # print('\nBest genome:\n{!s}'.format(winner))
-
+        
+        #### DONT RETURN SINGLE MODEL RETURN POPULATION
+        #### Individual score and population score
         ## Use winning model to build neighbourhood
         winner_net = neat.nn.FeedForwardNetwork.create(winner, self.config)
         
@@ -79,24 +89,24 @@ class Neat(BlockInterface):
             if not self.n_output is None:
                 if lines[l][:11] == "num_outputs":
                     lines[l] = f"num_outputs             = {self.n_output}\n"
-            else:
-                if lines[l][:11] == "num_outputs":
-                    lines[l] = f"num_outputs             = {len(self.blocklist)}\n"
 
         # write back lines
         with open(self.config_path, "w") as fs:
             fs.writelines(lines)
         
-    def load_checkpoint(self, checkpoint_path:str) -> neat.Population:
+    def load_checkpoint(self, checkpoint_name:str) -> neat.Population:
         cp = neat.Checkpointer()
-        return cp.restore_checkpoint(checkpoint_path)
+        return cp.restore_checkpoint(os.path.join(self.checkpoint ,checkpoint_name))
 
-    def load_genomes_checkpoint(self, checkpoint_path:str):
-        return self.load_checkpoint(checkpoint_path).population.items()
+    def run_from_checkpoint(self, checkpoint_name):
+        return self.run(self.load_checkpoint(checkpoint_name))
 
-    def checkpoint_best_genome(self, checkpoint_path:str, as_model=True):
+    def load_genomes_checkpoint(self, checkpoint_name:str):
+        return self.load_checkpoint(checkpoint_name).population.items()
+
+    def checkpoint_best_genome(self, checkpoint_name:str, as_model=True):
         # Load genomes from checkpoint        
-        genomes = self.load_genomes_checkpoint(checkpoint_path)
+        genomes = self.load_genomes_checkpoint(checkpoint_name)
         if as_model:
             return neat.nn.FeedForwardNetwork.create(
                 self.fitness(genomes, self.config, return_best=True), self.config)
