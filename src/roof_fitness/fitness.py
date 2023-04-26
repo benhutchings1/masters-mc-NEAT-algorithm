@@ -1,4 +1,4 @@
-from . import fitness_functions, generate_roof
+from . import generate_roof, structure_functions
 from src import novelty as nvlty, logger
 from src.Blocks import block_interactions
 import neat
@@ -43,7 +43,7 @@ class Fitness:
         best_fit = 0
         best_genome = 0
         
-        for (__, genome), fit in zip(genomes, self.combined_fitness_tests(genomes, input_config, net_results)):
+        for (__, genome), fit in zip(genomes, self.fitness_test(genomes, input_config, net_results)):
             # Get best model
             if return_best:
                 if fit > best_fit:
@@ -57,7 +57,7 @@ class Fitness:
         
     def __generate_nets(self, genomes:list, config:neat.Config) -> list:
         """
-        Uses each genome to make a list of corresponding neat.FeedForwardNetwork's
+        Uses each genome to make a list of corresponding neat.FeedForwardNetwork neural networks
         returns list of networks
         """
         nets = []
@@ -67,22 +67,22 @@ class Fitness:
         return nets
             
 
-    def combined_fitness_tests(self, genomes:neat.DefaultGenome, input:np.array, outputs:np.array) -> int:
+    def fitness_test(self, genomes:neat.DefaultGenome, input:np.array, outputs:np.array) -> int:
         """
-        Combines all fitness tests
+        Gets fitness of each genome
         """
         # Start logging generation
         self.struct_logger.start_gen()
         
-        # Compute ratio of fitness to novelty
-        r_nov, r_fit = 1, 2 # r_nov:r_fit
-        p_nov = r_nov/(r_nov+r_fit)
-        p_fit = r_fit/(r_nov+r_fit)
+        # Compute ratio of structure score to novelty
+        r_nov, r_score = 1, 2 # r_nov:r_score
+        p_nov = r_nov/(r_nov+r_score)
+        p_score = r_score/(r_nov+r_score)
         
-        # Compute fitness and novelty
+        # Compute structure score and novelty then combine to make fitness score
         out = []
-        novelty = self.novelty.novelty_fitness(genomes, math.ceil(len(genomes)/2))
-        fitness = fitness_functions.structure_fitness(input, outputs, logger=self.struct_logger) 
-        for ni, fi in zip(novelty, fitness):
-            out.append(ni * p_nov + fi * p_fit)
-        return [0.5 for g in genomes]
+        novelty = self.novelty.novelty_score(genomes, math.ceil(len(genomes)/2))
+        score = structure_functions.structure_score(input, outputs, logger=self.struct_logger) 
+        for ni, sc in zip(novelty, score):
+            out.append(ni * p_nov + sc * p_score)
+        return out
