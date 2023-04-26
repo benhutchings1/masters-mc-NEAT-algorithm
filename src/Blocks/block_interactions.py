@@ -147,8 +147,6 @@ class BlockInterface():
         return [min(ai, bi) for ai, bi in zip(a, b)], \
             [max(ai, bi) for ai, bi in zip(a, b)]
             
-                
-                
     def save_np(self, arr:np.array, path:str):
         with open(path, "w+") as fs:
             wr = csv.writer(fs)
@@ -178,7 +176,6 @@ class BlockInterface():
     
     def convert_heightmap(self, heightmap, blockidx=1):
         out = np.zeros((np.max(heightmap)+1, heightmap.shape[0], heightmap.shape[1])).astype(int)
-        print(heightmap)
         for yi,y in enumerate(heightmap):
             for xi, x in enumerate(y):
                 out[x][yi][xi] = blockidx
