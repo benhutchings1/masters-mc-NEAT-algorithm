@@ -5,7 +5,7 @@ from src.logger import StatsLogger
 
 class Neat(BlockInterface):
     def __init__(self, config_file:str, block_path:str, checkpoint_path:str, stats_log_path:str, fitness_func:object,
-            n_generations=1000, n_input=None, n_pop=None, n_output=None, overwrite=True):       
+            n_generations=1000, n_input=None, n_pop=None, n_output=None, overwrite=True, checkpoint_rate=10):       
         # Run parent init
         super().__init__(block_path=block_path, connect=False)
          
@@ -28,6 +28,7 @@ class Neat(BlockInterface):
         self.n_output:int = n_output
         self.n_gen:int = n_generations
         self.edit_config()
+        self.checkpoint_rate = checkpoint_rate
         
         # Save fitness function
         self.fitness = fitness_func
@@ -53,20 +54,11 @@ class Neat(BlockInterface):
         # Add a stdout reporter to show progress in the terminal.
         # p.add_reporter(neat.StdOutReporter(True))
         p.add_reporter(self.stats_logger)
-        p.add_reporter(neat.Checkpointer(5, filename_prefix=self.checkpoint + "NEAT-checkpoint-"))
+        p.add_reporter(neat.Checkpointer(self.checkpoint_rate, filename_prefix=self.checkpoint + "NEAT-checkpoint-"))
 
-        # Run for up to n generations.
-        winner = p.run(self.fitness, self.n_gen)
+        # Run evolution, save models to checkpoint
+        p.run(self.fitness, self.n_gen)
 
-        # Display the winning genome.
-        # print('\nBest genome:\n{!s}'.format(winner))
-        
-        #### DONT RETURN SINGLE MODEL RETURN POPULATION
-        #### Individual score and population score
-        ## Use winning model to build neighbourhood
-        winner_net = neat.nn.FeedForwardNetwork.create(winner, self.config)
-        
-        return winner_net
 
     def edit_config(self) -> None:
         """
@@ -90,7 +82,7 @@ class Neat(BlockInterface):
                 if lines[l][:11] == "num_outputs":
                     lines[l] = f"num_outputs             = {self.n_output}\n"
 
-        # write back lines
+           # write back lines
         with open(self.config_path, "w") as fs:
             fs.writelines(lines)
         
