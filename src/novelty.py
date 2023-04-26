@@ -5,7 +5,7 @@ import math
 from src.logger import NoveltyLogger
 
 class Novelty:
-    def __init__(self, novelty_log_path, activation_function=False, threshold=0.9, overwrite=True) -> None:
+    def __init__(self, novelty_log_path, threshold=0.9, overwrite=True) -> None:
         self.archive = None
         self.threshold = threshold
         if overwrite:
@@ -13,11 +13,9 @@ class Novelty:
         else:
             self.logger = NoveltyLogger(novelty_log_path, "novelty.csv")
             
-        self.activation_function = activation_function
-
-    def novelty_fitness(self, genomes: List[neat.DefaultGenome], k:int):
+    def novelty_score(self, genomes: List[neat.DefaultGenome], k:int):
         # Novelty config
-        weight_coef = 0.5
+        weight_coef = 0.5 
         disjoint_coef = 1 
         
         # Get novelty within population to n_pop/3 nearest neightbours
@@ -85,59 +83,59 @@ class Novelty:
         for bi in b:
             dist.append(self.distance(a, bi, weight_coef, disjoint_coef))
         dist = sorted(dist)[:k]
-        return self.__activation_function(np.average(dist))
+        return np.average(dist)
         
 
     def distance(self, a, b, weight_coef, disjoint_coef):
-            """
-            Returns the genetic distance between this genome and the b. This distance value
-            is used to compute genome compatibility for speciation.
-            """
+        """
+        Returns the genetic distance between this genome and the b. This distance value
+        is used to compute genome compatibility for speciation.
+        """
 
-            # Compute node gene distance component.
-            node_distance = 0.0
-            if a.nodes or b.nodes:
-                disjoint_nodes = 0
-                for k2 in b.nodes:
-                    if k2 not in a.nodes:
-                        disjoint_nodes += 1
+        # Compute node gene distance component.
+        node_distance = 0.0
+        if a.nodes or b.nodes:
+            disjoint_nodes = 0
+            for k2 in b.nodes:
+                if k2 not in a.nodes:
+                    disjoint_nodes += 1
 
-                for k1, n1 in a.nodes.items():
-                    n2 = b.nodes.get(k1)
-                    if n2 is None:
-                        disjoint_nodes += 1
-                    else:
-                        # Homologous genes compute their own distance value.
-                        node_distance += self.gene_distance(n1, n2, weight_coef)
+            for k1, n1 in a.nodes.items():
+                n2 = b.nodes.get(k1)
+                if n2 is None:
+                    disjoint_nodes += 1
+                else:
+                    # Homologous genes compute their own distance value.
+                    node_distance += self.gene_distance(n1, n2, weight_coef)
 
-                max_nodes = max(len(a.nodes), len(b.nodes))
-                node_distance = (node_distance +
+            max_nodes = max(len(a.nodes), len(b.nodes))
+            node_distance = (node_distance +
+                            (disjoint_coef *
+                            disjoint_nodes)) / max_nodes
+
+        # Compute connection gene differences.
+        connection_distance = 0.0
+        if a.connections or b.connections:
+            disjoint_connections = 0
+            for k2 in b.connections:
+                if k2 not in a.connections:
+                    disjoint_connections += 1
+
+            for k1, c1 in a.connections.items():
+                c2 = b.connections.get(k1)
+                if c2 is None:
+                    disjoint_connections += 1
+                else:
+                    # Homologous genes compute their own distance value.
+                    connection_distance += self.conn_distance(c1, c2, weight_coef)
+
+            max_conn = max(len(a.connections), len(b.connections))
+            connection_distance = (connection_distance +
                                 (disjoint_coef *
-                                disjoint_nodes)) / max_nodes
+                                    disjoint_connections)) / max_conn
 
-            # Compute connection gene differences.
-            connection_distance = 0.0
-            if a.connections or b.connections:
-                disjoint_connections = 0
-                for k2 in b.connections:
-                    if k2 not in a.connections:
-                        disjoint_connections += 1
-
-                for k1, c1 in a.connections.items():
-                    c2 = b.connections.get(k1)
-                    if c2 is None:
-                        disjoint_connections += 1
-                    else:
-                        # Homologous genes compute their own distance value.
-                        connection_distance += self.conn_distance(c1, c2, weight_coef)
-
-                max_conn = max(len(a.connections), len(b.connections))
-                connection_distance = (connection_distance +
-                                    (disjoint_coef *
-                                        disjoint_connections)) / max_conn
-
-            distance = node_distance + connection_distance
-            return distance
+        distance = node_distance + connection_distance
+        return distance
 
     def conn_distance(self, a, b, weight_coef):
         d = abs(a.weight - b.weight)
@@ -152,9 +150,3 @@ class Novelty:
         if a.aggregation != b.aggregation:
             d += 1.0
         return d * weight_coef
-
-    def __activation_function(self,x):
-        if self.activation_function:
-            pass
-        else:
-            return x
