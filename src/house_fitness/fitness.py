@@ -1,5 +1,5 @@
 from . import generate_building
-from . import fitness_functions
+from . import structure_functions
 from .. import novelty as nvlty
 from src.Blocks import block_interactions
 from src.logger import StructLogger
@@ -46,7 +46,7 @@ class Fitness:
         best_genome = 0
         
         # Get fitness
-        for (__, genome), fit in zip(genomes, self.combined_fitness_tests(genomes, input_config, net_results)):
+        for (__, genome), fit in zip(genomes, self.fitness_test(genomes, input_config, net_results)):
             # Get best model
             if return_best:
                 if fit > best_fit:
@@ -70,18 +70,18 @@ class Fitness:
         return nets
             
 
-    def combined_fitness_tests(self, genomes:neat.DefaultGenome, input:np.array, outputs:np.array) -> int:
+    def fitness_test(self, genomes:neat.DefaultGenome, input:np.array, outputs:np.array) -> int:
         """
-        Combines all fitness tests
+        Gets fitness for each genome
         """
         # Start new logging generation
         self.struct_logger.start_gen()
          
-        # Compute novelty and fitness and take ratio
-        r_nov, r_fit = 1, 2 # r_nov:r_fit
+        # Compute novelty and structure score and take ratio to get fitness
+        r_nov, r_score = 1, 2 # r_nov:r_score
         out = []
-        novelty = self.novelty.novelty_fitness(genomes, math.ceil(len(genomes)/2))
-        fitness = fitness_functions.structure_fitness(genomes, input, outputs, logger=self.struct_logger) 
-        for ni, fi in zip(novelty, fitness):
-            out.append(ni * (r_nov/(r_nov+r_fit)) + fi * (r_fit/(r_nov+r_fit)))
+        novelty = self.novelty.novelty_score(genomes, math.ceil(len(genomes)/2))
+        score = structure_functions.structure_score(genomes, input, outputs, logger=self.struct_logger) 
+        for ni, sc in zip(novelty, score):
+            out.append(ni * (r_nov/(r_nov+r_score)) + sc * (r_score/(r_nov+r_score)))
         return out
