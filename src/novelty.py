@@ -3,15 +3,21 @@ from typing import List
 import numpy as np 
 import math
 from src.logger import NoveltyLogger
+import collections
 
 class Novelty:
-    def __init__(self, novelty_log_path, threshold=0.9, overwrite=True) -> None:
+    def __init__(self, novelty_log_path, threshold=0.85, overwrite=True, squash_function=True) -> None:
         self.archive = None
         self.threshold = threshold
         if overwrite:
             self.logger = NoveltyLogger(novelty_log_path, "novelty.csv", header=["KNN Novelty", "Archive Novelty"])
         else:
             self.logger = NoveltyLogger(novelty_log_path, "novelty.csv")
+        
+        if squash_function:
+            self.squash_func = self.__squash_function
+        else:
+            self.squash_func = lambda x: x
             
     def novelty_score(self, genomes: List[neat.DefaultGenome], k:int):
         # Novelty config
@@ -67,7 +73,7 @@ class Novelty:
         # Get distances between each genome
         for ai, a in enumerate(g[:-1]):
             for b in g[ai + 1:]:
-                ab_dist = self.distance(a[1], b[1], weight_coef, disjoint_coef)
+                ab_dist = self.squash_func(self.distance(a[1], b[1], weight_coef, disjoint_coef))
                 dist[a[0]][b[0]] = ab_dist
                 dist[b[0]][a[0]] = ab_dist
 
@@ -81,7 +87,7 @@ class Novelty:
                    disjoint_coef:float) -> float:
         dist = []
         for bi in b:
-            dist.append(self.distance(a, bi, weight_coef, disjoint_coef))
+            dist.append(self.squash_func(self.distance(a, bi, weight_coef, disjoint_coef)))
         dist = sorted(dist)[:k]
         return np.average(dist)
         
@@ -150,3 +156,53 @@ class Novelty:
         if a.aggregation != b.aggregation:
             d += 1.0
         return d * weight_coef
+
+    def __squash_function(self, x):
+        return 1/(1+(math.e**((-6*x)+5)))
+    
+class DynamicNovelty():
+    def __init__(self):
+        self.buffer = collections.deque()
+        self.window = 5
+    
+    def get_ratios(self, novelty_values, structure_values):
+        assert type(novelty_values) == list and type(structure_values) == list
+        assert len(novelty_values) == len(structure_values)
+        
+        p_nov, p_struct = self.__calculate_ratio(np.average(structure_values))
+
+        out = []
+        for i in range(len(novelty_values)):
+            out.append(
+                novelty_values[i]*p_nov + structure_values[i]*p_struct
+            )
+        return out    
+
+    def __calculate_ratio(self, struct):
+        if len(self.buffer) < self.window:
+            # If there are not enough values in buffer, 
+            # add and return 1:1 nov:struct
+            self.buffer.appendleft(struct)
+            return (0.5, 0.5)
+        else:
+            r_nov, r_struct = 0, 0 
+            # If buffer is filled
+            # Calculate average gradient
+            avg_grad = np.average([abs(self.buffer[i] - self.buffer[i-1]) for i in range(1, len(self.buffer))])
+            if avg_grad == 0:
+                r_nov = 1
+                r_struct = 0
+            else:
+                r_struct = avg_grad
+                r_nov = 1 / avg_grad
+                
+            p_nov = r_nov / (r_nov + r_struct)
+            p_struct = r_struct / (r_nov + r_struct)
+            
+            # Remove oldest value and add newest
+            self.buffer.pop()
+            self.buffer.appendleft(struct)
+            
+            return p_nov, p_struct
+    
+    
