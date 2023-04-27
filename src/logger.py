@@ -2,6 +2,7 @@ import os
 import csv
 from neat.reporting import BaseReporter, StdOutReporter
 import time
+import numpy as np
 
 class Logger():
     def __init__(self, log_path, filename, overwrite=True, header=None):
@@ -79,8 +80,34 @@ class StructLogger(Logger):
         self.log_value(["##Gen##"])
     
     def read_file(self):
-        pass
-
+        data = []
+        with open(self.filepath, "r") as fs:
+            # Open file
+            rr = csv.reader(fs, delimiter=",")
+            # Skip header
+            next(rr, None)
+            # Read generation data
+            buff = []
+            for line in rr:
+                if line == ["##Gen##"]:
+                    data.append(np.array(buff))
+                    buff = []
+                else:
+                    buff.append(line)
+        
+        return data[1:]
+                
+    def get_scores(self):
+        data = self.read_file()
+        for i in range(len(data)):
+            data[i] = data[i].astype(float)
+            
+        scores = []
+        for gen in data:
+            scores.append(np.array([np.average(x) for x in gen]))
+        
+        return scores
+        
 
 class StatsLogger(Logger, StdOutReporter):
     def __init__(self, log_path, filename, header=None, overwrite_log=True):
