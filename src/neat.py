@@ -2,13 +2,18 @@ import neat
 import os
 from src.Blocks.block_interactions import BlockInterface
 from src.logger import StatsLogger
+import shutil
 
 class Neat(BlockInterface):
     def __init__(self, config_file:str, block_path:str, checkpoint_path:str, stats_log_path:str, fitness_func:object,
             n_generations=1000, n_input=None, n_pop=None, n_output=None, overwrite=True, checkpoint_rate=10):       
         # Run parent init
         super().__init__(block_path=block_path, connect=False)
-         
+        
+        if os.path.exists(checkpoint_path):
+            # Remove previous checkpoints
+            shutil.rmtree(checkpoint_path)
+
         # Make checkpoint path if non-existant
         try:
             os.makedirs(checkpoint_path)
@@ -52,7 +57,6 @@ class Neat(BlockInterface):
             p = population
         
         # Add a stdout reporter to show progress in the terminal.
-        # p.add_reporter(neat.StdOutReporter(True))
         p.add_reporter(self.stats_logger)
         p.add_reporter(neat.Checkpointer(self.checkpoint_rate, filename_prefix=self.checkpoint + "NEAT-checkpoint-"))
 
