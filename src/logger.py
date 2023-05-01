@@ -79,13 +79,13 @@ class StructLogger(Logger):
     def start_gen(self):
         self.log_value(["##Gen##"])
     
-    def read_file(self):
+    def read_file(self, return_headers=False):
         data = []
         with open(self.filepath, "r") as fs:
             # Open file
             rr = csv.reader(fs, delimiter=",")
             # Skip header
-            next(rr, None)
+            headers = next(rr, None)
             # Read generation data
             buff = []
             for line in rr:
@@ -95,7 +95,10 @@ class StructLogger(Logger):
                 else:
                     buff.append(line)
         
-        return data[1:]
+        if return_headers:
+            return (headers, data[1:])
+        else:
+            return data[1:]
                 
     def get_scores(self):
         data = self.read_file()
