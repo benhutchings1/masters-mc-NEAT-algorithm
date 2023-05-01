@@ -4,54 +4,39 @@
 ## Abstract
 
 ##  Introduction
-Procedural content generation (PCG) is a technique used in video game design and other creative fields, such as art and music. The technique allows creators to generate a near infinite amount of content based on a few rules, constraints, and parameters. This allows games to be highly replayable, feeling more unique and unpredictable. An example of effective PCG is in No Man’s Sky, a universe exploration game which can generate 2^64 (~18x10^18) worlds, each roughly 78.5 miles^2 (~203 sqkm). Comparing this to one the biggest non-generated games, ARMA 3, which has a map size of 270 sqkm, barely bigger than one of the quintillions of the worlds in No Mans’ Sky. 
-https://www.nomanssky.com/
-[https://www.gamespot.com/articles/making-sense-of-no-mans-skys-massive-universe/1100-6441344/]
-https://arma3.com/
-https://www.pcgamer.com/arma-3-map-might-be-bigger-than-you-ever-imagined/
+Procedural content generation (PCG) is a technique used in video game design and other creative fields, such as art and music. The technique allows creators to generate a near infinite amount of content based on a few rules, constraints, and parameters. This allows games to be highly replayable, feeling more unique and unpredictable. An example of effective PCG is in No Man’s Sky [@no_man_sky_2016], a universe exploration game which can generate 2^64 (~18x10^18) worlds, each roughly 78.5 miles$^2$ (~203 sqkm) [@newhouse_2016]. Comparing this to one the biggest non-generated games, ARMA 3 [@arma_3_2012], which has a map size of 270 sqkm [@carlson_2013], barely bigger than one of the quintillions of the worlds in No Mans’ Sky. 
 
-PCG does come with some downsides, mainly sacrificing quality control. A traditional game would have game designers’ hand-designing all aspects of the game, meaning the output is predetermined and easily controllable. Since PCG is designed to be unending, it is impossible to completely quality check. Unlike other types of PCG, like art and music, the design of content in games is first and foremost based around playability, with artistic qualities being a secondary objective. Many existing machine learning PCG techniques allow for small variations in the content generated, which in a medium like music makes no difference to the overall quality, but small variations in game design can lead to the game being unplayable. (###Example about platformers?). But playability is not a binary scale, as [ref book] explains there is a "golden section" of game design which is the perfect balance novelty and familiarity, which is pleasing for our brains, therefore better to play.
-https://books.google.co.uk/books?hl=en&lr=&id=3TAKAgAAQBAJ&oi=fnd&pg=PT3&dq=game+design&ots=EL229oE8MV&sig=t-DrjYbyrbdrTjhtZdF0mOGaNpM&redir_esc=y#v=onepage&q=game%20design&f=true
+PCG does come with some downsides, mainly sacrificing quality control. A traditional game would have game designers’ hand-designing all aspects of the game, meaning the output is predetermined and easily controllable. Since PCG is designed to be unending, it is impossible to completely quality check. Unlike other types of PCG, like art and music, the design of content in games is first and foremost based around playability, with artistic qualities being a secondary objective. Many existing machine learning PCG techniques allow for small variations in the content generated, which in a medium like music makes no difference to the overall quality, but small variations in game design can lead to the game being unplayable. (###Example about platformers?). But playability is not a binary scale, as [@koster_2013] explains there is a "golden section" of game design which is the perfect balance novelty and familiarity, which is pleasing for our brains, therefore better to play.
 
-Another drawback to PCG is processing costs and generation speed. According to the steam hardware survey [ref], which is the most comprehensive hardware census and continuously updated, there is still a massive range in hardware capabilities being used, with strongest graphics card being ~2400% stronger than the lowest. The higher the hardware requirements for a game, the larger the proportion of users unable to run the game, alienating a portion of the customer base.
-https://store.steampowered.com/hwsurvey/Steam-Hardware-Software-Survey-Welcome-to-Steam
-https://gpu.userbenchmark.com/Compare/Nvidia-RTX-3060-Ti-vs-Intel-UHD-Graphics-630-Desktop-Coffee-Lake-i5-i7/4090vsm356797
+Another drawback to PCG is processing costs and generation speed. According to the steam hardware survey [@steam_2023], which is the most comprehensive hardware census and continuously updated, there is still a massive range in hardware capabilities being used, with strongest graphics card being ~2400% stronger than the weakest [@userbenchmark]. The higher the hardware requirements for a game, the larger the proportion of users unable to run the game, alienating a portion of the customer base.
 
-Outside of games, machine learning based PCG has made massive leaps forward. Models such as DALL-E 2 can generate completely unique photo-realistic images from a text description, and ChatGPT can generate text answers to almost any question. These models have been so successful due in large part to the enormous amount of data they have been trained on and the huge complexity of the models, which presents problems for PCG in games. For DALL-E/ChatGPT to generate whatever is requested, they needed to have seen something similar to base their response off of. This is problematic for game world generation, as there exists no dataset big or diverse enough to adequatly train these models. Large-scale deep learning models are also extremely computationally expensive, heavily affecting the hardware requirements.
-https://openai.com/blog/chatgpt
-https://openai.com/product/dall-e-2
-https://arxiv.org/abs/1702.00539
+Outside of games, machine learning based PCG has made massive leaps forward. Models such as DALL-E 2 [@ramesh2022hierarchical] can generate completely unique photo-realistic images from a text description, and ChatGPT [@chatgpt_2022] can generate text answers to almost any question. These models have been so successful due in large part to the enormous amount of data they have been trained on and the huge complexity of the models, which presents problems for PCG in games. For DALL-E/ChatGPT to generate whatever is requested, they needed to have seen something similar to base their response off of. This is problematic for game world generation, as there exists no dataset big or diverse enough to adequatly trai these models [@summerville2018procedural]. Large-scale deep learning models are also extremely computationally expensive, heavily affecting the hardware requirements .
 
-Another issue is the idea of creativity. Models such as DALL-E and ChatGPT do produce unique outputs, but the output is based on many existing sources. For these models this is not a big problem because of the huge variety of training data which allows the models to draw on many sources to generate new content. Games on the other hand generally have the same recognisable styles and artifacts throughout the world. A model splicing these together could lead to a disjointed world and recognisable from other games, leading to lower immersion. 
-https://www.ibm.com/watson/advantage-reports/future-of-artificial-intelligence/ai-creativity.html
+Another issue is the idea of creativity. Models such as DALL-E and ChatGPT do produce unique outputs, but the output is based on many existing sources. For these models this is not a big problem because of the huge variety of training data which allows the models to draw on many sources to generate new content [@ibmai_2015]. Games on the other hand generally have the same recognisable styles and artifacts throughout the world. A model splicing these together could lead to a disjointed world and recognisable from other games, leading to lower immersion. 
 
-The fundemental problem with PCG is the the *state-explosion* problem, where as the size of the generated content increases, the search space increases exponentially and brute force solutions become intractable. Since it is impossible to verify if a solution is the best solution, an approximate solution is required. One solution to this is through the use of genetic algorithms (GA). GA’s take inspiration from the biological process of natural selection and use it to evolve a solution to a problem by using a heuristic approach to move towards a better solution. Accomplished by removing ineffective algorithms from the population and allowing effective models to proceed and evolve further. Evolving a solution instead of training from past solutions comes with certain advantages. By having an algorithm which is controlled by the rules of a system rather than being trained on existing examples allows the model to come up with new unique solutions, rather than rehashing existing solutions. 
-https://link.springer.com/content/pdf/10.1007/3-540-46002-0_19.pdf
+The fundemental problem with PCG is the the *state-explosion* problem, where as the size of the generated content increases, the search space increases exponentially and brute force solutions become intractable [@Godefroid_2002]. Since it is impossible to verify if a solution is the best solution, an approximate solution is required. One solution to this is through the use of genetic algorithms (GA). GA’s take inspiration from the biological process of natural selection and use it to evolve a solution to a problem by using a heuristic approach to move towards a better solution. Accomplished by removing ineffective algorithms from the population and allowing effective models to proceed and evolve further. Evolving a solution instead of training from past solutions comes with certain advantages. By having an algorithm which is controlled by the rules of a system rather than being trained on existing examples allows the model to come up with new unique solutions, rather than rehashing existing solutions. 
 
-In this paper I will be experimenting with NEAT, which is a type of genetic algorithm, and how the performance is affected by different levels of novelty. I will be investigating this within the context of the EvoCraft challenge, a PCG challenge for MineCraft. Theses concepts will be explained in more detail.
+This paper will be experimenting with NEAT [@6790655], which is a type of genetic algorithm, and how the performance is affected by different levels of novelty. I will be investigating this within the context of the EvoCraft [@grbic2020evocraft] challenge, a PCG challenge for MineCraft [@persson_2023]. Theses concepts will be explained in more detail.
 
 ### Aims and Objectives
-Aim: Investigate how varying levels of novelty in a population affects the population's overall fitness, within the context of the EvoCraft challenge.
+Aim: Investigate how varying levels of novelty affects the (quality, realism??) of procedurally generated cities in Minecraft
 Objectives:
     1. Investigate other competition entries for the EvoCraft challenge
-    2. Research novelty techniques
-    3. Train a basic model which can generate structures of arbitrary quality
-    4. Implement basic novelty search
-    5. Experiment with different levels of novelty
-### Hypothesis
-@@
+    2. Research procedural content and novelty search techniques
+    3. Implement fitness functions to evaluate single structures
+    4. Experiment with varying levels of novelty
+    5. Evaluate multi-structure cities to see effects of novelty
 
 ## Background
 ### Minecraft
-Minecraft is a 3D, open-world, sandbox, voxel-based video game. Each voxel, called a block, can be broken and replaced to build structures, allowing players to apply their creativity. Minecraft uses PCG and world seeds to create a unique world which is 3.6 billion blocks^2, allowing players virtually infinite space to explore and build. Because of the open-ended nature of the game and the simplicity of interactions with the world, Minecraft has become a platform for many AI challenges, including mineRL. This competition focused on an agent within Minecraft which has to complete a variety of tasks in an unknown environment. Because there is no one defined task, the algorithm has to be able to complete many smaller problems, with the eventual goal of improving research into general intelligence. 
+Minecraft is a 3D, open-world, sandbox, voxel-based video game. Each voxel, called a block, can be broken and replaced to build structures, allowing players to apply their creativity. Minecraft uses PCG and world seeds to create a unique world which is 3.6 billion blocks$^2$ [@whitworth_2021], allowing players virtually infinite space to explore and build. Because of the open-ended nature of the game and the simplicity of interactions with the world, Minecraft has become a platform for many AI challenges, including mineRL. This competition focused on an agent within Minecraft which has to complete a variety of tasks in an unknown environment. Because there is no one defined task, the algorithm has to be able to complete many smaller problems, with the eventual goal of improving research into general intelligence. 
 
-https://www.sportskeeda.com/minecraft/how-big-minecraft-world
-For interactions between Python and Minecraft world I will be using a Minecraft server with a Bukkit plugin called RaspberryJuice installed and the McPi Python library to communicate with it. Bukkit is a server modification tool with an API which allows users to easily create server plugins. The plugin converts Python commands into Java commands which can be processed by the Minecraft server. The McPi simply sends Python commands to the RaspberryJuice plugin.
+For interactions between Python and Minecraft world I will be using a Minecraft server with a Bukkit [@bukkit_2010] plugin called RaspberryJuice installed and the McPi Python library to communicate with it. Bukkit is a server modification tool with an API which allows users to easily create server plugins. The plugin converts Python commands into Java commands which can be processed by the Minecraft server. The McPi simply sends Python commands to the RaspberryJuice plugin.
 
 ## EvoCraft
 To investigate genetic algorithms for PCG, I am working on the EvoCraft Challenge. The EvoCraft challenge brief is to create an open-ended algorithm which is capable of creating novel and increasingly complex structures in MineCraft. These algorithms have to be unending and should aim to diverge over time rather than slow down and become repetitive. One of the drawbacks of PGC was the lack of quality control, and the problem with infintely generating content becoming repetitive over time. This challenge aims to use evolving algorithms to keep generating content which keeps diverging and becoming more interesting.
 
-### EvoCraft competition winners
+### Other EvoCraft Entries 
 #### Evocraft PCGNN *Michael Beukman, Matthew Kruger, Guy Axelrod, Manuel Fokam, Muhammad Nasir*
 [ref] were came runners up in the EvoCraft competition with their endless city generator. Their approach broke a city down into the component 'levels', starting from the lowest level, the house and garden. To generate a house and garden they broke this down into 4 components: the house structure, roof, decorations, and garden. They then used a PCGNN (Procedural Content Generation using Neat and Novelty search) to generate each of these components. The house, roof, and decorations are all generated as 3d tilemaps to be placed in-world. The house consists of walls, empty space, and enterance, the roof consists of a design covering the area beneath it, and the decorations consists of decoration blocks filling floor space inside the house. The garden works slightly differently as it is a 2d tilemap covering an area with flowers, grass, and trees. They then used these component houses and gardens to create a town. A town is its own generated 2D tilemap of houses, gardens and roads @@image in appendix@@, where are road connects all the houses in the town. They then placed many towns together to create a city, which could grow endlessly. 
 @@ Put about successes and drawbacks? About other details in paper
@@ -59,8 +44,8 @@ To investigate genetic algorithms for PCG, I am working on the EvoCraft Challeng
 https://github.com/Michael-Beukman/Evocraft22_PCGNN
 
 #### simple_minecraft_evolver *real_itu*
+The simple Minecraft evolver is basic NEAT implementation which aims to build a tower towards a gold block in the air. Early generations start by building towers in random directions, but as they evolve they move more towards the gold block. 
 https://github.com/real-itu/simple_minecraft_evolver
-#### Automated design of novel redstone circuits *Nicholas Guttenberg* 
 
 https://github.com/GoodAI/EvocraftEntry
 
@@ -111,12 +96,14 @@ The roof model genomes work in a similar way, but in 2D. A height map consists o
 A fitness function is used to evalute the quality of a candidate solution, to help it reach the desired solution. According to @@ref@@ a fitness function should be:  
 - Clearly defined: it should be easy to understand and provide meaningful insight into the performance.
 - Intuitive: Better solutions should get a better score and visa-versa 
-- Efficiently implemented: NEAT requires many iterations to evolve a good solution, so the fitness function should not be a bottleneck
+- Efficiently implemented: NEAT requires many generations to evolve a good solution, so the fitness function should not be a bottleneck
 - Sensitive: Should be able to distinguish between slightly better and slightly worse solutions to allow a gradual movement towards a better solution
 https://towardsdatascience.com/how-to-define-a-fitness-function-in-a-genetic-algorithm-be572b9ea3b4
+For each model the fitness is calulated by combining the novelty score and structure score (explained in more detail below). The ratio of these combinations decides the level of novelty in the population. 
 
-##### House Model
- To start writing functions, the components of the desired structure have to be broken down. An example structure is shown in figure @@. When deciding fitness functions it is important to limit the scope of what can be expected, there is always more detail that can be added to the fitness. The purpose of a fitness function is to highlight the important parts of a structure and guide the genome towards the desired output, but leaving enough flexibility to allow for creativity. A balance between control and creativity. Each of the fitness functions generate a score between 0≤x≤1 and the average is used to calculate the final fitness.
+##### Structure Scoring
+###### House Model 
+ To start calculating a house score, the components of the desired structure have to be broken down. An example structure is shown in figure @@. When deciding fitness functions it is important to limit the scope of what can be expected, there is always more detail that can be added to the scoring. The purpose of  the scoring is to highlight the important parts of a structure and guide the genome towards the desired output, but leaving enough flexibility to allow for creativity. A balance between control and creativity. Each of the component scoring functions generate a value between 0@@x@@1 and the average is used to calculate the final overall score.
 The fitness functions I decided on were:
 1. A bounding wall
 An important part of a house is a complete wall with no airgaps and one block thick.
@@ -127,13 +114,13 @@ There should be a door on ground level to enter the structure. This is the only 
 4. Seed blocks
 The seed blocks inputs are to control the types of blocks which are generated by the structure. This scores models higher which  prioritise using blocks from the three seed blocks. For each seed block which is in the top 6 blocks used, 1/3 is added to the score. I chose top 6 as this almost always includes an air block in the top 5, which will never be a seed block.
 5. Symmetry
-In almost everything considered beautiful, there is some element of symmetry. It has been well documented that humans find symmetry much more attractive and soothing to look at. Instead of limiting my model and forcing symmetry in one axis, I am checking both xy axes and chosing the one which has the highest symmetry. The symmetry is calculated by comparing the ratio of equal blocks on both sides of the axis, giving a value between 0 and 1. 
+In almost everything considered beautiful, there is some element of symmetry. It has been well documented that humans find symmetry much more attractive and soothing to look at. Instead of limiting my model and forcing symmetry in one axis, I am checking both xy axes and chosing the one which has the highest symmetry. The symmetry is calculated by comparing the percentage of equal blocks on both sides of the axis, giving a value between 0 and 1. 
 https://www.nature.com/articles/s41598-018-24558-x
 https://www.psychologytoday.com/gb/blog/beastly-behavior/201907/why-are-symmetrical-faces-so-attractive
 
-##### Roof Model
-Since the roof is a simpler structure than the house, less fitness functions are required. Since this is a simple structure it is very easy for the fitness functions to be too controlling. For example, if the fitness function maximises for sloped rooves, then only sloped rooves will be made, therefore it was very important to have gentle control in the fitness functions.
-The fitness functions I decided on were:
+###### Roof Model
+Since the roof is a simpler structure than the house, less scoring metrics are required. Since this is a simple structure it is very easy for the fitness functions to be too controlling. For example, if the scores maximise for sloped rooves, then only sloped rooves will be generated, therefore it was very important to have gentle control.
+The scores I decided on were:
 1. Compliance
 This ensures the heightmap generated fits within the limits I have set. For example, if the maximum height set is 5 blocks and the heightmap contains a height greater than 5, then the solution doesnt pass the compliance check. This fitness is either a 0 (failed the check) or 1 (passed the check). 
 2. Symmetry
@@ -141,6 +128,16 @@ Just like the house model, I am maximising for symmetry in the xy axes.
 3. Visual Complexity
 This is the fitness for quality checking and making the solution more interesting. To make the solutions more intersting I am maximising for complexity in the surface. This is achieved by rewarding changes in height over flatness. This is accomplished by counting the ratio of changes in height of 1 vs no changes in height. I am purposly not counting changes in height of more than 1, as that will leave gaps and ruin the look of the roof. An example of low complexity vs high complexity is shown in figure @@. I chose this solution over rewarding specific types of structure, like flat or triangle-sloped rooves, to allow for more creativity. 
 
+##### Novelty Scoring
+A novelty score encapsulates how much an individual in a new generation has changed from the previous generation. A higher novelty score means an individual has significantly changed from the previous generation, leading to a higher fitness score. The hope of this is for individuals to be able to make changes to their genotypes which may not improve the structure score in the short term, but will lead to long term improvements. In populations with a high novelty score to structure score ratio, the individuals will be able to spread out try more novel solutions without being killed. If novelty is too high then the structure score becomes less and less important, leading to the solutions being novel but useless. The model still has to enforce the structure scores.
+
+When finding the novelty of a genome, it needs to be compared to its closest relations. If a genomes if very different to its closest relations, then it will have a high novelty score. If there are two genomes which are completely different then they will always have a high novelty score, regardless of the changes made to the genomes. The easiest way to compare a genome to the closest relations is by taking the average novelty between the *k*-nearest-neighbours (KNN). To improve the novelty score, a new genome can also be compared to the previous generation by archiving them. A novelty score is then composed of the comparison between neighbours and archived ancestors. To promote the highest novelty, only individuals above a threshold, $$ρ_x$$, are added to the archive. From some simple testing, $$ρ_x = 0.85$$ archived the right amount of the highest novelty genomes. 
+
+##### Dynamic Novelty
+One issue with a fixed level of novelty is that it is not always suitable for every situation. When a population is stuck in a local minumum a very high novelty ratio is needed to help promote potential solutions which move the the population out of the local minumum. On the other hand when the population is quickly improving, a low novelty ratio is needed to promote the individuals which are improving the most. Having a high novelty ratio in this circumstance is not bad but increases the number of generations needed converge to a solution. An improvement to this is a dynamic novelty system which looks at how quickly a population is improving and adjusts the novelty accoringly. To get the speed of improvement, the gradient of *n*-previous generations structure score's  are taken and the inverse is used to calculate the novelty required.  
+
 ## Evaluation
 
 ## Future Work
+
+## References
