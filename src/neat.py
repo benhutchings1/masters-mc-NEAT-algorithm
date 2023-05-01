@@ -6,13 +6,14 @@ import shutil
 
 class Neat(BlockInterface):
     def __init__(self, config_file:str, block_path:str, checkpoint_path:str, stats_log_path:str, fitness_func:object,
-            n_generations=1000, n_input=None, n_pop=None, n_output=None, overwrite=True, checkpoint_rate=10):       
+            n_generations=1000, n_input=None, n_pop=None, n_output=None, overwrite=False, checkpoint_rate=10):       
         # Run parent init
         super().__init__(block_path=block_path, connect=False)
-        
-        if os.path.exists(checkpoint_path):
-            # Remove previous checkpoints
-            shutil.rmtree(checkpoint_path)
+
+        if overwrite:
+            if os.path.exists(checkpoint_path):
+                # Remove previous checkpoints
+                shutil.rmtree(checkpoint_path)
 
         # Make checkpoint path if non-existant
         try:
