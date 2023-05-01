@@ -26,29 +26,49 @@ class StructPlot(StructLogger):
         ax.set_xlabel("Generation")
         ax.set_ylabel("Avg structure value")
 
-    def plot(self, titles, loggers:List[StructLogger]):
+    def average_plot(self, titles, loggers:List[StructLogger], super_plot_title):
         assert type(loggers) == list
         assert type(loggers[0]) == StructLogger
         assert len(titles) == len(loggers)
-        # Get number of subplots
-        dim = math.ceil(math.sqrt(len(loggers)))
-        
-        if dim == 1:
+        # Get number of subplots        
+        if len(loggers) == 1:
             fix, ax = plt.subplots(figsize=(10,10))
         else:    
             # Make and save graph
-            fig, ax = plt.subplots(dim, dim, figsize=(10, 10))
+            fig, ax = plt.subplots(len(loggers), figsize=(10, 10))
             
-        if dim == 1:
+        if len(loggers) == 1:
             self.__plot_average(ax, loggers[0].get_scores(), titles[0])
         else:
             # Fill graph
-            idx = 0
-            for i in range(dim):
-                for j in range(dim): 
-                    self.__plot_average(ax[i][j], loggers[i].get_scores(), titles[i])
-                    idx += 1
+            for i in range(len(loggers)):
+                self.__plot_average(ax[i], loggers[i].get_scores(), titles[i])
             
         # Save to file
         plt.tight_layout()
+        plt.suptitle(super_plot_title)
+        plt.savefig(self.out)
+        
+    def individual_scores_plot(self, logger:StructLogger, plot_title):
+        headers, data = logger.read_file(return_headers=True)
+        fig, ax = plt.subplots(len(headers), figsize=(10, len(headers)*5))
+        
+        # Gather data
+        format_data = {head:[] for head in headers}
+        
+        for gen in data:
+            gen = gen.astype(float)
+            for i, header in enumerate(headers):
+                format_data[header].append(np.average(gen[:, i]))
+        
+        for axi, header in zip(ax, headers):
+            axi.plot(
+                range(len(format_data[header])),
+                format_data[header]
+            )
+            axi.set_title(f"{header} plot")
+        
+        # Save to file
+        plt.tight_layout()
+        plt.suptitle(plot_title)
         plt.savefig(self.out)
