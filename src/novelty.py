@@ -163,7 +163,7 @@ class Novelty:
 class DynamicNovelty():
     def __init__(self):
         self.buffer = collections.deque()
-        self.window = 5
+        self.window = 15
     
     def get_ratios(self, novelty_values, structure_values):
         assert type(novelty_values) == list and type(structure_values) == list
@@ -188,8 +188,9 @@ class DynamicNovelty():
             r_nov, r_struct = 0, 0 
             # If buffer is filled
             # Calculate average gradient
-            avg_grad = np.average([abs(self.buffer[i] - self.buffer[i-1]) for i in range(1, len(self.buffer))])
-            if avg_grad == 0:
+            avg_grad = np.average([self.buffer[i] - self.buffer[i-1] for i in range(1, len(self.buffer))])#
+            # Convert gradient into ratio
+            if avg_grad <= 0:
                 r_nov = 1
                 r_struct = 0
             else:
