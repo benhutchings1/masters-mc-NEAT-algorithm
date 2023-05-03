@@ -106,23 +106,51 @@ class BlockInterface():
             subblock
         )
 
-    def place_blocks_np(self, blocks, x0=0, y0=-60, z0=0, isblocklist=True):
-        assert len(blocks.shape) == 3
-        if map:
-            assert not self.blocklist is None 
-            
-        for yi, y in enumerate(blocks):
-            for xi, x in enumerate(y):
-                for zi, z in enumerate(x):
+    def place_blocks_np(self, blocks, width, length, x0=0, y0=-60, z0=0, orientation="N",isblocklist=True):
+        assert blocks.shape[1] == (2*length + 2*(width - 2))
+        # Choose orientation to place blocks in
+        axis = self.__orientation_conv(orientation)
+        # Map direction changes
+        change_dir = {"N":"E", "E":"S", "S":"W", "W":"N"}
+    
+        side_lengths = [length-1, width-1]*2
+        for y, row in enumerate(blocks):
+            curr_pos = {"x":x0, "y":y0+y, "z":z0}
+            point = 0
+            for l in side_lengths:
+                side = row[point:point+l]
+                point += l
+                
+                # Place side
+                for i, block in enumerate(side):
                     if isblocklist:
-                        if type(z) is not int:
-                            # try cast to int
-                            z = int(z)
-                        z = self.blocklist[z]
+                        self.place_block_id(blockid=block, **curr_pos)
                     else:
-                        z = str(z)
+                        self.place_block_str(strblock=block, **curr_pos)
+                    # Update position
+                    curr_pos[axis[0]] += axis[1]
+                # Change placement direction
+                orientation = change_dir[orientation]
+                axis = self.__orientation_conv(orientation)
+                
                     
-                    self.place_block_str(x0+xi, y0+yi, z0+zi, strblock=z)
+                    
+    def __orientation_conv(self, orientation):
+        if orientation == "N":
+            return ["z",1]
+        elif orientation == "E":
+            return ["x",1]
+        elif orientation == "S":
+            return ["z",-1]
+        elif orientation == "W":
+            return ["x",-1]
+        else:
+            raise AttributeError()
+                
+            
+            
+            
+                
                     
 
     def __read_in_blocks(self, path):
@@ -134,8 +162,7 @@ class BlockInterface():
                 out.append(row[1])
                 lookup[row[1]] = ri
         # Remap some lookup values
-        remap = [64, 71, 193, 194, 195, 196, 197, 17, 162, 53, 67, 108,\
-            109, 114, 128, 134, 135, 136, 156, 163, 164, 180, 203]        
+        remap = [64, 17, 162]        
         for id in remap:
             mpp = lookup[f"{id}"]
             for i in range(20):
