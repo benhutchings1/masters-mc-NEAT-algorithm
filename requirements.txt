@@ -1,4 +1,3 @@
 neat-python
 numpy
 mcpi
-watchdog

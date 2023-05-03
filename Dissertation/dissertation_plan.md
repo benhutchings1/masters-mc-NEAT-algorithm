@@ -53,26 +53,38 @@ Objectives
     - i am focusing on a much smaller scale generation, they focused on large scale diversity?
 - GAN
     - Can be much bigger models
-    - EA's are harder to run on GPU
+
 ## Method (~10-12 pages)
-- Type of novelty search
-    - KNN
-    - Archived ancestors
-- Experiment
-    - Test with no novelty
-    - Test with low novelty
-    - test medium novelty
-    - test high novelty
-    - Dynamic diversity? diversity coefficient changes the most stable a fitness becomes
+- End goal
+    - Requirements
+- Evaluation of language choice
+- NEAT python
+    - Algorithmic fitnesss functions
+    - Novelty search
+        - Put through activation function
+        - dist fuction
+        - Archived and NN networks 
+            - Might cycle through evolutinoary behaviours
+        - Experiment
+            - Test with no novelty
+            - Test with low novelty
+            - test medium novelty
+            - test high novelty
+            - Dynamic diversity? 
+                - Inverse differential of fitness
+- Block placement   
+
+
 ## Evaluation (~5-7 pages)
 - Minecraft performance 
 - Fitness over time
     - Max, mean, min, fitness
     - Performance scaling with size of building generated
-- Novelty can be high but has to be human novelty which is hgih
+- Novelty can be high but has to be human novelty which is high
 - 
 ## Future Work
-
+- Having some memory based NN?
+- Feature network (adding chimneys, balconies....)
 ## References (~1-2 pages)
 https://subscription.packtpub.com/book/game-development/9781785886713/1/ch01lvl1sec14/the-drawbacks-of-procedural-generation
 
