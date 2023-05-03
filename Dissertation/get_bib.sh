@@ -1,0 +1,1 @@
+curl -LH "Accept: application/x-bibtex" https://doi.org/$1 >> citations/$2.bib

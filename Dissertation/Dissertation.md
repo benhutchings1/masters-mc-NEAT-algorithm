@@ -74,9 +74,10 @@ https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8877944/
 https://jonathan-hui.medium.com/gan-why-it-is-so-hard-to-train-generative-advisory-networks-819a86b3750b
 
 # Implementation
-As previously mentioned, I will be experimenting with novelty in NEAT populations to create structures in MineCraft. I am taking a note from @@evocraft PCGNN@@ and breaking down the solution into 2 models, one to produce the base of the structure and the other to create the roof. This each approach can be broken down into three main objectives: genome creation, the fitness functions, and novelty experimentation. 
-The structural base model, which I will call the house model, will create a 3D tilemap of the blocks to place. The roof model will output a 2D heightmap, fig@@, which details the height of each block to place. I chose to do the roof model as a 2D heightmap as a roof only needs to be one layer thick and it is much more computationally efficient. 
+As previously mentioned, I will be experimenting with novelty in NEAT populations to create structures in MineCraft. I am taking a note from [@beukman2023hierarchically] and breaking down the solution into 2 models, one to produce the base of the structure and the other to create the roof. This each approach can be broken down into three main objectives: genome creation, the fitness functions, and novelty experimentation. 
+The structural base model, which I will call the house model, will place the wall of the house. Since the wall of the house should be one block thick, I can map the 3D wall to a 2D. This is done by starting at a corner and unwinding the wall into a 2D plane, as shown in @@fig.
 I have chosen to do this project in Python. While the competitors (Java, C++, R...) are much faster than the core Python modules, there are libraries, such as NumPy, which are written in C and are extremely quick. This means it can perform well on large datasets, making it a favorite for data scientists. Because it is a popular data science language, there is also a large collection of machine learning libraries supported to help development.
+!["Caption"]("Images/layered_image.png")
 
 ## Genome creation
 A genome is an individual within a population. It contains the information needed to create a neural network, which can be used to create structures. The aim is to create a genome which, given some configuration information (building dimensions, type of blocks...), can output a structure which follows the configuration instructions. To implement the NEAT algorithms, I am using a python library called python-neat. This library manages the encoding and mutation of the population, the only implementation that is required is giving the evolution hyperparameters and evaluating the fitness of each individual.
@@ -131,8 +132,11 @@ When finding the novelty of a genome, it needs to be compared to its closest rel
 
 #### Dynamic Novelty
 One issue with a fixed level of novelty is that it is not always suitable for every situation. When a population is stuck in a local minimum a very high novelty ratio is needed to help promote potential solutions which move the the population out of the local minimum. On the other hand when the population is quickly improving, a low novelty ratio is needed to promote the individuals which are improving the most. Having a high novelty ratio in this circumstance is not bad but increases the number of generations needed converge to a solution. An improvement to this is a dynamic novelty system which looks at how quickly a population is improving and adjusts the novelty accordingly. To get the speed of improvement, the gradient of *n*-previous generations structure score's are taken and the inverse is used to calculate the novelty required.  
+## Experimentation
+
 
 # Evaluation
+
 
 # Future Work
 

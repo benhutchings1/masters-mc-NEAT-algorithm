@@ -29,7 +29,8 @@
 Aim: 
 Objectives  
 1. Experiment with other creations
-
+how novelty affects the final aesthetics/realism of city
+compare different generations
 
 
 ## Related Work (~6-8 pages)
@@ -55,6 +56,7 @@ Objectives
     - Can be much bigger models
 
 ## Method (~10-12 pages)
+- Redo terminology
 - End goal
     - Requirements
 - Evaluation of language choice

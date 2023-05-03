@@ -30,7 +30,7 @@ class CheckpointPlacer:
                 self.house_placer(model, height, length, width, seeds)
     
     def place_population_from_checkpoint(self, checkpoint_name, height, length, width, seeds=None):
-        self.nt = Neat(self.config_path, self.block_path, self.checkpoint_path, "temp/", None)
+        self.nt = Neat(self.config_path, self.block_path, self.checkpoint_path, "temp/", None, overwrite=False)
         self.nt.connect()
         population = self.nt.load_genomes_checkpoint(checkpoint_name)
         nets = [neat.nn.FeedForwardNetwork.create(gen, self.nt.config) 
@@ -51,7 +51,6 @@ class CheckpointPlacer:
                 generate_roof.generate(0, model, [height, length, width])[1]
             )
         
-
     def house_generator(self, model, height, length, width, seeds):
         return generate_building.generate(0, model,
                                             [height, length, width]+seeds)[1]
@@ -70,25 +69,25 @@ if __name__ == "__main__":
     tp = 1
     if tp == 0:       
         config = "config/Roof-NEAT-config"
-        checkpoints = "logs/roof/checkpoints"
+        checkpoints = "logs/house/roof/checkpoints"
         cp = CheckpointPlacer(0, -50, 0, 1,
                             config_path=config,
                             block_path="src/Blocks/blocks.csv",
                             checkpoint_path=checkpoints
                             )
         cp.place_population_from_checkpoint(
-            checkpoint_name="NEAT-checkpoint-9999",
+            checkpoint_name="NEAT-checkpoint-999",
             height=4, length=8, width=8
         )
     else:
         config = "config/House-NEAT-config"
-        checkpoints = "logs/house/checkpoints"
+        checkpoints = "data/dynamic/iter2/house/checkpoints/"
         cp = CheckpointPlacer(0, -60, 0, 2,
                             config_path=config,
                             block_path="src/Blocks/blocks.csv",
                             checkpoint_path=checkpoints
                             )
         cp.place_population_from_checkpoint(
-            checkpoint_name="NEAT-checkpoint-989",
-            height=8, length=8, width=8, seeds=[12, 13, 14]
+            checkpoint_name="NEAT-checkpoint-99",
+            height=8, length=8, width=8, seeds=[1, 2, 3]
         )
