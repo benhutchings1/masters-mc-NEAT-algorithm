@@ -1,0 +1,101 @@
+<mxfile host="app.diagrams.net" modified="2023-04-13T10:04:01.654Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/111.0" etag="ozvQTQfpjuM27VkRO7tM" version="21.1.7" type="device">
+  <diagram name="Page-1" id="43PuBrk4U5488BSwDqnO">
+    <mxGraphModel dx="904" dy="1085" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="BYYpCkRwLiD1by9MsPb--5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="BYYpCkRwLiD1by9MsPb--1" target="BYYpCkRwLiD1by9MsPb--2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="BYYpCkRwLiD1by9MsPb--1" value="Population initialised randomly" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="630" y="-120" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BYYpCkRwLiD1by9MsPb--6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="BYYpCkRwLiD1by9MsPb--2" target="BYYpCkRwLiD1by9MsPb--3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="BYYpCkRwLiD1by9MsPb--2" value="Population&#39;s fitness evaluated (including novelty search)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="630" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BYYpCkRwLiD1by9MsPb--7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="BYYpCkRwLiD1by9MsPb--3" target="BYYpCkRwLiD1by9MsPb--4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="BYYpCkRwLiD1by9MsPb--3" value="Highest fitness individuals are kept" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="630" y="110" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BYYpCkRwLiD1by9MsPb--8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="BYYpCkRwLiD1by9MsPb--4">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="690" y="-30" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="520" y="240" />
+              <mxPoint x="520" y="-40" />
+              <mxPoint x="690" y="-40" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="BYYpCkRwLiD1by9MsPb--31" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="BYYpCkRwLiD1by9MsPb--4" target="BYYpCkRwLiD1by9MsPb--29">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="BYYpCkRwLiD1by9MsPb--4" value="Kept individuals mutated to produce new population" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="630" y="210" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BYYpCkRwLiD1by9MsPb--9" value="Repeat for each individual in the population" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="990" y="370" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BYYpCkRwLiD1by9MsPb--12" value="" style="endArrow=classic;html=1;rounded=0;dashed=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="BYYpCkRwLiD1by9MsPb--2" target="BYYpCkRwLiD1by9MsPb--13">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="900" y="200" as="sourcePoint" />
+            <mxPoint x="950" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="BYYpCkRwLiD1by9MsPb--22" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="BYYpCkRwLiD1by9MsPb--13" target="BYYpCkRwLiD1by9MsPb--15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="BYYpCkRwLiD1by9MsPb--23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="BYYpCkRwLiD1by9MsPb--13" target="BYYpCkRwLiD1by9MsPb--14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="BYYpCkRwLiD1by9MsPb--13" value="Individual taken from the population" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="890" y="-70" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BYYpCkRwLiD1by9MsPb--24" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="BYYpCkRwLiD1by9MsPb--14" target="BYYpCkRwLiD1by9MsPb--16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="BYYpCkRwLiD1by9MsPb--14" value="Novelty search performed on individual" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1070" y="20" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BYYpCkRwLiD1by9MsPb--25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="BYYpCkRwLiD1by9MsPb--15" target="BYYpCkRwLiD1by9MsPb--19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="BYYpCkRwLiD1by9MsPb--15" value="Structure fitness tests performed" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="890" y="20" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BYYpCkRwLiD1by9MsPb--26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="BYYpCkRwLiD1by9MsPb--16" target="BYYpCkRwLiD1by9MsPb--19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="BYYpCkRwLiD1by9MsPb--16" value="Get average distance to &lt;i&gt;k&lt;/i&gt; nearest neighbours" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1070" y="110" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BYYpCkRwLiD1by9MsPb--27" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="BYYpCkRwLiD1by9MsPb--19" target="BYYpCkRwLiD1by9MsPb--20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="BYYpCkRwLiD1by9MsPb--19" value="novelty and fitness value combined (depends on novelty level)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="990" y="200" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BYYpCkRwLiD1by9MsPb--28" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="BYYpCkRwLiD1by9MsPb--20" target="BYYpCkRwLiD1by9MsPb--9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="BYYpCkRwLiD1by9MsPb--20" value="Individual fitness level assigned to combined value" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="990" y="280" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BYYpCkRwLiD1by9MsPb--29" value="After n generations, best individual taken" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="630" y="310" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BYYpCkRwLiD1by9MsPb--30" value="" style="endArrow=classic;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;dashed=1;" edge="1" parent="1" source="BYYpCkRwLiD1by9MsPb--9" target="BYYpCkRwLiD1by9MsPb--2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="820" y="360" as="sourcePoint" />
+            <mxPoint x="870" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
