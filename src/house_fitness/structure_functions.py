@@ -5,6 +5,12 @@ import warnings
 from functools import lru_cache
 from src.logger import StructLogger
 
+def __get_funcs():
+    return (
+        [score_seed_blocks, score_symmetry, score_door, score_bounding_wall],
+        ["score_seed_blocks", "score_symmetry", "score_door", "score_bounding_wall"]
+    )
+
 def structure_score(genomes:List[neat.DefaultGenome], input:list, outputs:List[np.array], logger:StructLogger) \
     -> List[float]:
     # Setup logger headers
@@ -12,7 +18,7 @@ def structure_score(genomes:List[neat.DefaultGenome], input:list, outputs:List[n
         setup_logger(logger)
         logger.first_time = False
     # Run score functions
-    score_funcs = [score_seed_blocks, score_airspace, score_bounding_wall, score_door, score_symmetry]
+    score_funcs, __ = __get_funcs()
     scores = []
     for (__, genome), output in zip(genomes, outputs):
         g_score = []
@@ -24,74 +30,36 @@ def structure_score(genomes:List[neat.DefaultGenome], input:list, outputs:List[n
     return scores
 
 def setup_logger(logger:StructLogger) -> None:
-    f_names = ["Seed_block_score", "Airspace_score", "Bounding_wall_score", "Door_score", "Symmetry_score"]
-    logger.add_header(f_names)
+    logger.add_header(__get_funcs()[1])
     logger.start_gen()
 
 def single_structure_score(input:list, output:np.array) -> Dict:
-    score_funcs = [score_seed_blocks, score_airspace, score_bounding_wall, score_door, score_symmetry]
-    score_names = ["Seed block score", "Airspace score", "Bounding wall score", "Door score", "Symmetry score"]
+    score_funcs, score_names = __get_funcs()
     score = {}
     for name, f in zip(score_names, score_funcs):
         score[name] = f(None, input, output)
     return score
 
 def score_bounding_wall(genome:neat.DefaultGenome, input:np.array, output:np.array) -> float:
-    # Checks for a complete wall with no airgaps
-    non_zero = 0
-    for y in output:
-        # Get number of air gaps in each layer of the wall
-        non_zero += np.count_nonzero(y[0])  
-        non_zero += np.count_nonzero(y[:, 0][1:-1])
-        non_zero += np.count_nonzero(y[:, -1][1:-1])
-        non_zero += np.count_nonzero(y[-1])
-    perimeter = output.shape[0] * (output.shape[1] * 2 + (output.shape[2] - 2)*2)
-    return non_zero / perimeter
+    return np.count_nonzero(output)/(len(output) * len(output[0]))
 
 
 def score_door(genome:neat.DefaultGenome, input:np.array, output:np.array) -> float:
     # Check door exists and is on floor
     # Door ID's
-    ids = get_door_ids()
-    # Catch numpy future warning
-    with warnings.catch_warnings():
-        warnings.simplefilter(action='ignore', category=FutureWarning)
-        # Iterate over each layer
-        for yi, y in enumerate(output):
-            # Get non-corner walls
-            walls = [y[0][1:-1], y[:, 0][1:-1], y[:, -1][1:-1], y[-1][1:-1]]
-            for wall in walls:
-                # Check if each door ID exists
-                for door in ids:
-                    if door in wall:
-                        if yi == 0 or yi == 1:
-                            return 1.0
-    return 0.0                
+    id = __get_door_id()
+    # Check a door id is on the bottom layer
+    if id in output[-1]:
+        return 1
+    return 0
 
 @lru_cache(maxsize=None)
-def get_door_ids():
+def __get_door_id():
     from src.Blocks.block_interactions import BlockInterface
     bi = BlockInterface(block_path="src/Blocks/blocks.csv", connect=False)
-    door_ids = ["64", "71", "193", "194", "195", "196", "197"]
-    return [bi.blockmap.get(id) for id in door_ids]
+    return bi.blockmap.get("64")
     
-              
-def score_airspace(genome:neat.DefaultGenome, input:np.array, output:np.array) -> float:
-    non_zero = 0
-
-    # Get airspace inside building (removing walls)
-    for y in output:
-        for z in y[1:-1]:
-            # Count non air blocks
-            non_zero += np.count_nonzero(z[1:-1])
     
-    # Get volume of interior space
-    vol = ((output.shape[1] - 2) * (output.shape[2] - 2)) * output.shape[0]
-
-    # Get percentage of air blocks
-    return 1- (non_zero / vol)
-
-
 def score_seed_blocks(genome:neat.DefaultGenome, input:np.array, output:np.array) -> float:
     # Get frequency of blocks being used
     # Check if seed values are in top 8 (top 7 - air) most common blocks (Allow for some randomness)
@@ -123,58 +91,46 @@ def score_seed_blocks(genome:neat.DefaultGenome, input:np.array, output:np.array
     return found/len(seeds)
     
 def score_symmetry(genome:neat.DefaultGenome, input:np.array, output:np.array) -> float:
-    return max(score_vert_symmetry(output), score_horiz_symmetry(output))
+    return max(score_vert_symmetry(input, output), score_horiz_symmetry(input, output))
 
-def score_vert_symmetry(output:np.array) -> float:
-    # Get sides for symmetry checking
-    a = None
-    b = None
-    same = 0
-    for y in output:
-        a, b = arr_split(y, axis=1)
-        # Flip b side
-        b = np.flip(b, axis=1)
-        same += np.count_nonzero(a==b)
+def score_vert_symmetry(input:np.array, output:np.array) -> float:
+    length = input[1]
+    width = input[2]
+    length_mid = __get_midpoint_bound(length)
+    symmetry_sum = 0
+    # Get both sides across symmetry line    
+    boundry = length_mid[1]+2*(length_mid[0]+1)+(width-2) 
+    for row in output:
+    # RHS of symmetry line
+        a = np.array(row[length_mid[1]:boundry])
+        # LHS of symmetry line
+        b = np.concatenate(
+            (np.flip(row[:length_mid[0]+1]),
+            np.flip(row[-1*((width-2)+length_mid[0]+1):])))
+        symmetry_sum += np.count_nonzero(a==b)
+        
+    return symmetry_sum / (len(output) * (2*(length_mid[0]+1) + width - 2))
 
-    return same/(a.shape[0] * a.shape[1] * len(output))
 
-
-def score_horiz_symmetry(output:np.array) -> float:
-    # Get sides for symmetry checking
-    same = 0
-    for y in output:
-        a, b = arr_split(y, axis=0)
-        # Flip b side
-        b = np.flip(b, axis=0)
-        same += np.count_nonzero(a==b)
-
-    return same/(a.shape[0] * a.shape[1] * len(output))
-
-def arr_split(plane:np.array, axis:int) -> List[np.array]:
-    assert axis == 1 or axis == 0
-    assert len(plane.shape) == 2
+def score_horiz_symmetry(input:np.array, output:np.array) -> float:
+    length = input[1]
+    width = input[2]
+    width_mid = __get_midpoint_bound(width)
+    symmetry_sum = 0
     
-    left, right = None, None
-    if axis == 0:
-        # axis 0 split
-        if plane.shape[0] % 2 == 0:
-            div_line = int(plane.shape[0]/2)
-            left = plane[:div_line]
-            right = plane[div_line:]
-            
-        else:
-            div_line = int((plane.shape[0]+1) / 2)
-            left = plane[:div_line-1]
-            right = plane[div_line:]
+    for row in output:
+        a = np.concatenate((
+            row[-1*(width_mid[0]):],
+              row[:length+width_mid[0]]
+              ))
+        b = np.flip(row[length+width_mid[1]-1:len(row)-width_mid[1]+1])
+        symmetry_sum += np.count_nonzero(a==b)
+    return symmetry_sum / (len(output) * (length + 2*(width_mid[0])))
+    
+
+def __get_midpoint_bound(x):
+    x = x-2
+    if x%2 == 0:
+        return (int(x/2), int(x/2)+1)
     else:
-        if plane.shape[1] % 2 == 0:
-            div_line = int(plane.shape[1]/2)
-            left = plane[:, :div_line]
-            right = plane[:, div_line:]
-            
-        else:
-            div_line = int((plane.shape[1]+1) / 2)
-            left = plane[:, :div_line-1]
-            right = plane[:, div_line:]
-    
-    return left, right
+        return (int(((x+1)/2)-1), int(((x+1)/2)+1))
