@@ -44,7 +44,6 @@ def generate(genome_id:int, net:neat.nn.FeedForwardNetwork, input_config:List[fl
             template_input[len(input_config) + 2:] = get_surrounding(out, yi, xi)
             # Pass input to network
             out[yi][xi] = np.argmax(net.activate(template_input))
-    print(out)
     return genome_id, out
     
 
