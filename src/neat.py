@@ -5,21 +5,27 @@ from src.logger import StatsLogger
 import shutil
 
 class Neat(BlockInterface):
-    def __init__(self, config_file:str, block_path:str, checkpoint_path:str, stats_log_path:str, fitness_func:object,
+    def __init__(self, config_file:str, block_path:str=None, stats_log_path:str=None, fitness_func:object=None, checkpoint_path:str=None,
             n_generations=1000, n_input=None, n_pop=None, n_output=None, overwrite=False, checkpoint_rate=10):       
         # Run parent init
-        super().__init__(block_path=block_path, connect=False)
+        if not block_path is None:
+            super().__init__(block_path=block_path, connect=False)
 
+        # Setup new checkpoint if overwrite is True
         if overwrite:
             if os.path.exists(checkpoint_path):
                 # Remove previous checkpoints
                 shutil.rmtree(checkpoint_path)
 
         # Make checkpoint path if non-existant
-        try:
-            os.makedirs(checkpoint_path)
-        except FileExistsError:
-            pass
+        if overwrite:
+            try:
+                os.makedirs(checkpoint_path)
+            except FileExistsError:
+                pass
+        else:
+            if not os.path.exists(checkpoint_path):
+                raise ValueError("Checkpoint path doesn't exist")
         self.checkpoint:str = checkpoint_path
         
         # Make config file from config path
@@ -40,7 +46,8 @@ class Neat(BlockInterface):
         self.fitness = fitness_func
         
         # Make stats logger
-        self.stats_logger = StatsLogger(stats_log_path, "stats.csv", overwrite_log=overwrite)
+        if not stats_log_path is None: 
+            self.stats_logger = StatsLogger(stats_log_path, "stats.csv", overwrite_log=overwrite)
     
     def run(self, population:neat.Population=None):
         """
@@ -100,12 +107,3 @@ class Neat(BlockInterface):
 
     def load_genomes_checkpoint(self, checkpoint_name:str):
         return self.load_checkpoint(checkpoint_name).population.items()
-
-    def checkpoint_best_genome(self, checkpoint_name:str, as_model=True):
-        # Load genomes from checkpoint        
-        genomes = self.load_genomes_checkpoint(checkpoint_name)
-        if as_model:
-            return neat.nn.FeedForwardNetwork.create(
-                self.fitness(genomes, self.config, return_best=True), self.config)
-        else:
-            return self.fitness(genomes, self.config, return_best=True)[1]
