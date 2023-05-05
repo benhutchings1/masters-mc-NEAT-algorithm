@@ -6,7 +6,7 @@ from src.logger import NoveltyLogger
 import collections
 
 class Novelty:
-    def __init__(self, novelty_log_path, threshold=0.85, overwrite=True, squash_function=True) -> None:
+    def __init__(self, novelty_log_path, threshold=0.90, overwrite=True, squash_function=True) -> None:
         self.archive = None
         self.threshold = threshold
         if overwrite:
@@ -25,16 +25,16 @@ class Novelty:
         disjoint_coef = 1 
         
         # Get novelty within population to n_pop/3 nearest neightbours
-        novelty = self.knn(genomes, math.ceil(2*len(genomes)/3), weight_coef, disjoint_coef)
+        novelty = self.knn(genomes, math.ceil(2*len(genomes)/2), weight_coef, disjoint_coef)
         log = [[i,-1] for i in novelty]
                 
         # Check if archive is empty or not
-        if self.archive is not None:
+        # if self.archive is not None:
             # Add archived novelty to population novelty
-            arch = self.archived_dist(genomes, weight_coef, disjoint_coef)
-            for i in range(len(novelty)):
-                novelty[i] = (arch[i] + novelty[i])/2
-                log[i][1] = arch[i]
+            # arch = self.archived_dist(genomes, weight_coef, disjoint_coef)
+            # for i in range(len(novelty)):
+                # novelty[i] = (arch[i] + novelty[i])/2
+                # log[i][1] = arch[i]
 
         # Log novelty values
         self.logger.log_iteration(log)
