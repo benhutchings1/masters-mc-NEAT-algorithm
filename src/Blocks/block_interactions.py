@@ -1,6 +1,7 @@
 from mcpi.minecraft import Minecraft as mc
 import csv
 import numpy as np
+import random
 
 class BlockInterface():
     def __init__(self, block_path=None, connect=True):
@@ -106,10 +107,22 @@ class BlockInterface():
             subblock
         )
 
-    def place_blocks_np(self, blocks, width, length, x0=0, y0=-60, z0=0, orientation="N",isblocklist=True):
+    def place_house(self, blocks, width, length, x0=0, y0=-60, z0=0, orientation="N",isblocklist=True):
+        def orientation_conv(orientation):
+            if orientation == "N":
+                return ["z",-1]
+            elif orientation == "E":
+                return ["x",1]
+            elif orientation == "S":
+                return ["z",1]
+            elif orientation == "W":
+                return ["x",-1]
+            else:
+                raise AttributeError()
+        
         assert blocks.shape[1] == (2*length + 2*(width - 2))
         # Choose orientation to place blocks in
-        axis = self.__orientation_conv(orientation)
+        axis = orientation_conv(orientation)
         # Map direction changes
         change_dir = {"N":"E", "E":"S", "S":"W", "W":"N"}
     
@@ -131,28 +144,32 @@ class BlockInterface():
                     curr_pos[axis[0]] += axis[1]
                 # Change placement direction
                 orientation = change_dir[orientation]
-                axis = self.__orientation_conv(orientation)
+                axis = orientation_conv(orientation)
+        
+    def place_roof(self, blocks, x0=0, y0=-60, z0=0, orientation="N", isblocklist=True):
+        def orientation_conv(orientation):
+            if orientation == "N":
+                return [["z",-1], ["x", 1]]
+            elif orientation == "E":
+                return [["x",1], ["z", 1]]
+            elif orientation == "S":
+                return [["z",1], ["x", -1]]
+            elif orientation == "W":
+                return [["x",-1], ["z", -1]]
+            else:
+                raise AttributeError()
+        
+        direction = orientation_conv(orientation)
+        pos = {"z": z0, "x":x0}
+        blk = random.choice(["5", "5^1", "5^2", "5^3", "5^4"])
+        initial = pos[direction[1][0]]
+        for j in blocks:
+            for i in j:
+                self.place_block_str(y=y0+i, strblock=blk, **pos)
+                pos[direction[1][0]] += direction[1][1]
+            pos[direction[0][0]] += direction[0][1]
+            pos[direction[1][0]] = initial
                 
-                    
-                    
-    def __orientation_conv(self, orientation):
-        if orientation == "N":
-            return ["z",1]
-        elif orientation == "E":
-            return ["x",1]
-        elif orientation == "S":
-            return ["z",-1]
-        elif orientation == "W":
-            return ["x",-1]
-        else:
-            raise AttributeError()
-                
-            
-            
-            
-                
-                    
-
     def __read_in_blocks(self, path):
         out = []
         lookup = {}
@@ -178,28 +195,18 @@ class BlockInterface():
         with open(path, "w+") as fs:
             wr = csv.writer(fs)
             wr.writerow(arr.shape)
-            for y in arr:
-                for z in y:
-                    wr.writerow(z)
+            for z in arr:
+                wr.writerow(z)
     
     def read_np(self, path:str) -> np.array:
         with open(path, "r") as fs:
             rd = csv.reader(fs)
-            shape = ()
-            arr = None
-            rowy = 0
-            rowx=0
-            for i, row in enumerate(rd):
-                if not i:
-                    shape = tuple([int(s) for s in row])
-                    arr = np.zeros(shape=shape).astype(int).astype(str)
-                else:
-                    arr[rowy][rowx] = row
-                    rowx += 1
-                    if rowx > (shape[1] - 1):
-                        rowx = 0
-                        rowy += 1
-        return arr
+            shape = tuple([int(s) for s in next(rd)])
+            arr = np.zeros(shape=shape).astype(int).astype(str)
+            for i, row in enumerate( rd):
+                for j, val in enumerate(row):
+                    arr[i][j] = val
+            return arr
     
     def convert_heightmap(self, heightmap, blockidx=1):
         out = np.zeros((np.max(heightmap)+1, heightmap.shape[0], heightmap.shape[1])).astype(int)
