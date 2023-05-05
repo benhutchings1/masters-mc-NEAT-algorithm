@@ -49,7 +49,7 @@ class Fitness:
         WIDTH = random.randint(5, 10)
         
         # Generate 3 random blocks
-        seeds = random.sample(range(0, len(self.BI.blocklist) - 1), 3)
+        seeds = random.sample(range(1, len(self.BI.blocklist) - 1), 3)
 
         # Format inputs
         input_config = [
