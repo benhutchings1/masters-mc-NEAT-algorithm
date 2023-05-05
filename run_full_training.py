@@ -15,8 +15,8 @@ iters = [
     ["data/control/iter2/", {"use_novelty":False}],
     ["data/high_novelty/iter1/", {"use_novelty":True, "novelty_ratio":(1, 4)}],
     ["data/high_novelty/iter2/", {"use_novelty":True, "novelty_ratio":(1, 4)}],
-    ["data/low_novelty/iter1/", {"use_novelty":True, "novelty_ratio":(3, 4)}],
-    ["data/low_novelty/iter2/", {"use_novelty":True, "novelty_ratio":(3, 4)}],
+    ["data/low_novelty/iter1/", {"use_novelty":True, "novelty_ratio":(4, 1)}],
+    ["data/low_novelty/iter2/", {"use_novelty":True, "novelty_ratio":(4, 1)}],
     ["data/dynamic/iter1/", {"use_novelty":True, "use_dynamic_novelty":True}],
     ["data/dynamic/iter2/", {"use_novelty":True, "use_dynamic_novelty":True}],
 ]
