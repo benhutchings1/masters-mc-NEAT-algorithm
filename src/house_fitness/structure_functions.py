@@ -7,8 +7,8 @@ from src.logger import StructLogger
 
 def __get_funcs():
     return (
-        [score_seed_blocks, score_symmetry, score_door, score_bounding_wall],
-        ["score_seed_blocks", "score_symmetry", "score_door", "score_bounding_wall"]
+        [score_seed_blocks, score_symmetry, score_door, score_bounding_wall, score_block_variation],
+        ["score_seed_blocks", "score_symmetry", "score_door", "score_bounding_wall", "score_block_variation"]
     )
 
 def structure_score(genomes:List[neat.DefaultGenome], input:list, outputs:List[np.array], logger:StructLogger) \
@@ -41,20 +41,20 @@ def single_structure_score(input:list, output:np.array) -> Dict:
     return score
 
 def score_bounding_wall(genome:neat.DefaultGenome, input:np.array, output:np.array) -> float:
-    return np.count_nonzero(output)/(len(output) * len(output[0]))
+    return np.count_nonzero(output)/(output.shape[0]*output.shape[1])
 
 
 def score_door(genome:neat.DefaultGenome, input:np.array, output:np.array) -> float:
     # Check door exists and is on floor
     # Door ID's
-    id = __get_door_id()
+    id = get_door_id()
     # Check a door id is on the bottom layer
     if id in output[-1]:
         return 1
     return 0
 
 @lru_cache(maxsize=None)
-def __get_door_id():
+def get_door_id():
     from src.Blocks.block_interactions import BlockInterface
     bi = BlockInterface(block_path="src/Blocks/blocks.csv", connect=False)
     return bi.blockmap.get("64")
@@ -80,13 +80,11 @@ def score_seed_blocks(genome:neat.DefaultGenome, input:np.array, output:np.array
     
     # Get IDs 
     counts = [id for id, __ in counts]
-    
     # Get number of seed blocks found in structure
     found = 0
     for seed in seeds:
         if seed in counts:
             found += 1
-
     # Return percentage of seeds found for score
     return found/len(seeds)
     
@@ -134,3 +132,10 @@ def __get_midpoint_bound(x):
         return (int(x/2), int(x/2)+1)
     else:
         return (int(((x+1)/2)-1), int(((x+1)/2)+1))
+    
+def score_block_variation(genome:neat.DefaultGenome, input:np.array, output:np.array) -> float:
+    unique_blocks = len(np.unique(output, return_counts=True))
+    if unique_blocks -1 <= 3:
+        return unique_blocks / 3
+    else:
+        return 0.75
