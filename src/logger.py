@@ -1,8 +1,12 @@
 import os
 import csv
 from neat.reporting import BaseReporter, StdOutReporter
+from src.house_fitness import structure_functions as house_func
+from src.roof_fitness import structure_functions as roof_func
 import time
+import itertools
 import numpy as np
+from skimage import morphology as morph
 
 class Logger():
     def __init__(self, log_path, filename, overwrite=True, header=None):
@@ -123,3 +127,62 @@ class StatsLogger(Logger, StdOutReporter):
     def end_generation(self, config, population, species_set):
         self.log_value([self.generation, time.time() - self.generation_start_time])
         return super().end_generation(config, population, species_set)
+
+class MultiStructureLogger(Logger):
+    def __init__(self, log_path, filename, overwrite_log=True, header=None):
+        super().__init__(log_path, filename, overwrite_log, header)
+        self.constructions = []
+        self.block_counts = {}
+
+    def add_construction(self, house, roof, house_input, roof_input):
+        # Store construction and structure score
+        con = Construction(house, roof, house_input[1], house_input[2]) 
+        con.roof_struct_score = roof_func.single_structure_score(roof_input, roof, avg=True)
+        con.house_struct_score = house_func.single_structure_score(house_input, house, avg=True)
+        self.constructions.append(con)
+        
+        # Record block information when entering
+        counts = np.unique(house, return_counts=True)
+        # Add frequencies to dictionary
+        for id, count in zip(counts[0], counts[1]):
+            if not id in self.block_counts:
+                self.block_counts[id] = 0
+            self.block_counts[id] += count
+    
+    def get_building_variance(self):
+        ids = {}
+        house_vars = []
+        roof_vars = []
+        # Get all unique combinations
+        for con in self.constructions:
+            if not (con.length, con.width) in ids:
+                ids[(con.length, con.width)] = []
+            ids[(con.length, con.width)].append(con)
+        
+        for (l, w), cons in ids.items():
+            for a, b in itertools.permutations(cons, 2):
+                h,r  = self.construction_diff(a, b)
+                house_vars.append(h)
+                roof_vars.append(r)
+        return np.median(house_vars), np.median(roof_vars)
+        
+    def construction_diff(self, a:np.array, b:np.array):
+        assert a.length == b.length
+        assert a.width == b.width
+        a = morph.label(a, connectivity=2)
+        b = morph.label(b, connectivity=2)
+        raise NotImplementedError() ###TEST THIS
+        house_var = 1 - (np.count_nonzero(a.house==b.house) / (a.house.shape[0] * a.house.shape[1]))
+        roof_var = 1 - (np.count_nonzero(a.roof==b.roof) / (a.roof.shape[0] * a.roof.shape[1]))
+        
+        return (house_var, roof_var)
+        
+class Construction:
+    def __init__(self, house, roof, length, width) -> None:
+        self.house = house
+        self.roof = roof
+        self.length = length
+        self.width = width
+        self.roof_struct_score = 0
+        self.house_struct_score = 0
+        
