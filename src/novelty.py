@@ -91,7 +91,8 @@ class Novelty:
         dist = sorted(dist)[:k]
         return np.average(dist)
         
-
+    # distance, gene_distance, conn_distance functions taken from NEAT-Python source code
+    # https://neat-python.readthedocs.io/en/stable/_modules/genome.html
     def distance(self, a, b, weight_coef, disjoint_coef):
         """
         Returns the genetic distance between this genome and the b. This distance value
@@ -159,51 +160,4 @@ class Novelty:
 
     def __squash_function(self, x):
         return 1/(1+(math.e**((-6*x)+5)))
-    
-class DynamicNovelty():
-    def __init__(self):
-        self.buffer = collections.deque()
-        self.window = 15
-    
-    def get_ratios(self, novelty_values, structure_values):
-        assert type(novelty_values) == list and type(structure_values) == list
-        assert len(novelty_values) == len(structure_values)
-        
-        p_nov, p_struct = self.__calculate_ratio(np.average(structure_values))
-
-        out = []
-        for i in range(len(novelty_values)):
-            out.append(
-                novelty_values[i]*p_nov + structure_values[i]*p_struct
-            )
-        return out    
-
-    def __calculate_ratio(self, struct):
-        if len(self.buffer) < self.window:
-            # If there are not enough values in buffer, 
-            # add and return 1:1 nov:struct
-            self.buffer.appendleft(struct)
-            return (0.5, 0.5)
-        else:
-            r_nov, r_struct = 0, 0 
-            # If buffer is filled
-            # Calculate average gradient
-            avg_grad = np.average([self.buffer[i] - self.buffer[i-1] for i in range(1, len(self.buffer))])#
-            # Convert gradient into ratio
-            if avg_grad <= 0:
-                r_nov = 1
-                r_struct = 0
-            else:
-                r_struct = avg_grad
-                r_nov = 1 / avg_grad
-                
-            p_nov = r_nov / (r_nov + r_struct)
-            p_struct = r_struct / (r_nov + r_struct)
-            
-            # Remove oldest value and add newest
-            self.buffer.pop()
-            self.buffer.appendleft(struct)
-            
-            return p_nov, p_struct
-    
     
