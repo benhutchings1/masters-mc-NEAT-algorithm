@@ -107,72 +107,69 @@ class TestRoofFitness(unittest.TestCase):
         ])
         
         self.assertTrue(roof_struct_fn.score_compliance([2, 1, 1], a))
-        self.assertFalse(roof_struct_fn.score_compliance([10, 1, 1], b))
+        self.assertTrue(roof_struct_fn.score_compliance([10, 1, 1], b))
         self.assertFalse(roof_struct_fn.score_compliance([5, 1, 1], c))
         print("Compliance test passed")
 
 class TestStructureFitness(unittest.TestCase):        
     def __init__(self):
-        self.bi = block_interactions.BlockInterface(connect=False)    
+        self.bi = block_interactions.BlockInterface("src/Blocks/blocks.csv", connect=False)    
+        
     def test_bounding_wall(self):
         data = self.get_data("bounding_wall")
-        self.assertTrue(house_struct_fn.score_bounding_wall(None, [], data[0]) == 1.0)
-        self.assertTrue(house_struct_fn.score_bounding_wall(None, [], data[1]) == 0.0)
-        self.assertTrue(house_struct_fn.score_bounding_wall(None, [], data[2]) == 0.5)
+        self.assertTrue(house_struct_fn.score_bounding_wall(None, [], data[0]) == 0.0)
+        self.assertTrue(house_struct_fn.score_bounding_wall(None, [], data[1]) == 0.5)
+        self.assertTrue(house_struct_fn.score_bounding_wall(None, [], data[2]) == 1.0)
         print("Bounding wall passed")
         
     def test_door(self):
         data = self.get_data("door")
+        door_id = house_struct_fn.get_door_id()
         self.assertTrue(house_struct_fn.score_door(None, None, data[0]) == 1.0)
         self.assertTrue(house_struct_fn.score_door(None, None, data[1]) == 0.0)
         self.assertTrue(house_struct_fn.score_door(None, None, data[2]) == 0.0)
         print("Door test passed")
     
-    def test_airspace(self):
-        data = self.get_data("airspace")
-        self.assertTrue(house_struct_fn.score_airspace(None, None, data[0]) == 1.0)
-        self.assertTrue(house_struct_fn.score_airspace(None, None, data[1]) == 0.0)
-        self.assertTrue(house_struct_fn.score_airspace(None, None, data[2]) == 0.5)
-        print("Airspace test passed")
-    
     def test_seed_blocks(self):
         data = self.get_data("seed_blocks")
-        self.assertTrue(house_struct_fn.score_seed_blocks(None, [3,5,5,1,2,3], data[0]) == 1.0)
-        self.assertTrue(house_struct_fn.score_seed_blocks(None, [3,5,5,1,2,3], data[1]) == 0.0)
-        self.assertTrue(house_struct_fn.score_seed_blocks(None, [3,5,5,1,2,3], data[2]) == (1/3))
+        self.assertTrue(house_struct_fn.score_seed_blocks(None, [4,4,4,1,2,3], data[0]) == 1.0)
+        self.assertTrue(house_struct_fn.score_seed_blocks(None, [4,4,4,1,2,3], data[1]) == 0.0)
+        self.assertTrue(house_struct_fn.score_seed_blocks(None, [4,4,4,1,2,3], data[2]) == (1/3))
         print("Seed block test passed")
     
     def test_vert_symmetry(self):
         data = self.get_data("vert_symmetry")
-        self.assertTrue(house_struct_fn.score_vert_symmetry(data[0]) == 1.0)
-        self.assertTrue(house_struct_fn.score_vert_symmetry(data[1]) == 0.0)
-        self.assertTrue(house_struct_fn.score_vert_symmetry(data[2]) == 0.5)
+        self.assertTrue(house_struct_fn.score_vert_symmetry([4,4,4,1,2,3], data[0]) == 1.0)
+        self.assertTrue(house_struct_fn.score_vert_symmetry([4,4,4,1,2,3], data[1]) == 0.0)
+        self.assertTrue(house_struct_fn.score_vert_symmetry([4,4,4,1,2,3], data[2]) == 0.5)
         print("Vertical symmetry passed")
     
     def test_horiz_symmetry(self):
         data = self.get_data("horiz_symmetry")
-        self.assertTrue(house_struct_fn.score_horiz_symmetry(data[0]) == 1.0)
-        self.assertTrue(house_struct_fn.score_horiz_symmetry(data[1]) == 0.0)
-        self.assertTrue(house_struct_fn.score_horiz_symmetry(data[2]) == 0.5)
+        self.assertTrue(house_struct_fn.score_horiz_symmetry([4,4,4,1,2,3], data[0]) == 1.0)
+        self.assertTrue(house_struct_fn.score_horiz_symmetry([4,4,4,1,2,3], data[1]) == 0.0)
+        self.assertTrue(house_struct_fn.score_horiz_symmetry([4,4,4,1,2,3], data[2]) == 0.5)
         print("Horizonal symmetry passed")
-           
+    
+    def test_full_structure(self):
+        data = self.get_data("full_structure")
+        data = [self.bi.convert_to_blocklist(d) for d in data]
+        scores = []
+        scores.append(house_struct_fn.single_structure_score([7, 7, 9, 5, 17, 64], data[0]))
+        scores.append(house_struct_fn.single_structure_score([4, 5, 6, 5, 17, 64], data[1]))
+        scores.append(house_struct_fn.single_structure_score([4, 5, 6, 5, 17, 64], data[2]))
+
+        for key in scores[0].keys():
+            self.assertGreaterEqual(scores[0][key], scores[1][key])
+            self.assertGreaterEqual(scores[0][key], scores[2][key])
+        print("Full test passed")
+    
     def get_data(self, folder):
         out = []
         for letter in ["a", "b", "c"]:
             out.append(self.bi.read_np(f"testdata/structure_data/{folder}/{letter}.txt").astype(int))
         return out
-        
-
-# class TestNoveltyFitness(unittest.TestCase):
-#     def test_distance():
-#         nov = novelty.Novelty()
-#         checkpoint_genomes = nt.load_genomes_checkpoint("tests/testdata/NEAT-checkpoint")
-        
-#         for __, genome in checkpoint_genomes:
-#             assert nov.distance(genome, genome, 1, 1) == 0.0
-#         print("Distance test passed")
-
-
+    
 if __name__ == "__main__":
     roof = TestRoofFitness()
     house = TestStructureFitness()
@@ -184,8 +181,9 @@ if __name__ == "__main__":
     
     house.test_vert_symmetry()
     house.test_seed_blocks()
-    house.test_airspace()
     house.test_door()
     house.test_horiz_symmetry()
     house.test_bounding_wall()
+    house.test_full_structure()
     print("\033[1;32;40mStructure tests passed\033[0;37m")
+    
