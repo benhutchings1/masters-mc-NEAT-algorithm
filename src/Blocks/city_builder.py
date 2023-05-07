@@ -2,12 +2,13 @@ from . import block_interactions
 from src.house_fitness import generate_building
 from src.roof_fitness import generate_roof
 from src import neat as my_neat
+from src.logger import MultiStructureLogger
 import neat
 import random
 
 class CityBuilder(block_interactions.BlockInterface):
-    def __init__(self, block_path, house_config, roof_config, mutate_chance=0.1):
-        super().__init__(block_path, connect=True)
+    def __init__(self, block_path, house_config, roof_config, log_path, filename, overwrite_log, mutate_chance=0.1, connect=True):
+        super().__init__(block_path, connect=connect)
         self.block_path = block_path
         self.house_config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
                             neat.DefaultSpeciesSet, neat.DefaultStagnation,
@@ -23,6 +24,7 @@ class CityBuilder(block_interactions.BlockInterface):
         self.ROOF_HEIGHT = 4
         self.seeds = [10, 20, 30]
         self.mutate_chance = mutate_chance
+        self.logger = MultiStructureLogger(log_path=log_path, filename=filename, overwrite_log=overwrite_log)
         
         
         
@@ -59,14 +61,19 @@ class CityBuilder(block_interactions.BlockInterface):
                 house_model = neat.nn.FeedForwardNetwork.create(random.choice(self.house_pop), self.house_config)
                 roof_model = neat.nn.FeedForwardNetwork.create(random.choice(self.roof_pop), self.roof_config)                                
                 # Generate roof and house
-                house = generate_building.generate(0, house_model, 
-                                                   [self.HOUSE_HEIGHT, self.LENGTH, self.WIDTH]+self.seeds)[1]
-                roof = generate_roof.generate(0, roof_model, [self.ROOF_HEIGHT, self.LENGTH, self.WIDTH])[1]
+                house_input = [self.HOUSE_HEIGHT, self.LENGTH, self.WIDTH]+self.seeds
+                roof_input = [self.ROOF_HEIGHT, self.LENGTH, self.WIDTH]
+                house = generate_building.generate(0, house_model, house_input)[1]
+                roof = generate_roof.generate(0, roof_model, roof_input)[1]
                 
                 # Place generated building
-                self.place_house(house, self.WIDTH, self.LENGTH, y0=y0, orientation=orientation,
-                                 isblocklist=True, **temp_position)
-                self.place_roof(roof, orientation=orientation, y0=y0+self.HOUSE_HEIGHT, **temp_position)
+                if self.to_connect:
+                    self.place_house(house, self.WIDTH, self.LENGTH, y0=y0, orientation=orientation,
+                                    isblocklist=True, **temp_position)
+                    self.place_roof(roof, orientation=orientation, y0=y0+self.HOUSE_HEIGHT, **temp_position)
+                
+                # Log building
+                self.logger.add_construction(house, roof, house_input, roof_input)
                 
                 # Update temp position
                 temp_position[first_dir[0]] -= (first_dir[1] * plot_size) + gap
@@ -88,7 +95,7 @@ class CityBuilder(block_interactions.BlockInterface):
     def mutate_params(self):
         self.WIDTH = self.mutate(self.WIDTH, [5, 10])
         self.LENGTH = self.mutate(self.LENGTH, [5, 10])
-        self.HOUSE_HEIGHT = self.mutate(self.HOUSE_HEIGHT, [2, 7])
+        self.HOUSE_HEIGHT = self.mutate(self.HOUSE_HEIGHT, [3, 7])
         self.ROOF_HEIGHT = self.mutate(self.ROOF_HEIGHT, [2, 5])
         self.seeds[0] = self.mutate(self.seeds[0], [1, len(self.blocklist) - 1], add=False) 
         self.seeds[1] = self.mutate(self.seeds[1], [1, len(self.blocklist) - 1], add=False)
