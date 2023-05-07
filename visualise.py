@@ -1,15 +1,16 @@
 from src.visualise import struct_plot
 from src.logger import StructLogger
 import os
-os.mkdir("graphs/")
+
+try:
+    os.mkdir("graphs/")
+except:
+    pass
+
 for source in ["roof", "house"]:
     control_loggers = [
         StructLogger(f"data/control/iter1/{source}/struct", "struct_log.csv", None, False),
-        StructLogger(f"data/control/iter2/{source}/struct", "struct_log.csv", None, False)  
-    ]
-    dynamic_loggers = [
-        StructLogger(f"data/dynamic/iter1/{source}/struct", "struct_log.csv", None, False),
-        StructLogger(f"data/dynamic/iter2/{source}/struct", "struct_log.csv", None, False)
+        StructLogger(f"data/control/iter1/{source}/struct", "struct_log.csv", None, False)  
     ]
     high_novelty = [
         StructLogger(f"data/high_novelty/iter1/{source}/struct", "struct_log.csv", None, False),
@@ -20,26 +21,27 @@ for source in ["roof", "house"]:
         StructLogger(f"data/low_novelty/iter2/{source}/struct", "struct_log.csv", None, False)
     ]   
 
-    struct_plot.StructPlot(out=f"graphs/control/{source}/").average_plot(
-        ["Iter 1", "Iter 2"],
+    struct_plot.StructPlot(out=f"graphs/control/").plot(
+        ["Run 1", "Run 2"],
         control_loggers,
-        "Control"   
+        "Control",
+        f"control_{source}",
+        const=0.3
     )
+    print("Control graphs completed")
 
-    struct_plot.StructPlot(out=f"graphs/dynamic/{source}/").average_plot(
-        ["Iter 1", "Iter 2"],
-        dynamic_loggers,
-        "Dynamic"   
-    )
-
-    struct_plot.StructPlot(out=f"graphs/high_novelty/{source}/").average_plot(
-        ["Iter 1", "Iter 2"],
+    struct_plot.StructPlot(out=f"graphs/high_novelty/").plot(
+        ["Run 1", "Run 2"],
         high_novelty,
-        "High Novelty"   
+        "High Novelty",
+        f"high_nov_{source}"
     )
+    print("High novelty graphs completed")
 
-    struct_plot.StructPlot(out=f"graphs/low_novelty/{source}/").average_plot(
-        ["Iter 1", "Iter 2"],
+    struct_plot.StructPlot(out=f"graphs/low_novelty/").plot(
+        ["Run 1", "Run 2"],
         low_novelty,
-        "Low Novelty"   
-    )                           
+        "Low Novelty",
+        f"low_nov_{source}"   
+    )    
+    print("Low novelty graphs completed")                       
