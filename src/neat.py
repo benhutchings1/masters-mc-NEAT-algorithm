@@ -25,7 +25,7 @@ class Neat(BlockInterface):
                 pass
         else:
             if not os.path.exists(checkpoint_path):
-                raise ValueError("Checkpoint path doesn't exist")
+                raise ValueError(f"Checkpoint path {checkpoint_path} doesn't exist")
         self.checkpoint:str = checkpoint_path
         
         # Make config file from config path
