@@ -5,7 +5,7 @@ from src.roof_fitness.fitness import Fitness as RoofFitness
 class RoofInterface(neat.Neat):
     def __init__(self, config_file:str, block_path:str, log_root:str, n_generations=1000, 
                  n_input=None, n_pop=None, n_output=None, overwrite_logs=True, checkpoint_rate=10,
-                 use_novelty=False, use_dynamic_novelty=False, novelty_ratio=None, squash_function=None):
+                 use_novelty=False, novelty_ratio=None, squash_function=None):
         
         self.fit_func = RoofFitness(
             block_path,
@@ -13,7 +13,6 @@ class RoofInterface(neat.Neat):
             log_root+"struct/",
             overwrite=overwrite_logs,
             use_novelty=use_novelty,
-            use_dynamic_novelty=use_dynamic_novelty,
             novelty_ratio=novelty_ratio,
             squash_function=squash_function
             )
@@ -33,7 +32,7 @@ class RoofInterface(neat.Neat):
 class HouseInterface(neat.Neat):
     def __init__(self, config_file:str, block_path:str, log_root:str, n_generations=1000, 
                  n_input=None, n_pop=None, n_output=None, overwrite_logs=True, checkpoint_rate=10,
-                 use_novelty=False, use_dynamic_novelty=False, novelty_ratio=None, squash_function=None):
+                 use_novelty=False, novelty_ratio=None, squash_function=None):
         
         self.fit_func = HouseFitness(
             block_path,
@@ -41,7 +40,6 @@ class HouseInterface(neat.Neat):
             log_root+"struct/",
             overwrite=overwrite_logs,
             use_novelty=use_novelty,
-            use_dynamic_novelty=use_dynamic_novelty,
             novelty_ratio=novelty_ratio,
             squash_function=squash_function
             )
