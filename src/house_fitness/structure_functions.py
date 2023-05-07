@@ -3,7 +3,6 @@ import neat
 from typing import List, Dict
 import warnings
 from functools import lru_cache
-from src.logger import StructLogger
 
 def __get_funcs():
     return (
@@ -11,7 +10,7 @@ def __get_funcs():
         ["score_seed_blocks", "score_symmetry", "score_door", "score_bounding_wall", "score_block_variation"]
     )
 
-def structure_score(genomes:List[neat.DefaultGenome], input:list, outputs:List[np.array], logger:StructLogger) \
+def structure_score(genomes:List[neat.DefaultGenome], input:list, outputs:List[np.array], logger) \
     -> List[float]:
     # Setup logger headers
     if logger.first_time:
@@ -29,15 +28,21 @@ def structure_score(genomes:List[neat.DefaultGenome], input:list, outputs:List[n
         logger.log_value(g_score)
     return scores
 
-def setup_logger(logger:StructLogger) -> None:
+def setup_logger(logger) -> None:
     logger.add_header(__get_funcs()[1])
     logger.start_gen()
 
-def single_structure_score(input:list, output:np.array) -> Dict:
+def single_structure_score(input:list, output:np.array, avg=False) -> Dict:
     score_funcs, score_names = __get_funcs()
-    score = {}
-    for name, f in zip(score_names, score_funcs):
-        score[name] = f(None, input, output)
+    if not avg:
+        score = {}
+        for name, f in zip(score_names, score_funcs):
+            score[name] = f(None, input, output) 
+    else:
+        score = 0
+        for f in score_funcs:
+            score += f(None, input, output)
+        score = score/len(score_funcs)
     return score
 
 def score_bounding_wall(genome:neat.DefaultGenome, input:np.array, output:np.array) -> float:
@@ -49,7 +54,7 @@ def score_door(genome:neat.DefaultGenome, input:np.array, output:np.array) -> fl
     # Door ID's
     id = get_door_id()
     # Check a door id is on the bottom layer
-    if id in output[-1]:
+    if id in output[0]:
         return 1
     return 0
 
