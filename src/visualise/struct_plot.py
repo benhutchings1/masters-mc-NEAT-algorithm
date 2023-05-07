@@ -14,19 +14,32 @@ class StructPlot(StructLogger):
         except FileExistsError:
             pass
 
-
-    def __plot_average(self, ax, data, title):
+    def __plot_values(self, ax, data, title):
         # format data
         avg_data = [np.average(x) for x in data]
+        max_data = [np.max(x) for x in data]
+        min_data = [np.min(x) for x in data]
         ax.plot(
             range((len(data))),
-            avg_data
+            avg_data,
+            label="Avg Struct Score"
+        )
+        ax.plot(
+            range((len(data))),
+            max_data,
+            label="Max Structure Score"
+        )
+        ax.plot(
+            range((len(data))),
+            min_data,
+            label="Min Structure Score"
         )
         ax.set_title(title)
         ax.set_xlabel("Generation")
-        ax.set_ylabel("Avg structure value")
+        ax.set_ylabel("Structure Score")
+        ax.legend()
 
-    def average_plot(self, titles, loggers:List[StructLogger], super_plot_title):
+    def plot(self, titles, loggers:List[StructLogger], super_plot_title):
         assert type(loggers) == list
         assert type(loggers[0]) == StructLogger
         assert len(titles) == len(loggers)
@@ -42,11 +55,13 @@ class StructPlot(StructLogger):
         else:
             # Fill graph
             for i in range(len(loggers)):
-                self.__plot_average(ax[i], loggers[i].get_scores(), titles[i])
+                self.__plot_values(ax[i], loggers[i].get_scores(), titles[i])
+                
             
         # Save to file
         plt.tight_layout()
         plt.suptitle(super_plot_title)
+        plt.subplots_adjust(top=0.9)
         plt.savefig(self.out)
         
     def individual_scores_plot(self, logger:StructLogger, plot_title):
