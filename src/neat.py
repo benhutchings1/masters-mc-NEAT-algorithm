@@ -49,7 +49,7 @@ class Neat(BlockInterface):
         if not stats_log_path is None: 
             self.stats_logger = StatsLogger(stats_log_path, "stats.csv", overwrite_log=overwrite)
     
-    def run(self, population:neat.Population=None):
+    def run(self, population:neat.Population=None, checkpoint_prefix="NEAT-checkpoint-"):
         """
         Performs NEAT model creation and evolution for n_generations 
         Configuration for NEAT given by config file 
@@ -66,7 +66,7 @@ class Neat(BlockInterface):
         
         # Add a stdout reporter to show progress in the terminal.
         p.add_reporter(self.stats_logger)
-        p.add_reporter(neat.Checkpointer(self.checkpoint_rate, filename_prefix=self.checkpoint + "NEAT-checkpoint-"))
+        p.add_reporter(neat.Checkpointer(self.checkpoint_rate, filename_prefix=self.checkpoint + checkpoint_prefix))
 
         # Run evolution, save models to checkpoint
         p.run(self.fitness, self.n_gen)
@@ -102,8 +102,8 @@ class Neat(BlockInterface):
         cp = neat.Checkpointer()
         return cp.restore_checkpoint(os.path.join(self.checkpoint ,checkpoint_name))
 
-    def run_from_checkpoint(self, checkpoint_name):
-        return self.run(self.load_checkpoint(checkpoint_name))
+    def run_from_checkpoint(self, checkpoint_name, checkpoint_prefix):
+        return self.run(self.load_checkpoint(checkpoint_name, checkpoint_prefix))
 
     def load_genomes_checkpoint(self, checkpoint_name:str):
         return self.load_checkpoint(checkpoint_name).population.items()
