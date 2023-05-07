@@ -1,7 +1,7 @@
 checkpoints/
 logs/
 backup/
-data/
+data*/
 temp/
 out/
 .vscode/
