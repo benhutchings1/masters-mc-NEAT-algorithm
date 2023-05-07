@@ -1,8 +1,7 @@
 import numpy as np
 from typing import List
-from src.logger import StructLogger
 
-def structure_score(input:list, outputs:List[np.array], logger:StructLogger) \
+def structure_score(input:list, outputs:List[np.array], logger) \
     -> List[float]:
     # Setup logging file to first time with headers
     if logger.first_time:
@@ -26,18 +25,24 @@ def structure_score(input:list, outputs:List[np.array], logger:StructLogger) \
         logger.log_value(g_score)  
     return scores
 
-def setup_logger(logger:StructLogger):
+def setup_logger(logger):
     f_names = ["score_compliance", "score_complexity", "score_symmetry"]
     logger.add_header(f_names)
     logger.start_gen()
 
-def single_structure_score(input:list, output:np.array):
+def single_structure_score(input:list, output:np.array, avg=False):
     score_funcs = [score_compliance, score_complexity, score_symmetry]
     f_names = ["score_compliance", "score_complexity", "score_symmetry"]
-    score = {}
-    for name, f in zip(f_names, score_funcs):
-        score[name] = f(input, output) 
-        
+    if not avg:
+        score = {}
+        for name, f in zip(f_names, score_funcs):
+            score[name] = f(input, output) 
+    else:
+        score = 0
+        for f in score_funcs:
+            score += f(input, output)
+        score = score/len(score_funcs)
+            
     return score
 
 def get_roof_heighmap(output:np.array):
