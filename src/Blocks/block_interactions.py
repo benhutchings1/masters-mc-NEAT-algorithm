@@ -15,6 +15,7 @@ class BlockInterface():
         self.blockmap = None
         if not block_path is None:
             self.blocklist, self.blockmap = self.__read_in_blocks(block_path)
+        self.to_connect = connect
         
     def connect(self):
         self.client = mc.create()
@@ -139,7 +140,7 @@ class BlockInterface():
                     if isblocklist:
                         self.place_block_id(blockid=block, **curr_pos)
                     else:
-                        self.place_block_str(strblock=block, **curr_pos)
+                        self.place_block_str(strblock=str(block), **curr_pos)
                     # Update position
                     curr_pos[axis[0]] += axis[1]
                 # Change placement direction
@@ -215,4 +216,8 @@ class BlockInterface():
                 out[x][yi][xi] = blockidx
         return out
         
-        
+    def convert_to_blocklist(self, arr):
+        for yi, y in enumerate(arr):
+            for xi, x in enumerate(y):
+                arr[yi][xi] =  self.blockmap[str(arr[yi][xi])]
+        return arr
