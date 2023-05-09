@@ -1,4 +1,4 @@
-Air,0,minecraft:air
+Oak Wood Plank,5,minecraft:planks
 Stone,1,minecraft:stone
 Granite,1^1,minecraft:granite
 Polished Granite,1^2,minecraft:polished_granite
@@ -45,6 +45,7 @@ Black Wool,35^15,minecraft:black_wool
 Gold Block,41,minecraft:gold_block
 Iron Block,42,minecraft:iron_block
 Bricks,45,minecraft:brick_block
+Moss Stone,48,minecraft:mossy_cobblestone
 Obsidian,49,minecraft:obsidian
 Diamond Block,57,minecraft:diamond_block
 Oak Door,64,minecraft:wooden_door
@@ -58,10 +59,8 @@ Chiseled Stone Bricks,98^3,minecraft:chiseled_stone_bricks
 Brown Mushroom Block,99,minecraft:brown_mushroom_block
 Red Mushroom Block,100,minecraft:red_mushroom_block
 Nether Brick,112,minecraft:nether_brick
-Nether Brick Fence,113,minecraft:nether_brick_fence
 End Stone,121,minecraft:end_stone
 Emerald Block,133,minecraft:emerald_block
-Mossy Cobblestone Wall,139^1,minecraft:mossy_cobblestone_wall
 Redstone Block,152,minecraft:redstone_block
 Quartz Block,155,minecraft:quartz_block
 Chiseled Quartz Block,155^1,minecraft:chiseled_quartz_block
