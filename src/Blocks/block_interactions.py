@@ -92,6 +92,8 @@ class BlockInterface():
         else:
             self.place_block_id(x, y, z, blockid=int(strblock))    
 
+    def place_block_idx(self, x, y, z, block_idx):
+        self.place_block_str(x, y, z, self.blocklist[int(block_idx)])
 
     def place_blocks(self, start_coords, end_coords, blockid, subblock):
         assert type(start_coords) == list or type(end_coords) == list
@@ -136,9 +138,9 @@ class BlockInterface():
                 point += l
                 
                 # Place side
-                for i, block in enumerate(side):
+                for block in side:
                     if isblocklist:
-                        self.place_block_id(blockid=block, **curr_pos)
+                        self.place_block_idx(block_idx=block, **curr_pos)
                     else:
                         self.place_block_str(strblock=str(block), **curr_pos)
                     # Update position
@@ -147,7 +149,7 @@ class BlockInterface():
                 orientation = change_dir[orientation]
                 axis = orientation_conv(orientation)
         
-    def place_roof(self, blocks, x0=0, y0=-60, z0=0, orientation="N", isblocklist=True):
+    def place_roof(self, blocks, x0=0, y0=-60, z0=0, orientation="N"):
         def orientation_conv(orientation):
             if orientation == "N":
                 return [["z",-1], ["x", 1]]
@@ -167,6 +169,7 @@ class BlockInterface():
         for j in blocks:
             for i in j:
                 self.place_block_str(y=y0+i, strblock=blk, **pos)
+                
                 pos[direction[1][0]] += direction[1][1]
             pos[direction[0][0]] += direction[0][1]
             pos[direction[1][0]] = initial
