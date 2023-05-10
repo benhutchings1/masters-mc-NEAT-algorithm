@@ -5,6 +5,9 @@ from src import neat as my_neat
 from src.logger import MultiStructureLogger
 import neat
 import random
+from tqdm import tqdm
+import numpy as np
+import time
 
 class CityBuilder(block_interactions.BlockInterface):
     def __init__(self, block_path, house_config, roof_config, log_path, filename, overwrite_log, mutate_chance=0.1, connect=True):
@@ -49,7 +52,7 @@ class CityBuilder(block_interactions.BlockInterface):
         # Get direction to move in
         first_dir, second_dir = self.__conv_orientation(orientation)
         
-        for it in range(iterations):
+        for it in tqdm(range(iterations), desc="Placing Buildings"):
             # Start of diagonal movement
             temp_position = pos.copy()
             # Iterate down diagonal
@@ -60,11 +63,18 @@ class CityBuilder(block_interactions.BlockInterface):
                 # Choose random models
                 house_model = neat.nn.FeedForwardNetwork.create(random.choice(self.house_pop), self.house_config)
                 roof_model = neat.nn.FeedForwardNetwork.create(random.choice(self.roof_pop), self.roof_config)                                
-                # Generate roof and house
+                # Set specifications
                 house_input = [self.HOUSE_HEIGHT, self.LENGTH, self.WIDTH]+self.seeds
                 roof_input = [self.ROOF_HEIGHT, self.LENGTH, self.WIDTH]
+                # Generate house and time
+                start_time = time.time()
                 house = generate_building.generate(0, house_model, house_input)[1]
-                roof = generate_roof.generate(0, roof_model, roof_input)[1]
+                house_time = time.time() - start_time
+                
+                # generate and modifiy roof to fit smoothly   
+                start_time = time.time()             
+                roof = self.adjust_roof(generate_roof.generate(0, roof_model, roof_input)[1])
+                roof_time = time.time() - start_time
                 
                 # Place generated building
                 if self.to_connect:
@@ -73,7 +83,7 @@ class CityBuilder(block_interactions.BlockInterface):
                     self.place_roof(roof, orientation=orientation, y0=y0+self.HOUSE_HEIGHT, **temp_position)
                 
                 # Log building
-                self.logger.add_construction(house, roof, house_input, roof_input)
+                self.logger.add_construction(house, roof, house_input, roof_input, house_time, roof_time)
                 
                 # Update temp position
                 temp_position[first_dir[0]] -= (first_dir[1] * plot_size) + gap
@@ -119,3 +129,6 @@ class CityBuilder(block_interactions.BlockInterface):
                 value = random.randint(lim[0], lim[1])
         
         return value
+    
+    def adjust_roof(self, heightmap):
+        return heightmap - np.min(heightmap)
