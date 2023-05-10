@@ -8,7 +8,8 @@ import itertools
 import numpy as np
 from skimage import morphology as morph
 
-class Logger():
+    
+class Logger():       
     def __init__(self, log_path, filename, overwrite=True, header=None):
         self.path = log_path
         self.filepath = os.path.join(log_path, filename)
@@ -63,7 +64,6 @@ class Logger():
         self.log_value(header)
 
             
-
 class NoveltyLogger(Logger):
     def __init__(self, log_path, filename, header=None, overwrite_log=True):
         super().__init__(log_path, header=header, filename=filename, overwrite=overwrite_log)
@@ -83,7 +83,7 @@ class StructLogger(Logger):
     def start_gen(self):
         self.log_value(["##Gen##"])
     
-    def read_file(self, return_headers=False):
+    def read_file(self, return_headers=False, max_read=None ):
         data = []
         with open(self.filepath, "r") as fs:
             # Open file
@@ -98,14 +98,17 @@ class StructLogger(Logger):
                     buff = []
                 else:
                     buff.append(line)
-        
+
+        if max_read is None:
+            max_read = len(data)
+
         if return_headers:
-            return (headers, data[1:])
+            return (headers, data[1:max_read])
         else:
-            return data[1:]
+            return data[1:max_read]
                 
-    def get_scores(self):
-        data = self.read_file()
+    def get_scores(self, max_read=None):
+        data = self.read_file(max_read=max_read)
         for i in range(len(data)):
             data[i] = data[i].astype(float)
             
@@ -134,9 +137,9 @@ class MultiStructureLogger(Logger):
         self.constructions = []
         self.block_counts = {}
 
-    def add_construction(self, house, roof, house_input, roof_input):
+    def add_construction(self, house, roof, house_input, roof_input, house_time, roof_time):
         # Store construction and structure score
-        con = Construction(house, roof, house_input[1], house_input[2]) 
+        con = Construction(house, roof, house_input[1], house_input[2], house_time, roof_time) 
         con.roof_struct_score = roof_func.single_structure_score(roof_input, roof, avg=True)
         con.house_struct_score = house_func.single_structure_score(house_input, house, avg=True)
         self.constructions.append(con)
@@ -148,41 +151,47 @@ class MultiStructureLogger(Logger):
             if not id in self.block_counts:
                 self.block_counts[id] = 0
             self.block_counts[id] += count
-    
+       
     def get_building_variance(self):
         ids = {}
-        house_vars = []
-        roof_vars = []
         # Get all unique combinations
         for con in self.constructions:
             if not (con.length, con.width) in ids:
                 ids[(con.length, con.width)] = []
             ids[(con.length, con.width)].append(con)
         
+        house_results = {key:[] for key in ids.keys()}
+        roof_results = {key:[] for key in ids.keys()}
+        
         for (l, w), cons in ids.items():
             for a, b in itertools.permutations(cons, 2):
                 h,r  = self.construction_diff(a, b)
-                house_vars.append(h)
-                roof_vars.append(r)
-        return np.median(house_vars), np.median(roof_vars)
+                house_results[(l, w)].append(h)
+                roof_results[(l, w)].append(r)        
         
-    def construction_diff(self, a:np.array, b:np.array):
+        return house_results, roof_results  
+        
+    def construction_diff(self, a, b):
         assert a.length == b.length
         assert a.width == b.width
-        a = morph.label(a, connectivity=2)
-        b = morph.label(b, connectivity=2)
-        raise NotImplementedError() ###TEST THIS
-        house_var = 1 - (np.count_nonzero(a.house==b.house) / (a.house.shape[0] * a.house.shape[1]))
-        roof_var = 1 - (np.count_nonzero(a.roof==b.roof) / (a.roof.shape[0] * a.roof.shape[1]))
-        
+        houses = [morph.label(a.house, connectivity=2), morph.label(b.house, connectivity=2)]
+        roofs = [morph.label(a.roof, connectivity=2), morph.label(b.roof, connectivity=2)]
+        house_var = 1 - (np.count_nonzero(houses[0]==houses[1]) / (a.house.shape[0] * a.house.shape[1]))
+        roof_var = 1 - (np.count_nonzero(roofs[0]==roofs[1]) / (a.roof.shape[0] * a.roof.shape[1]))
         return (house_var, roof_var)
+
+    def get_avg_generation_time(self):
+        return sum([x.house_time for x in self.constructions])/len(self.constructions),\
+               sum([x.roof_time for x in self.constructions])/len(self.constructions)
         
+            
 class Construction:
-    def __init__(self, house, roof, length, width) -> None:
+    def __init__(self, house, roof, length, width, house_time, roof_time) -> None:
         self.house = house
         self.roof = roof
         self.length = length
         self.width = width
         self.roof_struct_score = 0
         self.house_struct_score = 0
-        
+        self.roof_time = roof_time
+        self.house_time = house_time
