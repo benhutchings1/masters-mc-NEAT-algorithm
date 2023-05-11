@@ -1,5 +1,10 @@
-% Generation of diverse Minecraft structures with evolutionary algorithms
-% Ben Hutchings
+---
+title: Generation of diverse Minecraft structures with evolutionary algorithms
+author: Ben Hutchings
+date: May 2023
+geometry: a4paper
+geometry: margin=1in
+---
 # Abstract
 \newpage
 #  Introduction
@@ -46,8 +51,8 @@ The simple Minecraft evolver is basic NEAT implementation which aims to build a 
 
 
 ## Neural Networks
-A neural network is a type of machine learning technique which is inspired by the human brain. A neural network consists of collections of neurons, organised in layers, which are connected to each other. An example is shown in @@figure, where each neuron is depicted as a node on the graph and the connections between neurons as vertices. In a traditional neural network, each neuron (apart from the input neurons) has a weighted connection to some nodes from the previous layer ($n_{prev}$). The equation for the value of a neuron is shown in @@figure, where $W_i$ is the weight to a node, $X_i$ is the value of the node, and $b$ is a bias.  
-![Figure @@: An example neural network](Images/Neural_network_explain.png)
+A neural network is a type of machine learning technique which is inspired by the human brain. A neural network consists of collections of neurons, organized in layers, which are connected to each other. An example is shown in @fig:desc, where each neuron is depicted as a node on the graph and the connections between neurons as vertices. In a traditional neural network, each neuron (apart from the input neurons) has a weighted connection to some nodes from the previous layer ($n_{prev}$). The equation for the value of a neuron is shown in @@figure, where $W_i$ is the weight to a node, $X_i$ is the value of the node, and $b$ is a bias.  
+![Figure @@: An example neural network\label{label}](Images/Neural_network_explain.png){#fig:desc}
 $$y=f(\sum_{i=0}^{n_{prev}} w_{i}x_{i}+b)$$
 
 To make a prediction, some input values are set to the input nodes values, which are used to calculate the value of the next layer's neurons. This repeats until the output layer is reached. The values from the output layer is the prediction. A traditional neural network can learn by adjusting the weights and bias in the neurons. 
@@ -75,7 +80,7 @@ The aim of the project is to procedurally create diverse Minecraft structures. T
 @@Maybe an image describing this?
 
 ## House Model
-The aim of the house model is to generate a 3D block for the roof to sit on. In the first design iteration, the house model simply predicted a full 3D block. The issue with this was the model had to be taught to leave a gap in the centre and 1 block for the outside wall. Just learning this took the model a long time and it was not guaranteed, which severely impacted the design of the house. Another issue was the generation speed. Producing a full 3D block was very computationally intense, especially for larger structures. Another approach took advantage of the wall being 1 block thick and empty inside. This allows for the wall of the 3D block to be mapped to a 2D tilemap. Now the model can predict the 2D tilemap and always keeps the correct house structure while being much more computationlly efficient.
+The aim of the house model is to generate a 3D block for the roof to sit on. In the first design iteration, the house model simply predicted a full 3D block. The issue with this was the model had to be taught to leave a gap in the centre and 1 block for the outside wall. Just learning this took the model a long time and it was not guaranteed, which severely impacted the design of the house. Another issue was the generation speed. Producing a full 3D block was very computationally intense, especially for larger structures. Another approach took advantage of the wall being 1 block thick and empty inside. This allows for the wall of the 3D block to be mapped to a 2D tilemap. Now the model can predict the 2D tilemap and always keeps the correct house structure while being much more computationally efficient.
 ![Figure @@: 3D house tilemap is mapped to a 2D wall tilemap](Images/block.png)
 
 ## Roof Model
@@ -85,10 +90,10 @@ The roof model, similar to the house model, initially predicted a 3D roof but ha
 ## Model hyperparameters
 Hyperparameters are the parameters which control the learning process for each population, such as mutation rate and population size. One of these parameters is the input/output sizes of the model, which must be a fixed value for all individuals in a population at all times. In the first design iteration, the model predicted each block in the structure in one go. This meant the output size of the model each block used in the structure, and because the output size is fixed, the size of the structure was fixed. This massively reduced the diversity of the structures and was visually boring. 
 
-The next design iteration took a different approach. Instead of predicting all the blocks in one go, the model predicted one block at a time, denoted ŷ. This removes the limitation on the structure size, since the model can be run an unlimited number of times. This does increase the overhead as making a prediction from the model is an intense process, but it is worth it to improve the quality of the structures. Since both the house and roof model produce 2D tilemaps, they work in similar ways. An 2D tilemap is first randomised and padded by 1. To predict the first ŷ, the model is given the blocks surrounding it (denoted $x_{surr}$), shown in @@figure. The output size of the model (ŷ), is each block which is possible to place. Minecraft contains 133 blocks which are suitable for the structures, and therefore is the outputs size. 
+The next design iteration took a different approach. Instead of predicting all the blocks in one go, the model predicted one block at a time, denoted ŷ. This removes the limitation on the structure size, since the model can be run an unlimited number of times. This does increase the overhead as making a prediction from the model is an intense process, but it is worth it to improve the quality of the structures. Since both the house and roof model produce 2D tilemaps, they work in similar ways. An 2D tilemap is first randomized and padded by 1. To predict the first ŷ, the model is given the blocks surrounding it (denoted $x_{surr}$), shown in @@figure. The output size of the model (ŷ), is each block which is possible to place. Minecraft contains 133 blocks which are suitable for the structures, and therefore is the outputs size. 
 ![Figure @@: Description of model inputs](Images/model_input.png)
 
-Since the models can produce structures of arbitrary size, the models need to know what size structure is being created to control the patterns, therefore the height, length and width of the structure is passed into the model aswell. Also since the model has no memory, it is also given the xy coordinates of ŷ for more information about what is being generated. The house model has another input. Since the model is predicting the blocks to place, there needs to be some control over this, otherwise the model will only ever predict one block. Therefore the house model is also given 3 seed blocks which it should use to build the structure.
+Since the models can produce structures of arbitrary size, the models need to know what size structure is being created to control the patterns, therefore the height, length and width of the structure is passed into the model as well. Also since the model has no memory, it is also given the xy coordinates of ŷ for more information about what is being generated. The house model has another input. Since the model is predicting the blocks to place, there needs to be some control over this, otherwise the model will only ever predict one block. Therefore the house model is also given 3 seed blocks which it should use to build the structure.
 
 ## Fitness Functions
 A fitness function is used to evaluate the quality of a candidate solution, to help it reach a desired solution. According to [@mallawaarachchi_2017] a fitness function should be:</br>
@@ -103,19 +108,19 @@ For each model the fitness is calculated by combining the novelty score and stru
 To start calculating a house score, the components of the desired structure have to be broken down. When deciding fitness functions it is important to limit the scope of what can be expected, there is always more detail that can be added to the scoring. The purpose of the scoring is to highlight the important parts of a structure and guide the genome towards the desired output, but leaving enough flexibility to allow for creativity. A balance between control and creativity. Each of the component scoring functions generate a value between $0<x<1$ and the average is used to calculate the overall structure score.
 The fitness functions I decided on were:
 1. A bounding wall </br>
-An important part of a house is a complete wall with no air-gaps. While the wall cannot be structurally wrong, the model can still place airgaps which must be minimised. The score is calculated by taking the percentage of blocks that aren't air.</br>
+An important part of a house is a complete wall with no air-gaps. While the wall cannot be structurally wrong, the model can still place airgaps which must be minimized. The score is calculated by taking the percentage of blocks that aren't air.</br>
 
 2. A door</br>
 There should be a door on ground level to enter the structure. This is the only score which is either 0 (no usable door) or 1 (usable door).</br>
 
 3. Seed blocks</br>
-The 3 seed blocks inputs are to control the types of blocks which are generated by the structure. This scores models higher which prioritise using blocks from the three seed blocks given. For each seed block which is in the top 5 blocks used, 1/3 is added to the score. </br>
+The 3 seed blocks inputs are to control the types of blocks which are generated by the structure. This scores models higher which prioritises using blocks from the three seed blocks given. For each seed block which is in the top 5 blocks used, 1/3 is added to the score. </br>
 
 4. Symmetry</br>
-In almost everything considered beautiful, there is some element of symmetry. It has been well documented that humans find symmetry much more attractive and soothing to look at [@Huang_2018]. Instead of limiting my model and forcing symmetry in one axis, I am checking both x & y axes and chosing the one which has the highest symmetry. The symmetry is calculated by comparing the percentage of equal blocks on both sides of the axis, giving a value between 0 and 1. </br>
+In almost everything considered beautiful, there is some element of symmetry. It has been well documented that humans find symmetry much more attractive and soothing to look at [@Huang_2018]. Instead of limiting my model and forcing symmetry in one axis, I am checking both x & y axes and choosing the one which has the highest symmetry. The symmetry is calculated by comparing the percentage of equal blocks on both sides of the axis, giving a value between 0 and 1. </br>
 
 5. Block Variance</br>
-Block variance promotes a higher variance of blocks, by scoring a structure higher if more unique blocks are used, the equation for which is below. The model gets a higher score the more blocks it uses, upto 3 blocks. Above 3 blocks the score caps at 3/4, chosen because it is better than 2 blocks (2/3) but not better than 3 blocks. This was done to prevent the the models using too many blocks and making a cluttered design, but not too few blocks..
+Block variance promotes a higher variance of blocks, by scoring a structure higher if more unique blocks are used, the equation for which is below. The model gets a higher score the more blocks it uses, up to 3 blocks. Above 3 blocks the score caps at 3/4, chosen because it is better than 2 blocks (2/3) but not better than 3 blocks. This was done to prevent the the models using too many blocks and making a cluttered design, but not too few blocks..
 ```
 int x: size(unique)
 if (x <= 3){ 
@@ -127,7 +132,7 @@ if (x <= 3){
 The final house structure score is calculated as the average of: bounding wall, door, symmetry, block variance scores.
 
 #### Roof Model
-Since this is a simple structure with a lower search space, it is very easy for the fitness functions to be too controlling. For example, if the scores maximize for sloped rooves, then only sloped rooves will be generated, therefore it was very important to have gentle control.
+Since this is a simple structure with a lower search space, it is very easy for the fitness functions to be too controlling. For example, if the scores maximize for sloped roofs, then only sloped roofs will be generated, therefore it was very important to have gentle control.
 The structure scores:</br>
 1. Compliance</br>
 This ensures the heightmap generated fits within the limits I have set. For example, if the maximum height set is 5 blocks and the heightmap contains a height greater than 5, then the solution doesn't pass the compliance check. This fitness is either a 0 (failed the check) or 1 (passed the check). </br>
@@ -136,39 +141,84 @@ This ensures the heightmap generated fits within the limits I have set. For exam
 Just like the house model, I am maximizing for symmetry in the xy axes.</br>
 
 3. Visual Complexity</br>
-This is the fitness for quality checking and making the solution more interesting. To make the solutions more interesting I am maximizing for complexity in the surface. This is achieved by rewarding changes in height over flatness. This is accomplished by counting the ratio of changes in height of 1 vs no changes in height. I am purposely not counting changes in height of more than 1, as that will leave gaps and ruin the look of the roof. An example of low complexity vs high complexity is shown in @@figure. I chose this solution over rewarding specific types of structure, like flat or triangle-sloped rooves, to allow for more flexibility. </br>
+This is the fitness for quality checking and making the solution more interesting. To make the solutions more interesting I am maximizing for complexity in the surface. This is achieved by rewarding changes in height over flatness. This is accomplished by counting the ratio of changes in height of 1 vs no changes in height. I am purposely not counting changes in height of more than 1, as that will leave gaps and ruin the look of the roof. An example of low complexity vs high complexity is shown in @@figure. I chose this solution over rewarding specific types of structure, like flat or triangle-sloped roofs, to allow for more flexibility. </br>
 ![Figure @@: High complexity vs low complexity heightmaps](Images/heightmap_complexity.png)
 
 ### Novelty Scoring
-As previously mentioned, the novelty score is necessary to allow a population to escape any local maxima and reach a higher fitness. When finding the novelty of a genome, it needs to be compared to its closest relations. If a genomes if very different to its closest relatives, then it will have a high novelty score. An individual cannot be compared to the whole population, it has to be compared to its closest relatives. If an individual is only compared to distant relatives, which are completely different, it will always have a high novelty score. This means the novelty score will stop reflecting how the individual has changed, therefore an individual can only be compared to its closest relatives. To make this comparison, the novelty score of an individual is he average genetic distance between the *k*-nearest-neighbours (KNN), equation shown in @@figure. After some testing, I found $k = \frac{2}{3} * size(population)$ gave the best comparison. 
+As previously mentioned, the novelty score is necessary to allow a population to escape any local maxima and reach a higher fitness. When finding the novelty of a genome, it needs to be compared to its closest relations. If a genomes if very different to its closest relatives, then it will have a high novelty score. An individual cannot be compared to the whole population, it has to be compared to its closest relatives. If an individual is only compared to distant relatives, which are completely different, it will always have a high novelty score. This means the novelty score will stop reflecting how the individual has changed, therefore an individual can only be compared to its closest relatives. To make this comparison, the novelty score of an individual is he average genetic distance between the *k*-nearest-neighbors (KNN), equation shown in @@figure. After some testing, I found $k = \frac{2}{3} * size(population)$ gave the best comparison. 
 $$NoveltyScore(x)=\frac{1}{k}\sum_{i=0}^{k}dist(x, \mu_{i})$$
 
-Another potential issue with novelty scoring is backtracking or cycling. This can occur when a population repeatedly cycles between the same behaviour space, which can repeatedly give a high novelty score, and therefore high population fitness. To a population this is an easy solution for reaching a high fitness, but does mean the population will not continue to explore the problem search space, therefore not improving. A solution to this is archiving highly novel members of the previous generation, then comparing to them when calculating novelty scores. If a population cycles, the population novelty score will be reduced and individuals who escape the cycle can improve [@salehi2022geodesics]. To choose which individuals are added to the archive, a threshold is created ($\alpha$), and any individuals over that threshold are kept. From some simple testing, $\alpha=0.85$ archived individuals at the correct rate.
+Another potential issue with novelty scoring is backtracking or cycling. This can occur when a population repeatedly cycles between the same behavior space, which can repeatedly give a high novelty score, and therefore high population fitness. To a population this is an easy solution for reaching a high fitness, but does mean the population will not continue to explore the problem search space, therefore not improving. A solution to this is archiving highly novel members of the previous generation, then comparing to them when calculating novelty scores. If a population cycles, the population novelty score will be reduced and individuals who escape the cycle can improve [@salehi2022geodesics]. To choose which individuals are added to the archive, a threshold is created ($\alpha$), and any individuals over that threshold are kept. From some simple testing, $\alpha=0.85$ archived individuals at the correct rate.
 
 ## City construction
-Part of the aim of the project was to use procedural content generation to generate multistructure content, e.g. a city. To generate a city using a trained house and roof populations, individuals are randomly selected to place a house and roof. By using all individuals from the population, the novelty of a population can come across in the constructions. The generated houses start off at the same sizes, but everytime a building is placed there is a 5% chance for the sizes to be adjusted. This gives a gradually chances the dimensions of the houses, instead of having randomly sized buildings next to each other, mimicing real city.
+Part of the aim of the project was to use procedural content generation to generate multi-structure content, e.g. a city. To generate a city using a trained house and roof populations, individuals are randomly selected to place a house and roof. By using all individuals from the population, the novelty of a population can come across in the constructions. The generated houses start off at the same sizes, but every time a building is placed there is a 5% chance for the sizes to be adjusted. This gives a gradually chances the dimensions of the houses, instead of having randomly sized buildings next to each other, mimicking real city.
 
-A core part of the project is maximising diversity while maintaining the structural form, therefore this needs to be measured across the city.
+A core part of the project is maximizing diversity while maintaining the structural form, therefore this needs to be measured across the city.
 1. Structure Score distribution
 The structure score is my measurement for the structural form of a building. If all the generated structures in a city have a low structure score then the constructions will be poorly made and will look worse.
 
 2. Block Distribution
-The visual quality of the structures are broken down into two metrics, colours and patterns. The colour distribution is easier to measure because each block has roughtly a different colour. Therefore if the structure has a high distribution in blocks used, the colour distribution will be higher and therefore will be more diverse. 
+The visual quality of the structures are broken down into two metrics, colors and patterns. The color distribution is easier to measure because each block has roughly a different color. Therefore if the structure has a high distribution in blocks used, the color distribution will be higher and therefore will be more diverse. 
 
 3. Pattern Measurement
-Pattern measurement is how often a structure design is repeated .This is harder to measure because the buildings arent all the same dimensions and are each made of different blocks. Since patterns can feasibily only be compared with structures of the same size, they are grouped by the dimensions and a pairwise comparison is made within the groups. Next each structure is passed through the skimage labelling function@@cite. This function labels connectivity between the elements of an array. An element is connected to another element if it is a neighbour and they have the same value. An example of connectivity is shown in @@figure. By labelling the connected regions in the image it is much easier to identify patterns between structure, regardless if different blocks are used. The labelled structures are then directly compared and the percentage similarity is used as the pattern similarity value.      
+Pattern measurement is how often a structure design is repeated .This is harder to measure because the buildings aren't all the same dimensions and are each made of different blocks. Since patterns can feasibly only be compared with structures of the same size, they are grouped by the dimensions and a pairwise comparison is made within the groups. Next each structure is passed through the skimage labelling function@@cite. This function labels connectivity between the elements of an array. An element is connected to another element if it is a neighbor and they have the same value. An example of connectivity is shown in @@figure. By labelling the connected regions in the image it is much easier to identify patterns between structure, regardless if different blocks are used. The labelled structures are then directly compared and the percentage similarity is used as the pattern similarity value.      
 ![Figure @@: Randomised pattern and labelled random pattern](Images/pattern_labelling.png)
 
 4. Generation Time
-One of the drawbacks of PCG, identified in the intruction, was the generation speeds. The immersion of a game can be broken if the user has to wait too long for the world to be generated, therefore the generation speed needs to be minimised.
+One of the drawbacks of PCG, identified in the introduction, was the generation speeds. The immersion of a game can be broken if the user has to wait too long for the world to be generated, therefore the generation speed needs to be minimized.
 
 # Evaluation
 ## Experimentation
-The aim of the experimentation is to understand the effects of different levels of novelty in populations for building structures. When an individual's fitness is calculated, their structure and novelty scores are calculated and the ratio of these are used for the fitness. The ratio of structure:novelty determines the level of novelty in the population. To experiment with the novelty, different populations will be trained, each with a different level of novelty. The structure scores throughout training will be collected and compared to show the effects of novelty throughout the training process. For each level of novelty a house and roof model will be trained twice. Since the models are inherantly random, running the generations multiple times was necessary to show a population wasn't an anomoly. The levels of novelty that will be compared are: no novelty (control), low novelty (1:4 novelty:structure), high novelty (4:1 novelty:structure), and full novelty (1:0 novelty:structure). 
-Each house model trained had a population of 20 and each roof model trained had a population of 100. Having a larger population increases the chances of a positive mutation, but also increases the hardware requirements. The neat-python library does not have GPU support and can struggle at larger populations, so was limited to those population sizes. Each model was trained for 2000 generations and was then trained for longer if the population was still showing improvement. The training was then stopped when the models have not improved in the last 30 generations, because there should be some improvement in that time. Unless the models reaches the the highest possible score (1.0), they can always train for longer because there is a chance they might improve more, but there has to be a cut off. 
+The aim of the experimentation is to understand the effects of different levels of novelty in populations for building structures. When an individual's fitness is calculated, their structure and novelty scores are calculated and the ratio of these are used for the fitness. The ratio of structure:novelty determines the level of novelty in the population. To experiment with the novelty, different populations will be trained, each with a different level of novelty. The structure scores throughout training will be collected and compared to show the effects of novelty throughout the training process. For each level of novelty a house and roof model will be trained twice. Since the models are inherently random, running the generations multiple times was necessary to show a population wasn't an anomaly. The levels of novelty that will be compared are: no novelty (control), low novelty (1:4 novelty:structure), high novelty (4:1 novelty:structure), and full novelty (1:0 novelty:structure). 
+Each house model trained had a population of 20 and each roof model trained had a population of 100. Having a larger population increases the chances of a positive mutation, but also increases the hardware requirements. The neat-python library does not have GPU support and can struggle at larger populations, so was limited to those population sizes. Each model was trained for 2000 generations and was then trained for longer if the population was still showing improvement. The training was then stopped when the models have not improved in the last 50 generations, because there should be some improvement in that time. Unless the models reaches the the highest possible score (1.0), they can always train for longer because there is a chance they might improve more, but there has to be a cut off. 
+
+## Training Comparisons
+@@fig shows an overview of the training results. The graph shows the maximum population average over a 20 generation window. This means every generation, the previous 20 generations are taken, and the average is taken over that window, equation shown in @@figure. As shown later, this is necessary because the graphs are quite noisy. If just only max value was taken, without the window, all the averages are very similar and don't reflect the state of the population. The graph shows that there is quite a difference between runs, but overall the results line up with what was expected, with the high novelty model regularly having the highest performance and the full novelty model having the lowest performance. @@maybe more?
+
+![Figure @@: Graph comparing max average structure score between runs](Images/final_graphs/avg_results.png)
+
+### Control Model
+![Figure @@: No novelty (control) training - house model](Images/final_graphs/house/control_house.png)
+![Figure @@: No novelty (control) training - roof model](Images/final_graphs/roof/control_roof.png)
+
+The control model shows a very typical learning process without novelty, where there is a region of rapid improvement at the start as the model can easily make improvement, but then reaches a local maxima, where the average score stays. Without the novelty mechanic, the model is stuck there and cannot improve. Since this has happened over all 4 graphs, we can be confident this would happen a majority of the time. As shown in @@figure, the success of the control model does vary and can sometimes surpass models with novelty, but it is very dependant on when it reaches the first local maxima, and would not improve with more generations, whereas a model with novelty might. 
+
+### Low Novelty Model
+![Figure @@: Low novelty training - house model](Images/final_graphs/house/low_nov_house.png)
+![Figure @@: Low novelty training - roof model](Images/final_graphs/roof/low_nov_roof.png)
+
+The low novelty models show lots of similarities with the control models, which is to be expected. There is more variation where the model has tried to escape a local maxima, especially evident in the run 2 of the house model around generation 250 - 750, where there is a significant dip with a large amount of variation. This period also has a large max-min gap (shown in grey). The large gap between the lines is evidence of novelty in the population, where the best and worse models have diverged. We should expect this max-min gap to appear more in the roof model as the population 5x larger and can spread out much easier. 
+
+### High novelty Model
+![Figure @@: High novelty training - house model](Images/final_graphs/house/high_nov_house.png)
+![Figure @@: High novelty training - roof model](Images/final_graphs/roof/high_nov_roof.png)
+
+The high novelty house model clearly shows a lots of activity during training, whereas the roof model shows much less. My hypothesis is that since the roof is much simpler and a smaller search space, the model either found a global maxima or a local maxima which it couldn't escape from. What the graph does show is a large max-min gap which is again evident of novelty. On the other hand, the house model clearly shows how novelty has caused many dips in the structure score. Especially evident around generation 400 on run 1, where there is a significant dip, rise in the middle, and dip again. 
+
+### Full Novelty Model
+![Figure @@: Full novelty training - house model](Images/final_graphs/house/full_nov_house.png)
+![Figure @@: Full novelty training - roof model](Images/final_graphs/roof/full_nov_roof.png)
+Because these models had no structure score feedback, only novelty score, there is little progression through the training. These models are randomly hoping to stumble across the correct solution and there are times, like in run 1 of the house model around generation 1750, where the model has found a decent solution. Unfortunately since the model didn't know it had improved, it quickly evolved away from that solution instead of improving on it. Run 2 of the roof model does appear to show the model retaining the score for a significant period. This could be because the model was evolving changes which had no effect on the score and therefore didn't reduce/improve the score.
+
+## Multi-structure Comparisons
+To populate the datasets for comparison, 20,000 structures are generated using each novelty type. Since some of the metrics rely on grouping building sizes, it is important there is a large number of structures to get an accurate comparison.
+### Structure Score Distribution
+![Figure @@: House Structure Score Distribution in generated structures](Images/final_graphs/city/house_scores.png)
+![Figure @@: Roof Structure Score Distribution in generated structures](Images/final_graphs/city/roof_scores.png)
+
+### Block Distribution
+![Figure @@: Block Distributions in generated structures](Images/final_graphs/city/block_freq.png)
+
+## Pattern Variety
+![Figure @@: Pattern variety in generated structures](Images/final_graphs/city/variance_comp.png)
+
+## Generation Time
+![Figure @@: Generation time in generated structures](Images/final_graphs/city/times.png)
 
 
 # Future Work
 - Due to hardware requirements and time pressure I could only run the models twice
 - work on other structures
 # References
+
+\end{document}
