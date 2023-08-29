@@ -99,8 +99,7 @@ class Neat(BlockInterface):
             fs.writelines(lines)
         
     def load_checkpoint(self, checkpoint_name:str) -> neat.Population:
-        cp = neat.Checkpointer()
-        return cp.restore_checkpoint(os.path.join(self.checkpoint ,checkpoint_name))
+        return neat.Checkpointer().restore_checkpoint(os.path.join(self.checkpoint ,checkpoint_name))
 
     def run_from_checkpoint(self, checkpoint_name, checkpoint_prefix):
         return self.run(self.load_checkpoint(checkpoint_name, checkpoint_prefix))
