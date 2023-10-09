@@ -5,6 +5,7 @@ import random
 
 class BlockInterface():
     def __init__(self, block_path=None, connect=True):
+        # Try connect to minecraft server
         if connect:
             self.client = mc.create()
         else:
@@ -222,5 +223,5 @@ class BlockInterface():
     def convert_to_blocklist(self, arr):
         for yi, y in enumerate(arr):
             for xi, x in enumerate(y):
-                arr[yi][xi] =  self.blockmap[str(arr[yi][xi])]
+                 arr[yi][xi] =  self.blockmap[str(x)]
         return arr
