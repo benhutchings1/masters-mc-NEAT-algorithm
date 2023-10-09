@@ -5,7 +5,7 @@ data*/
 temp/
 out/
 .vscode/
-graphs/
+vis_output/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
