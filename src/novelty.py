@@ -25,16 +25,8 @@ class Novelty:
         disjoint_coef = 1 
         
         # Get novelty within population to n_pop/3 nearest neightbours
-        novelty = self.knn(genomes, math.ceil(2*len(genomes)/2), weight_coef, disjoint_coef)
+        novelty = self.knn(genomes, math.ceil(len(genomes)/3), weight_coef, disjoint_coef)
         log = [[i,-1] for i in novelty]
-                
-        # Check if archive is empty or not
-        # if self.archive is not None:
-            # Add archived novelty to population novelty
-            # arch = self.archived_dist(genomes, weight_coef, disjoint_coef)
-            # for i in range(len(novelty)):
-                # novelty[i] = (arch[i] + novelty[i])/2
-                # log[i][1] = arch[i]
 
         # Log novelty values
         self.logger.log_iteration(log)
@@ -50,16 +42,6 @@ class Novelty:
             self.archive = None
             
         return novelty        
-        
-    def archived_dist(self, genomes:List[neat.DefaultGenome], weight_coef:float, disjoint_coef:float)\
-        -> List[float]:
-        genomes = [g for __, g in genomes]
-        # Get KNN to all archived genomes
-        k = math.ceil(len(self.archive) / 3)
-        dist = []
-        for genome in genomes:
-            dist.append(self.single_knn(genome, self.archive, k, weight_coef, disjoint_coef))
-        return dist
     
     def knn(self, genomes:List[neat.DefaultGenome], k:int, weight_coef:float, disjoint_coef:float) \
         -> List[float]:

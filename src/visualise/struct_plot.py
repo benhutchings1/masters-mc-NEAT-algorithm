@@ -23,18 +23,6 @@ class StructPlot(StructLogger):
         avg_data = [np.average(x) for x in data]
         max_data = [np.max(x) for x in data]
         min_data = [np.min(x) for x in data]
-        # ax.plot(
-        #     range((len(data))),
-        #     max_data,
-        #     label="Max Structure Score",
-        #     alpha=0.75
-        # )
-        # ax.plot(
-        #     range((len(data))),
-        #     min_data,
-        #     label="Min Structure Score",
-        #     alpha=0.75
-        # )
         ax.fill_between(range((len(data))),
                         max_data,
                         min_data,
@@ -52,7 +40,7 @@ class StructPlot(StructLogger):
         ax.set_ylabel("Structure Score")
         ax.legend()
     
-    def plot(self, titles, loggers:List[StructLogger], super_plot_title, filename, const=0, max_read=None):
+    def plot(self, titles, loggers:List[StructLogger], super_plot_title, filename, max_read=None):
         assert type(loggers) == list
         assert type(loggers[0]) == StructLogger
         assert len(titles) == len(loggers)
@@ -66,9 +54,11 @@ class StructPlot(StructLogger):
         if len(loggers) == 1:
             self.__plot_values(ax[0], loggers[0].get_scores(max_read=max_read), titles[0])
         else:
+            if max_read is None:
+                max_read = [None, None]
             # Fill graph
             for i in range(len(loggers)):
-                self.__plot_values(ax[i], loggers[i].get_scores(max_read=max_read[i]), titles[i], const=const[i])
+                self.__plot_values(ax[i], loggers[i].get_scores(max_read=max_read[i]), titles[i])
                 
             
         # Save to file

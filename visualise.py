@@ -1,11 +1,14 @@
 from src.visualise import struct_plot
 from src.logger import StructLogger
 import os
+import CONFIG
 
-out = "data"
-
+# Output locations
+out = CONFIG.DATA_OUTPUT_PATH
+graph_output = CONFIG.VISUALISATION_OUTPUT
+# Make path if doesnt exist
 try:
-    os.mkdir("graphs/")
+    os.mkdir(out)
 except:
     pass
 
@@ -23,19 +26,18 @@ for source in ["roof", "house"]:
         StructLogger(f"{out}/low_novelty/iter1/{source}/struct", "struct_log.csv", None, False),
         StructLogger(f"{out}/low_novelty/iter2/{source}/struct", "struct_log.csv", None, False)
     ]   
-    
+
     # Plot control graphs
-    struct_plot.StructPlot(out=f"graphs/control/").plot(
+    struct_plot.StructPlot(out=f"{graph_output}/control/").plot(
         ["Run 1", "Run 2"],
         control_loggers,
         "Control",
         f"control_{source}",
-        const=0.3
     )
     print("Control graphs completed")
 
     # Plot high novelty graphs
-    struct_plot.StructPlot(out=f"graphs/high_novelty/").plot(
+    struct_plot.StructPlot(out=f"{graph_output}/high_novelty/").plot(
         ["Run 1", "Run 2"],
         high_novelty,
         "High Novelty",
@@ -44,7 +46,7 @@ for source in ["roof", "house"]:
     print("High novelty graphs completed")
      
     # Plot low novelty graphs
-    struct_plot.StructPlot(out=f"graphs/low_novelty/").plot(
+    struct_plot.StructPlot(out=f"{graph_output}/low_novelty/").plot(
         ["Run 1", "Run 2"],
         low_novelty,
         "Low Novelty",

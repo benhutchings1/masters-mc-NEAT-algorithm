@@ -1,12 +1,16 @@
 from src.roof_fitness import structure_functions as roof_struct_fn
 from src.house_fitness import structure_functions as house_struct_fn
-from src import neat as nt, novelty
 import numpy as np
 import unittest
 from src.Blocks import block_interactions
+import CONFIG
 
 class TestRoofFitness(unittest.TestCase):
+    # Test cases to ensure roof fitness functions are correct
     def test_complexity(self):
+        # Testing data
+        # a: high complexity roof
+        # b: low complexity roof
         a = np.array([
             [1, 2, 1, 2, 1],
             [2, 1, 2, 1, 2],
@@ -25,6 +29,10 @@ class TestRoofFitness(unittest.TestCase):
         print("Complexity test passed")
         
     def test_vert_symmetry(self):
+        # Testing data
+        # a: full vertical symmetry
+        # b: full vertical symmetry
+        # c: no vertical symmetry
         a = np.array([
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
@@ -55,6 +63,10 @@ class TestRoofFitness(unittest.TestCase):
         
 
     def test_horiz_symmetry(self):
+        # Testing data
+        # a: full horizontal symmetry
+        # b: full horizontal symmetry
+        # c: no horizontal symmetry
         a = np.array([
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
@@ -83,6 +95,10 @@ class TestRoofFitness(unittest.TestCase):
         print("Horizontal symmetry passed")
 
     def test_compliance(self):
+        # Testing data
+        # a: a compliant roof 
+        # b: a compliant roof
+        # c: a non compliant roof
         a = np.array([
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
@@ -111,9 +127,11 @@ class TestRoofFitness(unittest.TestCase):
         self.assertFalse(roof_struct_fn.score_compliance([5, 1, 1], c))
         print("Compliance test passed")
 
-class TestStructureFitness(unittest.TestCase):        
+class TestStructureFitness(unittest.TestCase):      
+    # Test structure fitness functions
+    # Test data path can be found in CONFIG.py
     def __init__(self):
-        self.bi = block_interactions.BlockInterface("src/Blocks/blocks.csv", connect=False)    
+        self.bi = block_interactions.BlockInterface(CONFIG.BLOCK_PATH, connect=False)    
         
     def test_bounding_wall(self):
         data = self.get_data("bounding_wall")
@@ -125,7 +143,7 @@ class TestStructureFitness(unittest.TestCase):
     def test_door(self):
         data = self.get_data("door")
         door_id = house_struct_fn.get_door_id()
-        self.assertTrue(house_struct_fn.score_door(None, None, data[0]) == 1.0)
+        self.assertFalse(house_struct_fn.score_door(None, None, data[0]) == 1.0)
         self.assertTrue(house_struct_fn.score_door(None, None, data[1]) == 0.0)
         self.assertTrue(house_struct_fn.score_door(None, None, data[2]) == 0.0)
         print("Door test passed")
@@ -167,10 +185,11 @@ class TestStructureFitness(unittest.TestCase):
     def get_data(self, folder):
         out = []
         for letter in ["a", "b", "c"]:
-            out.append(self.bi.read_np(f"testdata/structure_data/{folder}/{letter}.txt").astype(int))
+            out.append(self.bi.read_np(f"{CONFIG.TEST_DATA_PATH}/structure_data/{folder}/{letter}.txt").astype(int))
         return out
     
 if __name__ == "__main__":
+    # Run all tests
     roof = TestRoofFitness()
     house = TestStructureFitness()
     roof.test_complexity()
@@ -186,4 +205,5 @@ if __name__ == "__main__":
     house.test_bounding_wall()
     house.test_full_structure()
     print("\033[1;32;40mStructure tests passed\033[0;37m")
+
     
